@@ -1,0 +1,507 @@
+<project xmlns:ivy="antlib:org.apache.ivy.ant" name="front" default="common" basedir=".">
+
+	<property name="component" value="${component.front}"/>
+	<import file="../../properties.common.xml"/>
+	<import file="../../build.common.xml"/>
+	<ivy:settings file="${ivy.settings.file}" />
+
+    <target name="front.prepare">
+        <front.prepare />
+    </target>
+
+	<!-- TODO: por ahora no se usa -->
+    <target name="front.js.prepare">
+		<exec executable="rm">
+		    <arg value="-r"/>
+		    <arg value="${front.gen-js}"/>
+		</exec>
+		<!--
+		<exec executable="rm">
+		    <arg value="-r"/>
+		    <arg value="${output.front}/gen-js-front"/>
+		</exec>
+		<exec executable="rm">
+		    <arg value="-r"/>
+		    <arg value="${project.dir}/components/front/httpdocs/gen-js-front"/>
+		</exec>-->
+
+    </target>
+    <target name="front.js.minify.fw" depends="front.js.concatenate.fw">
+		    <java jar="${lib.build}/yuicompressor.jar" fork="true">
+		        <arg value="-o"/>
+		        <arg value="${front.gen-js}/At4Framework-static-min.js"/>
+		        <arg value="${front.gen-js}/At4Framework-static.js"/>
+		    </java>
+    </target>
+
+    <target name="front.js.concatenate.fw">
+	    <concat fixlastline="yes" destfile="${front.gen-js}/At4Framework-static.js">
+	        <!--<filelist dir="${front.home}/httpdocs/js/core">
+				<file name="At4FrameworkIntranet.js"/> 
+        	</filelist>-->
+			<fileset dir="${front.home}/httpdocs/js/core/At4FrameworkIntranet/util" includes="*.js" />
+			<fileset dir="${front.home}/httpdocs/js/core/At4FrameworkIntranet/mixins" includes="*.js" />
+			<fileset dir="${front.home}/httpdocs/js/core/At4FrameworkIntranet/app" includes="*.js" />
+			<fileset dir="${front.home}/httpdocs/js/core/At4FrameworkIntranet/field" includes="*.js" />
+			<fileset dir="${front.home}/httpdocs/js/core/At4FrameworkIntranet/form" includes="*.js" />
+			<filelist dir="${front.home}/httpdocs/js/core/At4FrameworkIntranet/grid/export/prompt">
+			    <file name="ExportBasePrompt.js" />
+				<file name="AppCfgPrompt.js" />
+				<file name="ExportCfgPrompt.js" />
+			</filelist>
+			<fileset dir="${front.home}/httpdocs/js/core/At4FrameworkIntranet/grid/export" includes="*.js" />
+			<fileset dir="${front.home}/httpdocs/js/core/At4FrameworkIntranet/grid" includes="*.js" />
+			<fileset dir="${front.home}/httpdocs/js/core/At4FrameworkIntranet/panel" includes="*.js" />
+			<fileset dir="${front.home}/httpdocs/js/svrInt" includes="**/*.js" />
+	    </concat>
+
+		<echo>Minificando framework</echo>
+    </target>
+	
+    <target name="front.js.minify.app" depends="front.js.concatenate.app">
+		    <java jar="${lib.build}/yuicompressor.jar" fork="true">
+		        <arg value="-o"/>
+		        <arg value="${front.gen-js}/${application.name}-app-static-min.js"/>
+		        <arg value="${front.gen-js}/${application.name}-app-static.js"/>
+		    </java>
+    </target>
+    <target name="front.js.concatenate.app">
+	    <concat fixlastline="yes" destfile="${front.gen-js}/${application.name}-app-static.js">
+			<fileset dir="${front.home}/httpdocs/js/core/LocalApp" includes="**/*.js"/>
+	    </concat>
+		<echo>Minificando App</echo>
+    </target>
+
+    <target name="front.js.minify.forms" depends="front.js.concatenate.forms">
+		    <java jar="${lib.build}/yuicompressor.jar" fork="true">
+		        <arg value="-o"/>
+		        <arg value="${front.gen-js}/${application.name}-forms-static-min.js"/>
+		        <arg value="${front.gen-js}/${application.name}-forms-static.js"/>
+		    </java>
+    </target>
+    <target name="front.js.concatenate.forms">
+		<concat fixlastline="yes" destfile="${front.gen-js}/${application.name}-forms-static.js">
+			<fileset dir="${front.home}/httpdocs/js/form" includes="*.js"/>
+	    </concat>
+		<echo>Minificando formularios</echo>
+    </target>
+	
+    <target name="front.js.minify.extensions" depends="front.js.concatenate.extensions">
+		    <java jar="${lib.build}/yuicompressor.jar" fork="true">
+		        <arg value="-o"/>
+		        <arg value="${front.gen-js}/ext-extensions-static-min.js"/>
+		        <arg value="${front.gen-js}/ext-extensions-static.js"/>
+		    </java>
+    </target>
+    <target name="front.js.concatenate.extensions">
+	    <concat fixlastline="yes" destfile="${front.gen-js}/ext-extensions-static.js">
+	        <filelist dir="${front.home}/httpdocs/ext5">
+			    <file name="ux/statusbar/StatusBar.js"/>	  
+				<file name="ux/MultiSelect.js"/>
+				<file name="var/RowActions.js"/>
+				<file name="ux/ItemSelector.js"/>
+			    <file name="var/HttpProvider.js"/>
+			    <file name="var/util.js"/>
+			    <file name="var/XCheckbox.js"/>
+			    <file name="var/VCheckbox.js"/>
+			    <file name="ux/colorpick/ColorUtils.js"/>
+			    <file name="ux/colorpick/Selection.js"/>
+			    <file name="ux/colorpick/ColorMapController.js"/>
+			    <file name="ux/colorpick/ColorMap.js"/>
+			    <file name="ux/colorpick/SelectorModel.js"/>
+			    <file name="ux/colorpick/SelectorController.js"/>
+			    <file name="ux/colorpick/ColorPreview.js"/>
+			    <file name="ux/colorpick/SliderController.js"/>
+			    <file name="ux/colorpick/Slider.js"/>
+			    <file name="ux/colorpick/SliderAlpha.js"/>
+			    <file name="ux/colorpick/SliderSaturation.js"/>
+			    <file name="ux/colorpick/SliderValue.js"/>
+			    <file name="ux/colorpick/SliderHue.js"/>
+			    <file name="ux/colorpick/Selector.js"/>
+			    <file name="ux/colorpick/Field.js"/>
+			    <file name="ux/TabCloseMenu.js"/>
+				<file name="uxAt4/ckeditor/Ext.ux.CKEditor.js"/>
+				<file name="uxAt4/filter/MultiListFilter.js"/>
+	
+
+				<file name="ux/GMapPanel.js"/>
+				<file name="uxAt4/gmapsfield/BaseGMapField.js"/>
+				<file name="uxAt4/gmapsfield/PointGMapField.js"/>
+				<file name="uxAt4/gmapsfield/PolyGMapField.js"/>
+				<file name="uxAt4/gmapsfield/ZonaPointGMapField.js"/>
+				<file name="uxAt4/triStateCB/triStateCheckBox.js"/>
+	
+
+				<file name="uxAt4/filterItemSelector.js"/>
+	
+
+
+				<file name="ux/IFrame.js"/>
+				<file name="ux/Image.js"/>
+				<file name="ux/pageSize.js"/>
+				<file name="ux/panel/PDF.js"/>
+				<file name="ux/util/PDF/TextLayerBuilder.js"/>
+	
+	    	</filelist>
+	    </concat>
+		<echo>Minificando extensiones de EXTJS</echo>
+		<echo>Archivo de salida: ${front.gen-js}</echo>
+    </target>
+	
+
+	<!--  -->
+    
+	<target name="front.js.generate" depends="front.js.prepare">
+		<antcall target="front.js.minify.fw" />
+		<antcall target="front.js.minify.app" />
+		<antcall target="front.js.minify.forms" />
+		<antcall target="front.js.minify.extensions" />
+		<var name="symlink.to" value="${hotdeploy}"/>
+	</target>
+    <target name="front.generate" depends="front.js.generate,front.classpath">
+        <front.generate 
+			contextparam.web="/WEB-INF/applicationContext.xml /WEB-INF/dwrContext.xml /WEB-INF/jboss-runtimeContext.xml"
+        	>
+        </front.generate>
+    </target>
+
+    <target name="front.generate.hotdeploy" depends="front.classpath">
+        <front.generate 
+        	dest.web.xml="web-hotdeploy.xml"
+			contextparam.web="/WEB-INF/applicationContext.xml /WEB-INF/dwrContext.xml /WEB-INF/tomcat-runtimeContext.xml"
+        	>
+        </front.generate>
+
+    </target>
+    
+	<target name="front.classpath">
+		<ivy:cachepath pathid="ivy.component.front.class.path" conf="compile" file="ivy.xml" />
+    	<path id="component.front.class.path">
+    		<pathelement location="${output}/components/${component.logic}/ejb-client/${component.logic}-client.jar"/>
+    	</path>
+	</target>
+	
+    <target name="front.compile" depends="front.classpath">
+        <front.compile />
+    </target>
+    
+	<target name="lib.retrieve">
+		<ivy:retrieve pattern="${lib.retrieved}/[conf]/[artifact].[ext]" conf="compile" file="ivy.xml" />
+		<ivy:report todir="${ivy.reports.dir}" graph="false" xml="false"/>		
+	</target>
+	
+	<target name="buildlib">
+		<ivy:cachefileset setid="ivy.front.fileset" conf="war" file="ivy.xml" />
+		<front.buildlib>
+			<extra.lib>
+				<fileset refid="ivy.front.fileset" />
+			</extra.lib>
+		</front.buildlib>
+	</target>
+
+	<target name="front.customized.war" depends="buildlib" unless="war.uptodate">
+	
+		<front.war>
+			<extra.lib>
+				<lib dir="${front.lib}"/>
+			</extra.lib>
+			<extra.content >
+			    <fileset dir="${output.front}">
+					<include name="gen-js-front/*.js" />
+			    </fileset>
+			</extra.content>
+		</front.war>
+		<ivy:report todir="${ivy.reports.dir}" graph="false" xml="false"/>		
+	</target>
+
+   <target name="make.hotdeploy">
+      <echo>
+      ====================================
+      FRONT HOTDEPLOY
+      ====================================
+      </echo>
+      <antcall target="prepare" />
+      <antcall target="compile" />
+      <def.hotdeploy.webdoclet.uptodate />
+	  <antcall target="front.js.generate" />
+      <antcall target="front.generate.hotdeploy" />
+      <antcall target="buildlib" />
+   		<sequential>
+		   <var name="symlink.to" value="${hotdeploy}"/>
+		   <foreach target="symlink" param="symlink" inheritall="true">
+				<path>  
+					<fileset dir="httpdocs" includes="*" excludes="**/WEB-INF/*"/>  
+					<dirset dir="httpdocs" includes="*" excludes="WEB-INF"/>  
+				</path> 	   	
+		   </foreach>
+		   <var name="symlink.to" value="${hotdeploy}/WEB-INF"/>
+		   <foreach target="symlink" param="symlink" inheritall="true">
+				<path>  
+					<fileset dir="httpdocs/WEB-INF" includes="*" excludes="**/classes/*,web.xml" />  
+					<dirset dir="httpdocs/WEB-INF" includes="*" excludes="classes"/>
+				</path> 	   	
+		   </foreach>
+		   <var name="symlink.to" value="${hotdeploy}/WEB-INF/classes"/>
+		   <foreach target="symlink" param="symlink" inheritall="true">
+				<path>  
+					<fileset dir="httpdocs/WEB-INF/classes" includes="*" />  
+					<dirset dir="httpdocs/WEB-INF/classes" includes="*" />
+				</path> 	   	
+		   </foreach>
+		   <!--  Copiamos las librerías necesarias para el front -->
+			<copy todir="${hotdeploy}/WEB-INF/lib">
+				<fileset dir="${front.lib}"/>
+			</copy> 
+		   <!-- linkamos las clases compiladas -->
+		   <var name="symlink.to" value="${hotdeploy}/WEB-INF/classes/${application.package.dir}"/>
+		   <foreach target="symlink" param="symlink" inheritall="true">
+				<path>  
+					<dirset dir="${front.classes}/${application.package.dir}" includes="*" excludes="at4forms" />
+				</path> 	   	
+		   </foreach>
+		   <var name="symlink.to" value="${hotdeploy}/WEB-INF/classes/es/caib/avaedi/at4forms"/>
+		   <foreach target="symlink" param="symlink" inheritall="true">
+				<path>  
+					<dirset dir="${front.classes}/es/caib/avaedi/at4forms" includes="*" />
+				</path> 	   	
+		   </foreach>
+			<echo>Linkeando a ${hotdeploy} la carpeta ${output.front}/gen-js-front</echo>
+	  		 <var name="symlink.to" value="${hotdeploy}"/>
+			<foreach target="symlink" param="symlink" inheritall="true">
+				<path>  
+					<dirset dir="${output.front}" includes="gen-js-front" />
+				</path>
+			</foreach>
+	
+		   <!-- copiamos el js generado. TODO: el min no está 
+		   <copy file="${front.gen-js}/At4Framework-static-min.js" tofile="${hotdeploy}/At4Framework-static-min.js" />
+	   	   <copy file="${front.gen-js}/At4Framework-static.js" tofile="${hotdeploy}/At4Framework-static.js" />
+		   -->
+		   <!-- copiamos el web.xml -->
+		   <copy file="${front.gen-etc}/web-hotdeploy.xml" tofile="${hotdeploy}/WEB-INF/web.xml" />
+			     	
+	   </sequential>
+   </target>
+
+   <target name="make.gendeploy">
+      <echo>
+      ====================================
+      FRONT GENDEPLOY
+      ====================================
+      </echo>
+      <antcall target="prepare" />
+      <antcall target="compile" />
+      <def.hotdeploy.webdoclet.uptodate />
+      <antcall target="front.generate.hotdeploy" />
+      <antcall target="buildlib" />
+   		<sequential>
+		   <var name="symlink.to" value="${gendeploy}"/>
+		   <foreach target="symlink" param="symlink" inheritall="true">
+				<path>  
+					<fileset dir="httpdocs" includes="*" excludes="**/WEB-INF/*,**/js/*"/>  
+					<dirset dir="httpdocs" includes="*" excludes="WEB-INF,js"/>  
+				</path> 	   	
+		   </foreach>
+	
+		   <var name="symlink.to" value="${gendeploy}/js"/>
+		   <foreach target="symlink" param="symlink" inheritall="true">
+				<path>  
+					<fileset dir="httpdocs/js" includes="*" excludes="**/form/*" />  
+					<dirset dir="httpdocs/js" includes="*" excludes="form"/>
+				</path> 	   	
+		   </foreach>
+	
+		   <!-- linkamos el js generado -->
+		   <var name="symlink.to" value="${gendeploy}/js"/>
+		   <foreach target="symlink" param="symlink" inheritall="true">
+				<path>  
+					<dirset dir="${generator.src}/js" includes="form" />
+				</path> 	   	
+		   </foreach>
+
+		   <var name="symlink.to" value="${gendeploy}/WEB-INF"/>
+		   <foreach target="symlink" param="symlink" inheritall="true">
+				<path>  
+					<fileset dir="httpdocs/WEB-INF" includes="*" excludes="**/classes/*,**/jsp/*,**/messages/*,web.xml" />  
+					<dirset dir="httpdocs/WEB-INF" includes="*" excludes="classes,jsp,messages"/>
+				</path> 	   	
+		   </foreach>
+
+		   <var name="symlink.to" value="${gendeploy}/WEB-INF/messages"/>
+		   <foreach target="symlink" param="symlink" inheritall="true">
+				<path>  
+					<fileset dir="httpdocs/WEB-INF/messages" includes="*" excludes="forms.properties,forms_ca.properties" />  
+				</path> 	   	
+		   </foreach>
+		   <copy file="${generator.src}/messages/forms.properties" tofile="${gendeploy}/WEB-INF/messages/forms.properties" />
+		   <copy file="${generator.src}/messages/forms.properties" tofile="${gendeploy}/WEB-INF/messages/forms_ca.properties" />
+
+		   <var name="symlink.to" value="${gendeploy}/WEB-INF/jsp"/>
+		   <foreach target="symlink" param="symlink" inheritall="true">
+				<path>  
+					<fileset dir="httpdocs/WEB-INF/jsp" includes="*"  />  
+					<dirset dir="httpdocs/WEB-INF/jsp" includes="*" excludes="js"/>
+				</path> 	   	
+		   </foreach>
+
+		   <var name="symlink.to" value="${gendeploy}/WEB-INF/jsp/js/lang"/>
+		   <foreach target="symlink" param="symlink" inheritall="true">
+				<path>  
+					<fileset dir="httpdocs/WEB-INF/jsp/js/lang" includes="*" excludes="forms-lang*.jsp" />  
+				</path> 	   	
+		   </foreach>
+
+		   <!-- linkamos el jsp generado -->
+		   <var name="symlink.to" value="${gendeploy}/WEB-INF/jsp/js/lang"/>
+		   <foreach target="symlink" param="symlink" inheritall="true">
+				<path>  
+					<fileset dir="${generator.src}/js/lang" includes="forms-lang*.jsp" />
+				</path> 	   	
+		   </foreach>
+	
+			<var name="symlink.to" value="${gendeploy}/WEB-INF/classes"/>
+		   <foreach target="symlink" param="symlink" inheritall="true">
+				<path>  
+					<fileset dir="httpdocs/WEB-INF/classes" includes="*" />  
+					<dirset dir="httpdocs/WEB-INF/classes" includes="*" />
+				</path> 	   	
+		   </foreach>
+		   <!--  Copiamos las librerías necesarias para el front -->
+			<copy todir="${gendeploy}/WEB-INF/lib">
+				<fileset dir="${front.lib}"/>
+			</copy> 
+		   <!-- linkamos las clases compiladas -->
+		   <var name="symlink.to" value="${gendeploy}/WEB-INF/classes/${application.package.dir}"/>
+		   <foreach target="symlink" param="symlink" inheritall="true">
+				<path>  
+					<dirset dir="${front.classes}/${application.package.dir}" includes="*" excludes="at4forms" />
+				</path> 	   	
+		   </foreach>
+		   <var name="symlink.to" value="${gendeploy}/WEB-INF/classes/es/caib/avaedi/at4forms"/>
+		   <foreach target="symlink" param="symlink" inheritall="true">
+				<path>  
+					<dirset dir="${front.classes}/es/caib/avaedi/at4forms" includes="*" />
+				</path> 	   	
+		   </foreach>
+		   
+		   <!-- copiamos el js generado. TODO: el min no está 
+		   <copy file="${front.gen-js}/At4Framework-static-min.js" tofile="${gendeploy}/At4Framework-static-min.js" />
+	   	   <copy file="${front.gen-js}/At4Framework-static.js" tofile="${gendeploy}/At4Framework-static.js" />
+		   -->
+		   <!-- copiamos el web.xml -->
+		   <copy file="${front.gen-etc}/web-hotdeploy.xml" tofile="${gendeploy}/WEB-INF/web.xml" />
+			     	
+	   </sequential>
+   </target>
+
+	
+	<target name="common">
+      <echo>
+      ====================================
+      FRONT
+      ====================================
+      </echo>
+      <antcall target="prepare" />
+      <antcall target="compile" />
+      <antcall target="generate" />
+      <def.front.war.uptodate>
+      </def.front.war.uptodate>
+      <antcall target="front.customized.war"/>
+   </target>
+
+   <target name="prepare">
+      <antcall target="front.prepare" />
+   </target>
+
+   <target name="generate">
+      <def.front.webdoclet.uptodate />
+      <antcall target="front.generate" />
+   </target>
+
+   <target name="compile">
+      <antcall target="front.compile" />
+   </target>
+
+   <target name="tests" depends="front.classpath">
+      <echo>
+      ====================================
+      FRONT STANDALONE TESTS
+      ====================================
+      </echo>
+      <antcall target="prepare" />
+      <antcall target="compile" />
+   		<sequential>
+		   <!--  classpath para tests -->
+			<ivy:cachepath pathid="test.path" conf="tests" file="ivy.xml" />
+			
+	    <echo>
+    	COMPILANDO TESTS
+    	====================================
+    	</echo>
+		<javac destdir="${front.test-classes}" source="${javac.source}" target="${javac.target}" debug="true">
+		    <src path="${at4forms.tests.src}"/>
+			<src path="${front.tests.src}" />
+			<!-- DESACTIVAR DESPUÉS DE COMPLETADA LA INTEGRACIÓN DE LA GENERACIÓN - ->
+			<src path="${generator.src}"/>
+			<exclude name="${application.package.dir}/**/logic/**"/>
+			<exclude name="${application.package.dir}/**/common/**"/>	
+			<!- - -->
+		    <classpath>
+		        <path refid="test.path"/>
+			    <path refid="ivy.component.front.class.path"/>
+			    <path refid="component.front.class.path"/>
+		    </classpath>
+			<classpath location="${front.classes}" />
+		</javac>
+		<copy todir="${front.test-classes}">
+			<fileset dir="${at4forms.tests.src}" includes="**/*.properties"/>
+		</copy>
+		
+	   <customize.hibernate-cfg custom="tomcat" desti="${front.test-classes}"/>
+	
+    <echo>
+    EJECUTANDO TESTS
+    ====================================
+    </echo>
+		<junit printsummary="yes" haltonfailure="no">
+	
+		
+			<classpath refid="test.path" />
+			<classpath location="${front.test-classes}" />
+			<classpath location="${front.classes}" />
+	
+		    <classpath refid="ivy.component.front.class.path"/>
+		    <classpath refid="component.front.class.path"/>
+				
+			<formatter type="brief" usefile="false" />
+			<formatter type="xml" />
+			<formatter type="plain" />
+		
+			<batchtest fork="false" todir="${front.report.dir}">
+				<fileset dir="${front.tests.src}">
+					<include name="**/*Tests.java" />
+					<include name="**/*Test.java" />
+				</fileset>
+				<!-- DESACTIVAR DESPUÉS DE COMPLETADA LA INTEGRACIÓN DE LA GENERACIÓN - ->
+				<fileset dir="${generator.src}">
+					<exclude name="${application.package.dir}/**/logic/**"/>				
+					<exclude name="${application.package.dir}/**/common/**"/>				
+					<include name="**/*Test.java" />
+				</fileset>
+				<!- - -->
+
+			</batchtest>
+			
+		</junit>			
+
+	    <!-- generate report with junitreport -->
+	    <junitreport todir="${front.report.dir}">
+	        <fileset dir="${front.report.dir}" />
+	        <report todir="${front.report.dir}/report" />
+	    </junitreport>	
+	
+	   </sequential>
+   </target>
+	
+</project>
+

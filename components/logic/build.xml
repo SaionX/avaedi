@@ -1,0 +1,315 @@
+<project xmlns:ivy="antlib:org.apache.ivy.ant" name="logic" default="common" basedir=".">
+
+   <property name="component" value="${component.logic}"/>
+   <import file="../../build.common.xml" />
+   <import file="../../properties.common.xml"/>
+	<ivy:settings file="${ivy.settings.file}" />
+	
+	<target name="ejb.prepare">
+		<ejb.prepare />
+	</target>
+	
+	<target name="ejb.generate" unless="ejbdoclet.uptodate">
+		 <ejb.generate/>
+	</target>
+	
+	<target name="lib.retrieve">
+		<ivy:retrieve pattern="${lib.retrieved}/[conf]/[artifact].[ext]" conf="compile" file="ivy.xml" />
+		<ivy:report todir="${ivy.reports.dir}" graph="false" xml="false"/>		
+	</target>
+	
+	<target name="ejb.compile">
+		<ivy:cachepath pathid="component.class.path" conf="compile" file="ivy.xml" />
+		<ejb.compile />
+		<ejb.client >
+			<includes>
+				<include name="**/common/**/*.class"/>
+				<include name="**/dao/**/*.class"/>
+				<include name="**/bo/**/*.class"/>
+				<include name="**/exception/**/*.class"/>
+				<include name="**/hibernate/**/*.class"/>
+				<include name="**/model/**/*.class"/>
+				<include name="**/vo/**/*.class"/>
+				<include name="**/util/**/*.class"/>
+				<include name="**/importador/**/*.class"/>
+				<include name="**/meh/**/*.class"/>
+				<include name="application.properties" />
+			</includes>
+		</ejb.client>
+	</target>
+	
+   <target name="ejb.customized.jar" unless="jar.uptodate">
+	  <ejb.customize />
+	  <ejb.jar />
+   	  <antcall target="buildlib"/>
+   </target>
+	
+	<target name="buildlib">
+		<ivy:cachefileset setid="ivy.earlib.fileset" conf="earlib" file="ivy.xml" />
+		<copy flatten="true" todir="${output}/modules/lib">
+            <fileset refid="ivy.earlib.fileset"/>
+		</copy>      	
+	</target>
+	
+
+
+   <target name="make.hotdeploy">
+      <echo>
+      ====================================
+      LOGIC HOTDEPLOY
+      ====================================
+      </echo>
+      <antcall target="prepare" />
+      <antcall target="compile" />
+      <antcall target="generate" />
+   		<sequential>
+		   <!--  Copiamos las librerías necesarias para el logic -->
+			<ivy:cachefileset setid="ivy.logic.fileset" conf="war" file="ivy.xml" />
+			<copy flatten="true" todir="${hotdeploy}/WEB-INF/lib">
+				<fileset refid="ivy.logic.fileset"/>
+			</copy>
+			<!-- linkamos las clases compiladas -->
+		   <var name="symlink.to" value="${hotdeploy}/WEB-INF/classes/${application.package.dir}"/>
+		   <foreach target="symlink" param="symlink" inheritall="true">
+				<path>  
+					<dirset dir="${ejb.classes}/${application.package.dir}" includes="*" excludes="at4forms" />
+				</path> 	   	
+		   </foreach>
+		   <var name="symlink.to" value="${hotdeploy}/WEB-INF/classes/es/caib/avaedi/at4forms"/>
+		   <foreach target="symlink" param="symlink" inheritall="true">
+				<path>  
+					<dirset dir="${ejb.classes}/es/caib/avaedi/at4forms" includes="*" />
+				</path> 	   	
+		   </foreach>
+		   <var name="symlink.to" value="${hotdeploy}/WEB-INF/classes"/>
+		   <foreach target="symlink" param="symlink" inheritall="true">
+				<path>  
+					<fileset dir="${ejb.classes}" includes="application.properties" />  
+				</path> 	   	
+		   </foreach>
+		   <!--  Creamos la configuración hibernate -->
+		   <customize.hibernate-cfg custom="tomcat" desti="${hotdeploy}/WEB-INF/classes"/>
+			
+	   </sequential>
+   </target>
+   
+   <target name="make.gendeploy">
+      <echo>
+      ====================================
+      LOGIC GENDEPLOY
+      ====================================
+      </echo>
+      <antcall target="prepare" />
+      <antcall target="compile" />
+      <antcall target="generate" />
+   		<sequential>
+		   <!--  Copiamos las librerías necesarias para el logic -->
+			<ivy:cachefileset setid="ivy.logic.fileset" conf="war" file="ivy.xml" />
+			<copy flatten="true" todir="${gendeploy}/WEB-INF/lib">
+				<fileset refid="ivy.logic.fileset"/>
+			</copy>
+			<!-- linkamos las clases compiladas -->
+	
+		   <var name="symlink.to" value="${gendeploy}/WEB-INF/classes/${application.package.dir}"/>
+		   <foreach target="symlink" param="symlink" inheritall="true">
+				<path>  
+					<dirset dir="${ejb.classes}/${application.package.dir}" includes="*" excludes="at4forms" />
+				</path> 	   	
+		   </foreach>
+		   <var name="symlink.to" value="${gendeploy}/WEB-INF/classes/es/caib/avaedi/at4forms"/>
+		   <foreach target="symlink" param="symlink" inheritall="true">
+				<path>  
+					<dirset dir="${ejb.classes}/es/caib/avaedi/at4forms" includes="*" />
+				</path> 	   	
+		   </foreach>
+		   <var name="symlink.to" value="${gendeploy}/WEB-INF/classes"/>
+		   <foreach target="symlink" param="symlink" inheritall="true">
+				<path>  
+					<fileset dir="${ejb.classes}" includes="application.properties" />  
+				</path> 	   	
+		   </foreach>
+	
+		   <!--  Creamos la configuración hibernate -->
+		   <customize.hibernate-cfg custom="tomcat" desti="${gendeploy}/WEB-INF/classes"/>
+			
+	   </sequential>
+   </target>
+
+   <target name="tests">
+      <echo>
+      ====================================
+      LOGIC STANDALONE TESTS
+      ====================================
+      </echo>
+      <antcall target="prepare" />
+      <antcall target="compile" />
+      <antcall target="generate" />
+   		<sequential>
+		   <!--  classpath para tests -->
+			<ivy:cachepath pathid="test.path" conf="tests" file="ivy.xml" />
+			<ivy:cachepath pathid="compile.path" conf="compile" file="ivy.xml" />
+			
+    <echo>
+    COMPILANDO TESTS
+    ====================================
+    </echo>
+		<javac destdir="${logic.test-classes}" source="${javac.source}" target="${javac.target}" debug="true">
+		    <src path="${at4forms.tests.src}"/>
+			<src path="${ejb.tests.src}" />
+			<!-- DESACTIVAR DESPUÉS DE COMPLETADA LA INTEGRACIÓN DE LA GENERACIÓN  - ->
+			<src path="${generator.src}"/>
+			<exclude name="${application.package.dir}/**/front/**"/>				
+			<!- -  -->
+		    <classpath>
+		        <path refid="test.path"/>
+			    <path refid="compile.path"/>
+		    </classpath>
+			<classpath location="${ejb.classes}" />
+		</javac>
+		
+	   <customize.hibernate-cfg custom="tomcat" desti="${logic.test-classes}"/>
+	
+    <echo>
+    EJECUTANDO TESTS
+    ====================================
+    </echo>
+		<junit printsummary="yes" haltonfailure="no">
+	
+		
+			<classpath refid="test.path" />
+			<classpath location="${logic.test-classes}" />
+	
+			<classpath refid="compile.path" />
+			<classpath location="${ejb.classes}" />
+				
+			<formatter type="brief" usefile="false" />
+			<formatter type="xml" />
+			<formatter type="plain" />
+
+			<batchtest fork="false" todir="${logic.report.dir}">
+				<fileset dir="${ejb.tests.src}">
+					<include name="**/*Test.java" />
+				</fileset>
+				<!-- DESACTIVAR DESPUÉS DE COMPLETADA LA INTEGRACIÓN DE LA GENERACIÓN - ->
+				<fileset dir="${generator.src}">
+					<exclude name="${application.package.dir}/**/front/**"/>				
+					<include name="**/*Test.java" />
+				</fileset>
+				<!- -  -->
+			</batchtest>
+			
+		</junit>			
+	
+	    <!-- generate report with junitreport -->
+	    <junitreport todir="${logic.report.dir}">
+	        <fileset dir="${logic.report.dir}" />
+	        <report todir="${logic.report.dir}/report" />
+	    </junitreport>	
+			
+	   </sequential>
+   </target>
+	
+	<!--
+	
+	TODO: creo que se podría parametrizar tests para pasarle un patrón o algo así y no tener tanto código duplicado
+	
+	-->
+   <target name="custom.tests">
+      <echo>
+      ====================================
+      LOGIC CUSTOM TESTS
+      ====================================
+      </echo>
+      <antcall target="prepare" />
+      <antcall target="compile" />
+      <antcall target="generate" />
+   		<sequential>
+		   <!--  classpath para tests -->
+			<ivy:cachepath pathid="test.path" conf="tests" file="ivy.xml" />
+			<ivy:cachepath pathid="compile.path" conf="compile" file="ivy.xml" />
+			
+    <echo>
+    COMPILANDO TESTS
+    ====================================
+    </echo>
+		<javac destdir="${logic.test-classes}" source="${javac.source}" target="${javac.target}" debug="true">
+		    <src path="${at4forms.tests.src}"/>
+			<src path="${ejb.tests.src}" />
+			<!-- DESACTIVAR DESPUÉS DE COMPLETADA LA INTEGRACIÓN DE LA GENERACIÓN  - ->
+			<src path="${generator.src}"/>
+			<exclude name="${application.package.dir}/**/front/**"/>				
+			<!- -  -->
+		    <classpath>
+		        <path refid="test.path"/>
+			    <path refid="compile.path"/>
+		    </classpath>
+			<classpath location="${ejb.classes}" />
+		</javac>
+		
+	   <customize.hibernate-cfg custom="tomcat" desti="${logic.test-classes}"/>
+	
+    <echo>
+    EJECUTANDO TESTS
+    ====================================
+    </echo>
+		<junit printsummary="yes" haltonfailure="no">
+	
+		
+			<classpath refid="test.path" />
+			<classpath location="${logic.test-classes}" />
+	
+			<classpath refid="compile.path" />
+			<classpath location="${ejb.classes}" />
+				
+			<formatter type="brief" usefile="false" />
+			<formatter type="xml" />
+			<formatter type="plain" />
+
+			<batchtest fork="false" todir="${logic.report.dir}">
+				<fileset dir="${ejb.tests.src}">
+					<!-- SI, se escribe aquí a mano el test que queremos ejecutar -->
+					<include name="**/IslaBeanTest.java" />
+				</fileset>
+				<!-- DESACTIVAR DESPUÉS DE COMPLETADA LA INTEGRACIÓN DE LA GENERACIÓN - ->
+				<fileset dir="${generator.src}">
+					<exclude name="${application.package.dir}/**/front/**"/>				
+					<include name="**/*Test.java" />
+				</fileset>
+				<!- -  -->
+			</batchtest>
+			
+		</junit>			
+	
+	    <!-- generate report with junitreport
+	    <junitreport todir="${logic.report.dir}">
+	        <fileset dir="${logic.report.dir}" />
+	        <report todir="${logic.report.dir}/report" />
+	    </junitreport>	
+ 		-->			
+	   </sequential>
+   </target>	
+   
+   
+	<target name="common">
+	  <echo>
+	  ====================================
+	  LOGIC
+	  ====================================
+	  </echo>
+	  <antcall target="prepare"/>
+	  <antcall target="generate"/>
+	  <antcall target="compile"/>
+	  <def.jar.uptodate />
+	  <antcall target="ejb.customized.jar"/>
+   </target>
+
+	<target name="prepare">
+		<antcall target="ejb.prepare" />
+	</target>
+	<target name="generate">
+		<antcall target="ejb.generate" />
+	</target>
+	<target name="compile">
+		<antcall target="ejb.compile" />
+	</target>
+</project>

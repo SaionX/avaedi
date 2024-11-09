@@ -1,0 +1,48 @@
+        
+        <!-- AUDITORIA 
+        <mapping class="es.caib.avaedi.at4forms.common.audit.AuditOperation" />
+        -->
+
+        <mapping class="es.caib.avaedi.common.model.AcusticaRuidosInterioresHorizontales" />
+        <mapping class="es.caib.avaedi.common.model.Blob" />
+        <mapping class="es.caib.avaedi.common.model.Edificio" />
+        <mapping class="es.caib.avaedi.common.model.Cimentaciones" />
+        <mapping class="es.caib.avaedi.common.model.Deficiencia" />
+        <mapping class="es.caib.avaedi.common.model.ConfigExportacion" />
+        <mapping class="es.caib.avaedi.common.model.Usuario" />
+        <mapping class="es.caib.avaedi.common.model.Estructura" />
+        <mapping class="es.caib.avaedi.common.model.AcusticaDatosGenerales" />
+        <mapping class="es.caib.avaedi.common.model.EstadoInforme" />
+        <mapping class="es.caib.avaedi.common.model.ValoracionParcial" />
+        <mapping class="es.caib.avaedi.common.model.Valor" />
+        <mapping class="es.caib.avaedi.common.model.Instalaciones" />
+        <mapping class="es.caib.avaedi.common.model.Caracteristica" />
+        <mapping class="es.caib.avaedi.common.model.AcusticaRuidosExteriores" />
+        <mapping class="es.caib.avaedi.common.model.ConfigAplicacion" />
+        <mapping class="es.caib.avaedi.common.model.AcusticaRuidoInstalaciones" />
+        <mapping class="es.caib.avaedi.common.model.AcusticaComprobaciones" />
+        <mapping class="es.caib.avaedi.common.model.Via" />
+        <mapping class="es.caib.avaedi.common.model.AcusticaRuidosInterioresUniones" />
+        <mapping class="es.caib.avaedi.common.model.AccesibilidadValoracionFinales" />
+        <mapping class="es.caib.avaedi.common.model.Inspeccion" />
+        <mapping class="es.caib.avaedi.common.model.Acusticas" />
+        <mapping class="es.caib.avaedi.common.model.Municipio" />
+        <mapping class="es.caib.avaedi.common.model.Informe" />
+        <mapping class="es.caib.avaedi.common.model.DocumentacionOtro" />
+        <mapping class="es.caib.avaedi.common.model.AcusticaRuidosInterioresVerticales" />
+        <mapping class="es.caib.avaedi.common.model.GrupoCaracteristicas" />
+        <mapping class="es.caib.avaedi.common.model.TipoVia" />
+        <mapping class="es.caib.avaedi.common.model.CerramientosCubiertas" />
+        <mapping class="es.caib.avaedi.common.model.FechaVisita" />
+        <mapping class="es.caib.avaedi.common.model.EstadoAplicacion" />
+        <mapping class="es.caib.avaedi.common.model.AccesibilidadAjustesRazonables" />
+        <mapping class="es.caib.avaedi.common.model.Conservacion" />
+        <mapping class="es.caib.avaedi.common.model.EficienciasEnergeticas" />
+        <mapping class="es.caib.avaedi.common.model.AcusticaValoracionFinal" />
+        <mapping class="es.caib.avaedi.common.model.DeficienciaTipo" />
+        <mapping class="es.caib.avaedi.common.model.AccesibilidadPublicos" />
+        <mapping class="es.caib.avaedi.common.model.AcusticaMejorasAcusticas" />
+        <mapping class="es.caib.avaedi.common.model.Historico" />
+        <mapping class="es.caib.avaedi.common.model.Isla" />
+                
+		<mapping resource="named-queries.hbm.xml"/>

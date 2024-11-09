@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:context="http://www.springframework.org/schema/context" xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:jdbc="http://www.springframework.org/schema/jdbc" xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xmlns:jee="http://www.springframework.org/schema/jee"
+	xsi:schemaLocation="
+http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd
+http://www.springframework.org/schema/jee http://www.springframework.org/schema/jee/spring-jee.xsd">
+
+	<description>
+	
+	Descriptor que configura los beans de las vistas
+
+	</description>		
+
+	<!--  Configuración del exportador -->	
+	<bean id="urlMapping" class="org.springframework.web.servlet.handler.SimpleUrlHandlerMapping">	
+		<property name="mappings">
+			<props>
+				<prop key="/index.html">staticViewController</prop>
+
+				<prop key="/export/exportar.*">exportController</prop>
+				<prop key="/export/inspeccionExportar.*">inspeccionExportController</prop>
+				<prop key="/export/descarregar">documentController</prop>
+				<!--  <prop key="/export/datosDenuncia.pdf">datosDenunciaController</prop>				
+				<prop key="/export/imprimirTarjetas.pdf">imprimirTarjetasController</prop> -->				
+
+				<prop key="/js/lang/At4Framework-lang.js">staticViewController</prop>
+				<prop key="/js/lang/ux-lang.js">staticViewController</prop>
+				<prop key="/js/lang/forms-lang.js">staticViewController</prop>
+				<prop key="/js/lang/popup-lang.js">staticViewController</prop>
+
+				<prop key="/login/loginForm.html">staticViewController</prop>
+				<prop key="/login/loginError.html">staticViewController</prop>
+			
+			</props>
+		</property>
+		<property name="alwaysUseFullPath" value="true"/>
+		<property name="interceptors">
+		  <list>
+		    <ref bean="localeChangeInterceptor"/>
+		    <!-- desactivado para pruebas
+		    <ref bean="ConfigInterceptor"/>  
+		       -->
+		  </list>
+		</property>
+	</bean>	
+	
+	<bean id="staticViewController" class="org.springframework.web.servlet.mvc.UrlFilenameViewController"/>
+
+	<bean id="viewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+	  <property name="requestContextAttribute" value="rc"/>
+	  <property name="viewClass" value="org.springframework.web.servlet.view.JstlView"/>
+	  <property name="prefix" value="/WEB-INF/jsp/"/>
+	  <property name="suffix" value=".jsp"/>
+	    <property name="exposedContextBeanNames">
+	        <list><value>propertyConfigurer</value></list>
+	    </property>
+    </bean>
+
+
+</beans>

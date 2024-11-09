@@ -1,0 +1,22 @@
+<!--  
+	En interno, el contexto lo  configuramos en tomcat
+	Este archivo es para externo
+ -->
+<Context
+    antiJARLocking="true"
+    allowLinking="true"
+    reloadable="true">
+
+            <Resource
+            name="jdbc/avaediDS"
+            auth="Container"
+            type="javax.sql.DataSource"
+            driverClassName="org.postgresql.Driver"
+            url="jdbc:postgresql://dexter.in.at4.net:7432/avaedi_demo_db"
+            username="postgres"
+            password=""
+            maxActive="20"
+            maxIdle="10"
+            maxWait="-1"/>
+
+</Context>

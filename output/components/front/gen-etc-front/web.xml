@@ -1,0 +1,231 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://java.sun.com/xml/ns/javaee" xmlns:web="http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" version="2.5">
+   <display-name>CAIB AVAEDI</display-name>
+   <description><![CDATA[Registre d'informes d'avaluació d'edificis]]></description>
+
+   <context-param>
+      <param-name>contextConfigLocation</param-name>
+      <param-value>/WEB-INF/applicationContext.xml /WEB-INF/dwrContext.xml /WEB-INF/jboss-runtimeContext.xml</param-value>
+   </context-param>
+
+  <!-- Spring Listener -->
+  <listener> 
+		<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class> 
+  </listener>
+  
+  <!-- http://stackoverflow.com/questions/21286675/scope-session-is-not-active-for-the-current-thread-illegalstateexception-no -->
+  <listener>
+  	<listener-class>org.springframework.web.context.request.RequestContextListener</listener-class>
+  </listener>
+
+ 	<!-- Spring DispatcherServlet -->
+	<servlet>
+		<display-name>Spring Servlet</display-name>
+		<servlet-name>front</servlet-name>
+		<servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+		<!-- Para evitar que DisplatcherServlet vuelva a instanciar los beans que ya instancia ContextLoaderListener
+			TODO: Investigar más: si lo activo, la aplicación despliega pero dan not found todas las urls de spring 
+		<init-param>
+		  <param-name>contextConfigLocation</param-name>
+		  <param-value>/WEB-INF/empty-applicationContext.xml</param-value>
+		</init-param>
+		--> 
+		<load-on-startup>1</load-on-startup>
+	</servlet>
+
+	<!--  mappings al servlet spring -->
+	<servlet-mapping>
+		<servlet-name>front</servlet-name>
+		<url-pattern>/export/*</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>front</servlet-name>
+		<url-pattern>/index.html</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>front</servlet-name>
+		<url-pattern>/js/lang/*</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>front</servlet-name>
+		<url-pattern>/login/*</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>front</servlet-name>
+		<url-pattern>/chart/*</url-pattern>
+	</servlet-mapping>
+	
+	
+	<!--  El servlet dwr -->
+	<servlet>
+		<display-name>DWR Servlet</display-name>
+		<servlet-name>dwr</servlet-name>
+		<servlet-class>org.directwebremoting.spring.DwrSpringServlet</servlet-class>
+		<init-param>
+			<param-name>debug</param-name>
+			<param-value>true</param-value>
+		</init-param>
+		<init-param>
+			<param-name>jsonpEnabled</param-name>
+			<param-value>true</param-value>
+		</init-param>
+		<!-- Parece que interfiere con el proxy para multi-tenant  -->
+		<init-param>
+			<param-name>crossDomainSessionSecurity</param-name>
+			<param-value>false</param-value>
+		</init-param>
+	</servlet>
+
+  	<!-- mapping para dwr -->
+	<servlet-mapping>
+	  <servlet-name>dwr</servlet-name>
+	  <url-pattern>/dwr/*</url-pattern>
+	</servlet-mapping>
+
+	<!--  Jersey servlet (para servicios rest) -->
+	<servlet>
+		<servlet-name>jersey-servlet</servlet-name>
+		<servlet-class>
+			org.glassfish.jersey.servlet.ServletContainer
+		</servlet-class>
+      <init-param>
+            <param-name>javax.ws.rs.Application</param-name>
+            <param-value>es.caib.avaedi.front.server.RestApplication</param-value>
+        </init-param>
+           <!--<init-param>
+        <param-name>jersey.config.server.provider.packages</param-name>
+        <param-value>
+            es.caib.avaedi.front.server
+        </param-value>
+      	</init-param> -->
+<!--         
+		<init-param>
+			<param-name>jersey.config.server.provider.packages</param-name>
+			<param-value>es.ajpalma.movback.front</param-value>
+		</init-param>
+ -->
+ 		<load-on-startup>1</load-on-startup>
+	</servlet>	
+	<servlet-mapping>
+		<servlet-name>jersey-servlet</servlet-name>
+		<url-pattern>/rest/*</url-pattern>
+	</servlet-mapping>	
+
+
+<!--  filtro de seguridad spring
+	<filter>
+    	<filter-name>springSecurityFilterChain</filter-name>
+    	<filter-class>
+            org.springframework.web.filter.DelegatingFilterProxy
+    	</filter-class>
+	</filter>
+ -->
+ 
+  	<!-- Filtro asignar el encoding a todas las peticiones -->
+	<filter>
+		<filter-name>SetCharacterEncodingFilter</filter-name>
+		<filter-class>org.springframework.web.filter.CharacterEncodingFilter</filter-class>
+		<init-param>
+			<param-name>encoding</param-name>
+			<param-value>UTF8</param-value>
+		</init-param>
+		<!--  
+		<init-param>
+			<param-name>forceEncoding</param-name>
+			<param-value>true</param-value>
+		</init-param>
+		-->
+	</filter>
+
+<!--
+	<filter-mapping>
+		<filter-name>springSecurityFilterChain</filter-name>
+	    <url-pattern>/*</url-pattern>
+	</filter-mapping>
+-->
+  	<filter-mapping>
+		<filter-name>SetCharacterEncodingFilter</filter-name>
+		<url-pattern>/*</url-pattern>
+	</filter-mapping>
+
+   <session-config>
+      <session-timeout>60</session-timeout>
+   </session-config>
+
+   <!--
+   To specify mime mappings, create a file named mime-mappings.xml, put it in your project's mergedir.
+   Organize mime-mappings.xml following this DTD slice:
+
+   <!ELEMENT mime-mapping (extension, mime-type)>
+   -->
+
+   <welcome-file-list>
+      <welcome-file>index.jsp</welcome-file>
+   </welcome-file-list>
+
+   <!--
+   To specify error pages, create a file named error-pages.xml, put it in your project's mergedir.
+   Organize error-pages.xml following this DTD slice:
+
+   <!ELEMENT error-page ((error-code | exception-type), location)>
+   -->
+
+  	<jsp-config> 
+		<taglib>
+			<taglib-uri>http://java.sun.com/jstl/core</taglib-uri>
+			<taglib-location>/WEB-INF/c.tld</taglib-location>
+		</taglib>
+	</jsp-config>
+
+  <resource-ref>
+    <description>Mail</description>
+  	<res-ref-name>mail/Mail</res-ref-name> 
+    <res-type>javax.mail.Session</res-type>
+    <res-auth>Container</res-auth>
+ </resource-ref>
+
+    <!-- Comentar para usar securityfilter, spring-security, u otros -->
+	<security-constraint>
+		<web-resource-collection>
+			<web-resource-name>Back</web-resource-name>
+			<url-pattern>/*</url-pattern>
+		</web-resource-collection>
+		<auth-constraint>
+			<role-name>AED_ADMIN</role-name>
+			<role-name>AED_OPERADOR</role-name>
+			<role-name>AED_CONSULTA</role-name>
+			<role-name>AED_MUNICIPI</role-name>
+		</auth-constraint>
+	</security-constraint>
+	<security-constraint>
+		<web-resource-collection>
+			<web-resource-name>Back</web-resource-name>
+			<url-pattern>/css/login.css</url-pattern>
+			<url-pattern>/img/login/*</url-pattern>
+			<url-pattern>/rest/*</url-pattern>
+		</web-resource-collection>
+	</security-constraint>
+	<login-config>
+		<auth-method>BASIC</auth-method>
+		<realm-name>Govern de les Illes Balears</realm-name>
+	</login-config>
+
+	<security-role>
+		<description>operador general</description>
+		<role-name>AED_OPERADOR</role-name>
+	</security-role>
+	<security-role>
+		<description>administrador general</description>
+		<role-name>AED_ADMIN</role-name>
+	</security-role>
+	<security-role>
+		<description>usuario de consulta general</description>
+		<role-name>AED_CONSULTA</role-name>
+	</security-role>
+	<security-role>
+		<description>gestor de municipio</description>
+		<role-name>AED_MUNICIPI</role-name>
+	</security-role>
+ 	<!--  -->
+ 
+</web-app>

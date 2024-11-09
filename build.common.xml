@@ -1,0 +1,400 @@
+<!-- La tasca default es per evitar que l'editor protesti -->
+<project name="build.common">
+
+    <!-- d'aquesta manera, l'editor identifica les propietats definides -->
+    <import file="properties.common.xml"/>
+    <property name="component" value=""/>
+
+   <!-- ================================================================== -->
+   <!-- GENERALS                                                           -->
+   <!-- ================================================================== -->
+
+   <macrodef name="customize" >
+      <attribute name="origen"/>
+      <attribute name="desti"/>
+      <sequential>
+         <echo> "customize" -origen=@{origen} -destino=@{desti} </echo>
+         <copy todir="@{desti}" overwrite="yes"  >
+            <fileset dir="@{origen}" />
+            <filterset>
+               <filtersfile file="${project.dir}/deploy.properties"/>
+            </filterset>
+         </copy>
+      </sequential>
+   </macrodef>
+	
+  <macrodef name="customize.hibernate-cfg" >
+      <attribute name="desti"/>
+      <attribute name="custom"/>
+      <sequential>
+         <echo> "customize.hbnxml" -origen=@{origen} -destino=@{desti} </echo>
+         <concat destfile="@{desti}/hibernate.cfg.xml" append="no">
+            <filelist dir="${ejb.etc}" files="hibernate_head.cfg.xml"/>
+            <filelist dir="${ejb.etc}" files="hibernate_@{custom}.cfg.xml"/>
+            <filelist dir="${ejb.etc}" files="hibernate_mappings.cfg.xml"/>
+            <filelist dir="${ejb.etc}" files="hibernate_foot.cfg.xml"/>
+         </concat>
+		 <copy todir="@{desti}">
+	          <fileset dir="${ejb.etc}" includes="named-queries.hbm.xml,usertypes.hbm.xml" />
+		</copy>
+         
+      </sequential>
+   </macrodef>
+
+   <macrodef name="def.ear.uptodate">
+      <sequential>
+         <uptodate property="ear.uptodate" targetfile="${product}/${application.name}.ear">
+            <srcfiles dir="etc"></srcfiles>
+            <srcfiles dir="${output}/modules"></srcfiles>
+         </uptodate>
+         <echo> ear.uptodate = ${ear.uptodate} </echo>
+      </sequential>
+   </macrodef>
+
+	<macrodef name="assemble.ear">
+		<attribute name="modules"/>
+		<sequential>
+ 			<ear earfile="${product}/${application.name}.ear" manifest="etc/manifest.mf" appxml="@{modules}/META-INF/application.xml">
+				<fileset dir="@{modules}" includes="META-INF/*.xml,**/*.jar,*.war,*.har" excludes="META-INF/application.xml"/>
+			</ear>
+		</sequential>
+	</macrodef>
+
+    <target name="conditional.assemble.ear" unless="ear.uptodate">
+        <customize origen="etc" desti="${modules}/META-INF"/>
+        <assemble.ear modules="${modules}" />
+    </target>
+
+    <!-- ================================================================== -->
+    <!-- LOGIC                                                                -->
+    <!-- ================================================================== -->
+
+    <macrodef name="ejb.prepare">
+        <sequential>
+            <mkdir dir="${ejb.gen-etc}"/>
+            <mkdir dir="${ejb.client}"/>
+            <mkdir dir="${ejb.classes}"/>
+		    <mkdir dir="${logic.test-classes}"/>
+            <mkdir dir="${modules}"/>
+			<mkdir dir="${output.logic}/tests"/>
+        </sequential>
+    </macrodef>
+
+    <macrodef name="ejb.generate">
+        <sequential>
+		   <!--  Creamos la configuración hibernate -->
+		   <customize.hibernate-cfg custom="jboss" desti="${ejb.gen-etc}"/>
+            <tstamp>
+                <format property="gen_ejb_timestamp" pattern="yyyy-MM-dd&apos;T&apos;HH-mm-ss"></format>
+            </tstamp>
+            <echo file="${gen.ejb.uptodate.file}" message="gen.ejb.timestamp=${gen_ejb_timestamp}"></echo>
+        </sequential>
+    </macrodef>
+
+   <target name="symlink">
+ 		<basename property="symlink.filename" file="${symlink}"/>
+   		<symlink link="${symlink.to}/${symlink.filename}" resource="${symlink}" overwrite="true"/>
+   </target> 
+    
+
+    <!-- todo:  afegir beautify a depends -->
+    <macrodef name="ejb.compile">
+        <sequential>
+            <echo>-- ejb.compile --</echo>
+        	<javac destdir="${ejb.classes}" debug="on" source="${javac.source}" target="${javac.target}">
+                <src path="${ejb.src}"/>
+			    <src path="${at4forms.ejb.src}"/>
+	
+				<!-- DESACTIVAR DESPUÉS DE COMPLETADA LA INTEGRACIÓN DE LA GENERACIÓN - ->
+				<src path="${generator.src}"/>
+				<exclude name="${application.package.dir}/**/front/**"/>				
+				<exclude name="${application.package.dir}/**/tests/**"/>
+				<!- - -->
+
+                <classpath>
+                    <path refid="component.class.path"/>
+                </classpath>
+            </javac>
+			<copy todir="${ejb.classes}">
+				<fileset dir="${ejb.src}" includes="**/*.xml"/>
+				<fileset dir="${at4forms.ejb.src}" includes="**/*.xml"/>
+				<fileset dir="${ejb.src}" includes="**/*.properties"/>
+			</copy>
+        </sequential>
+    </macrodef>
+
+    <macrodef name="ejb.client">
+        <element name="includes"/>
+        <sequential>
+            <echo>-- ejb.client --</echo>
+                <jar jarfile="${ejb.client}/${component}-client.jar">
+                    <fileset dir="${ejb.classes}">
+                       <includes />
+                    </fileset>
+                </jar>
+        </sequential>
+    </macrodef>
+
+
+    <macrodef name="ejb.common">
+        <sequential>
+           <ejb.prepare />
+           <ejb.generate />
+           <ejb.compile />
+        </sequential>
+    </macrodef>
+
+   <macrodef name="def.jar.uptodate">
+      <element name="extra.src" optional="true" />
+      <sequential>
+         <uptodate property="jar.uptodate" targetfile="${modules}/${application.name}.jar">
+            <srcfiles dir="${ejb.src}"></srcfiles>
+    		<srcfiles dir="${at4forms.ejb.src}"></srcfiles>
+            <srcfiles dir="${ejb.home}/etc"></srcfiles>
+			<!-- DESACTIVAR DESPUÉS DE COMPLETADA LA INTEGRACIÓN DE LA GENERACIÓN - ->
+			<srcfiles dir="${generator.src}"/>
+			<!- - -->
+			 
+	
+         </uptodate>
+         <echo> jar.uptodate = ${jar.uptodate} </echo>
+      </sequential>
+   </macrodef>
+
+    <macrodef name="ejb.customize">
+        <sequential>
+            <echo>-- ejb.customize --</echo>
+            <customize
+                origen="${ejb.gen-etc}"
+                desti="${ejb.gen-etc}"/>
+        </sequential>
+    </macrodef>
+
+   <macrodef name="ejb.jar">
+      <element name="extra.content" optional="true"/>
+      <sequential>
+         <jar jarfile="${modules}/${application.name}.jar" basedir="${ejb.classes}" manifest="${ejb.etc}/manifest.mf"  >
+            <metainf dir="${ejb.etc}" includes="jboss-ejb3.xml"/>
+            <extra.content />
+			<!--exclude name="**/model/" /-->
+            <fileset dir="${ejb.gen-etc}" includes="hibernate.cfg.xml,named-queries.hbm.xml" />
+			<fileset dir="${ejb.src}" includes="**/resources/*" />
+			<fileset dir="${at4forms.ejb.src}" includes="**/resources/*" />
+         </jar>
+      </sequential>
+   </macrodef>
+
+   <!-- ================================================================== -->
+   <!-- WEB            ${component}                                        -->
+   <!-- ================================================================== -->
+
+	<macrodef name="front.prepare">
+        <sequential>
+            <echo>-- front.prepare --</echo>
+            <mkdir dir="${modules}"/>
+            <mkdir dir="${front.lib}"/>
+            <mkdir dir="${front.classes}"/>
+            <mkdir dir="${front.gen-etc}"/>
+            <mkdir dir="${front.gen-js}"/>
+            <mkdir dir="${front.gen-css}"/>
+		    <mkdir dir="${front.test-classes}"/>
+			<mkdir dir="${output.front}/tests"/>
+        </sequential>
+    </macrodef>
+
+    <macrodef name="def.webdoclet.uptodate">
+        <sequential>
+            <uptodate property="webdoclet.uptodate" targetfile="${gen.web.uptodate.file}">
+                <srcfiles dir="${web.src}"></srcfiles>
+				<!-- DESACTIVAR DESPUÉS DE COMPLETADA LA INTEGRACIÓN DE LA GENERACIÓN - ->
+				<srcfiles dir="${generator.src}"/>
+				<!- - -->
+            </uptodate>
+            <echo>webdoclet.uptodate = ${webdoclet.uptodate}</echo>
+        </sequential>
+    </macrodef>
+
+    <macrodef name="def.front.webdoclet.uptodate">
+        <sequential>
+            <uptodate property="webdoclet.uptodate" targetfile="${gen.front.uptodate.file}">
+			    <srcfiles dir="${front.src}"></srcfiles>
+                <srcfiles dir="${at4forms.front.src}"></srcfiles>
+				<!-- DESACTIVAR DESPUÉS DE COMPLETADA LA INTEGRACIÓN DE LA GENERACIÓN - ->
+				<srcfiles dir="${generator.src}"/>
+				<!- - -->
+            </uptodate>
+            <echo>webdoclet.uptodate = ${webdoclet.uptodate}</echo>
+        </sequential>
+    </macrodef>
+
+    <macrodef name="def.hotdeploy.webdoclet.uptodate">
+        <sequential>
+            <uptodate property="webdoclet.hotdeploy.uptodate" targetfile="${gen.hotdeploy.uptodate.file}">
+                <srcfiles dir="${front.src}"></srcfiles>
+		        <srcfiles dir="${at4forms.front.src}"></srcfiles>
+				<!-- DESACTIVAR DESPUÉS DE COMPLETADA LA INTEGRACIÓN DE LA GENERACIÓN - ->
+				<srcfiles dir="${generator.src}"/>
+				<!- - -->
+            </uptodate>
+            <echo>webdoclet.hotdeploy.uptodate = ${webdoclet.hotdeploy.uptodate}</echo>
+        </sequential>
+    </macrodef>
+
+
+    <macrodef name="front.generate">
+        <attribute name="dest.web.xml" default="web.xml"/>
+    	<attribute name="contextparam.web" />
+        <sequential>
+            <echo>-- front.generate --</echo>
+
+			<copy file="${front.home}/etc/web.xml" tofile="${front.gen-etc}/@{dest.web.xml}" overwrite="yes"  >
+		       <filterset>
+				  <filter token="contextparam.web" value="@{contextparam.web}" />
+				  <filtersfile file="${front.home}/deploy.properties"/>
+		          <filtersfile file="${project.dir}/deploy.properties"/>
+			      <filtersfile file="${project.dir}/components/logic/deploy.properties"/>
+		       </filterset>
+		    </copy>
+			<copy file="${front.home}/etc/jboss-web.xml" tofile="${front.gen-etc}/jboss-web.xml" overwrite="yes"  >
+		       <filterset>
+				  <filtersfile file="${front.home}/deploy.properties"/>
+		          <filtersfile file="${project.dir}/deploy.properties"/>
+			      <filtersfile file="${project.dir}/components/logic/deploy.properties"/>
+		       </filterset>
+		    </copy>
+        </sequential>
+    </macrodef>
+
+
+    <macrodef name="front.compile">
+        <sequential>
+            <echo>-- front.compile --</echo>
+            <javac destdir="${front.classes}" debug="on" source="${javac.source}" target="${javac.target}">
+                <src path="${front.src}"/>
+			    <src path="${at4forms.front.src}"/>
+				<!-- DESACTIVAR DESPUÉS DE COMPLETADA LA INTEGRACIÓN DE LA GENERACIÓN - ->
+				<src path="${generator.src}"/>
+				<exclude name="${application.package.dir}/**/common/**"/>				
+				<exclude name="${application.package.dir}/**/logic/**"/>	
+				<exclude name="${application.package.dir}/**/tests/**"/>
+				<!- - -->
+
+				<classpath>
+                    <path refid="ivy.component.front.class.path"/>
+                    <path refid="component.front.class.path"/>
+                </classpath>
+            </javac>
+	
+		    <echo>-- copiando plantillas docx --</echo>
+			<copy todir="${front.classes}">
+				<fileset dir="${front.src}" includes="**/*.docx"/>
+			</copy>
+			<copy todir="${front.classes}">
+				<fileset dir="${at4forms.front.src}" includes="**/*.docx"/>
+			</copy>
+	
+        </sequential>
+    </macrodef>
+
+
+   <macrodef name="def.war.uptodate">
+      <element name="extra.src" optional="true" />
+      <sequential>
+         <echo>-- def.war.uptodate --</echo>
+         <uptodate property="war.uptodate" targetfile="${modules}/${component}.war">
+            <srcfiles dir="${web.src}"></srcfiles>
+			<!-- DESACTIVAR DESPUÉS DE COMPLETADA LA INTEGRACIÓN DE LA GENERACIÓN - ->
+			<srcfiles dir="${generator.src}"/>
+			 <!- - -->
+            <srcfiles dir="${web.home}/httpdocs"></srcfiles>
+            <srcfiles dir="${web.home}/etc"></srcfiles>
+            <extra.src />
+         </uptodate>
+         <echo> war.uptodate = ${war.uptodate}</echo>
+      </sequential>
+   </macrodef>
+
+   <macrodef name="def.front.war.uptodate">
+      <element name="extra.src" optional="true" />
+      <sequential>
+         <echo>-- def.front.war.uptodate --</echo>
+         <uptodate property="war.uptodate" targetfile="${modules}/${application.name}.war">
+            <srcfiles dir="${front.src}"></srcfiles>
+    		<srcfiles dir="${at4forms.front.src}"></srcfiles>
+			<!-- DESACTIVAR DESPUÉS DE COMPLETADA LA INTEGRACIÓN DE LA GENERACIÓN - ->
+			<srcfiles dir="${generator.src}"/>
+			<!- - -->
+            <srcfiles dir="${front.home}/httpdocs"></srcfiles>
+            <srcfiles dir="${front.home}/etc"></srcfiles>
+            <extra.src />
+         </uptodate>
+         <echo> war.uptodate = ${war.uptodate}</echo>
+      </sequential>
+   </macrodef>
+
+	   <macrodef name="front.buildlib">
+	      <element name="extra.lib" optional="false" />
+	      <sequential>
+			<copy flatten="true" todir="${front.lib}">
+	            <extra.lib />
+			</copy>      	
+	      </sequential>
+	   </macrodef>
+
+	   <macrodef name="front.war">
+	      <element name="extra.content" optional="true" />
+	      <element name="extra.webinf" optional="true" />
+	      <element name="extra.lib" optional="true" />
+	      <sequential>
+	         <war warfile="${modules}/${front.context}.war" webxml="${output.front}/gen-etc-front/web.xml" manifest="${front.home}/etc/manifest.mf">
+
+	         	<!-- fitxers estatics ${component}-->
+	            <fileset dir="${front.home}/httpdocs">
+	            	<!-- podemos excluir archivos 
+	               <exclude name="maquetacion/"/>
+	               <exclude name="img/fotos_ejemplo/"/>
+	                -->
+					<exclude name="**/context.xml" />
+					<exclude name="**/log4j.properties" />
+					<exclude name="**/logging.properties" />
+	            </fileset>
+	            <extra.content />
+	            <!-- descriptors -->
+	            <webinf dir="${output.front}/gen-etc-front" excludes="web.xml,web-hotdeploy.xml,front-uptodate.txt,hotdeploy-uptodate.txt"/>
+	            <extra.webinf/>
+	            <!-- classes del war-->
+	            <classes dir="${front.home}/etc" includes="*.properties"/>
+	            <classes dir="${front.classes}" />
+	            <extra.lib />
+	            <!-- lib -->
+	         </war>
+	      </sequential>
+	   </macrodef>
+
+	
+   <!-- ================================================================== -->
+   <!-- ejb.prepare                                                        -->
+   <!-- ================================================================== -->
+
+   <target name="ejb.prepare" description="part de la preparacio necessaria pels ejb">
+      <ejb.prepare />
+   </target>
+
+   <target name="ejb.generate" description="genera codi i descriptors pels ejbs" >
+       <ejb.generate />
+   </target>
+
+   <target name="deploy.jar">
+      <copy file="${modules}/${application.name}.jar" todir="${deploy.dir}"/>
+   </target>
+
+
+    <!-- ================================================================== -->
+    <!-- front.prepare                                                        -->
+    <!-- ================================================================== -->
+   <target name="front.prepare" description="part de la preparacio necessaria pel component front" >
+      <front.prepare />
+   </target>
+
+
+</project>

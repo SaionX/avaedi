@@ -1,0 +1,74 @@
+ /** BOTONES DE MENU NEGRO **/
+ .x-btn.at4-menuButton {
+ 	background-color: #323232;
+ 	border: 0 !important;
+ }
+ .x-btn.at4-menuButton.x-btn-over{
+	background-color: #3A3A3A;
+ }
+ .x-btn.at4-menuButton.x-btn-over.x-btn-inner-default-toolbar-small{
+	color: white !important;
+ }
+ a.x-btn.at4-menuButton.x-btn-pressed, a.x-btn.at4-menuButton.x-btn-menu-active{
+ 	/* TODO: poner box-shadow gris o blanco;*/
+    -webkit-box-shadow: white 0 1px 0px 0 inset, white 0 -1px 0px 0 inset, white -1px 0 0px 0 inset, white 1px 0 0px 0 inset;
+    -moz-box-shadow: white 0 1px 0px 0 inset, white 0 -1px 0px 0 inset, white -1px 0 0px 0 inset, white 1px 0 0px 0 inset;
+    box-shadow: white 0 1px 0px 0 inset, white 0 -1px 0px 0 inset, white -1px 0 0px 0 inset, white 1px 0 0px 0 inset; 
+	background-color: #3A3A3A;
+ }
+ .x-btn.at4-menuButton.x-btn-focus{
+ 	-webkit-box-shadow: none;
+    -moz-box-shadow: none;
+    box-shadow: none;
+ }
+/*
+ .x-btn.at4-menuButton.x-btn-menu-active{
+	background-color: #3A3A3A;
+ }*/
+ .at4-menuButton .x-btn-inner-default-toolbar-small{
+ 	color: #CCCCCC ;
+ }
+
+ .x-menu.x-layer{
+ 	width: auto !important;
+ }
+
+ /** BASIC FORM SUBPANEL TABLA **/
+
+ .listadoPanel {
+ 	border: 1px solid #CECECE;
+ 	font-size: 14px;
+ }
+
+ .listadoPanel > tbody > tr >*{
+ 	/*text-align: center;*/
+ 	padding: 7px 7px 7px 15px;
+ }
+
+ .listadoPanel > tbody > tr > th {
+ 	/*background-color: #e5e5e5;*/
+ 	background-color: #EFEFEF;
+ 	height: 30px;
+ 	border-bottom: 1px solid #CECECE;
+ 	background-image: none;
+ 	/*color: #FF6726;*/
+ 	color: #000;
+ }
+ .listadoPanel > tbody > tr.x-view-over{
+ 	background-color: #ffcfbb;
+ 	background-image: none !important;
+ }
+
+ .listadoPanel > tbody > tr.filaListadoPanel * {
+ 	height: 17px;
+ 	margin: 0;
+ }
+
+ .listadoPanel > tbody > tr.filaListadoPanel > td {
+ 	padding-left: 20px;
+ }
+
+ .listadoPanel > tbody > tr.par.x-view-over{
+	/*background-color: #f2c5b3 !important;*/
+ }
+

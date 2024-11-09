@@ -1,0 +1,112 @@
+﻿<ivy-module version="2.0">
+    <info organisation="${organization.name}" module="${application.name}.logic"/>
+    
+<configurations>
+	  <conf name="master" visibility="public" description="contains only the artifact published by this module itself, with no transitive dependencies"/>
+	  <conf name="compile" visibility="public" description="this is the default scope, used if none is specified. Compile dependencies are available in all classpaths."/>
+	  <conf name="earlib" visibility="public" description="librerías necesarias en el lib del ear"/>
+	  <conf name="war" visibility="public" description="librerías necesarias para correr como war"/>
+	  <conf name="tests" extends="war" visibility="public" description="librerías necesarias para ejecutar los tests"/>
+</configurations>
+     
+    <dependencies>
+		<dependency org="javax" name="javaee-api" rev="6.0" conf="compile->compile(*),master(*)"/>
+		<dependency org="org.hibernate" name="hibernate-core" rev="${hibernate.version}" conf="compile->compile(*),master(*);war->runtime,master(*)"/>
+				<!--  jersey:
+			 	client para el cliente
+			 	server para el servicio de datos REST (app backend) 
+		-->		
+		<dependency org="org.glassfish.jersey.media" name="jersey-media-json-jackson" rev="${jersey.version}" conf="compile->default;war->default"/>
+		<!-- 
+		<dependency org="org.jboss.jbossas" name="jboss-as-hibernate-int" rev="5.1.0.GA" conf="compile->compile(*),master(*)" />
+		<dependency org="org.jboss.jbossas" name="jboss-as-ejb3" rev="5.1.0.GA" conf="compile->compile(*),master(*)"/>
+		 -->
+		 
+		 <!--  a partir de 3.6, está integrado en core
+		<dependency org="org.hibernate" name="hibernate-annotations" rev="${hibernate.version}" conf="compile->compile(*),master(*);war->runtime,master(*)"/>
+		 -->
+		 <!-- 
+		<dependency org="log4j" name="log4j" rev="1.2.13" conf="compile->compile(*),master(*)"/>
+		 -->
+		<dependency org="org.apache.poi" name="poi" rev="3.13"  conf="compile->default;war->default">
+			<exclude org="log4j" module="log4j"/>
+		</dependency>
+		
+		<!--  dependencias para archivos en fs -->
+		<dependency org="commons-io" name="commons-io" rev="2.2" conf="compile->compile(*),master(*);war->default;earlib->runtime,master"/>
+		
+		<!-- Dependencias para el cliente soap -->
+		<dependency org="org.apache.axis" name="axis" rev="1.4" conf="compile->compile(*),master(*);war->default;earlib->runtime,master"/>
+		<dependency org="javax.xml" name="jaxrpc-api" rev="1.1" conf="compile->compile(*),master(*);war->default;earlib->runtime,master"/>
+		<dependency org="commons-discovery" name="commons-discovery" rev="0.5" conf="compile->compile(*),master(*);war->default;earlib->runtime,master"/>
+		<dependency org="org.eclipse.birt.runtime.3_7_1" name="javax.wsdl" rev="1.5.1" conf="compile->compile(*),master(*);war->default;earlib->runtime,master"/>
+		<!-- FIN dependencias para el cliente soap -->
+
+
+		<!-- Dado que jersey-spring3 no funciona en jboss5 (alguna, o muchas, de las dependencias que arrastra, provoca errores)
+			 Usamos jersey-spring3 en modo hotdeploy sólo
+			 En modo jboss5, usaremos acceso a EJB
+		<dependency org="org.glassfish.jersey.ext" name="jersey-spring3" rev="${jersey.version}" conf="compile->default;war->default" >
+			-->
+			<!-- Evitando que se incluya spring 3.2.3, que no es compatible con jboss 5  
+			<exclude org="org.springframework" />
+			<exclude module="org.springframework-spring-context" />
+			<exclude module="org.springframework-spring-web" />
+			-->
+			<!-- 
+		</dependency>
+		 -->
+		 
+		 <!--  
+		 jboss5.2 viene con jaxb 2.1.12-patch-03 (https://access.redhat.com/articles/112673#EAP_5) 
+		  -->
+		 
+	 	 <dependency org="com.sun.xml.bind" name="jaxb-impl" rev="2.2.7" conf="compile->compile(*),master(*);war->default;"/>
+		 <dependency org="org.jvnet.hyperjaxb3" name="hyperjaxb3-ejb-runtime" rev="0.6.0" conf="compile->compile(*),master(*);war->default;earlib->default"/>
+		 <dependency org="org.jvnet.jaxb2_commons" name="jaxb2-commons-lang" rev="2.3" conf="compile->compile(*),master(*);war->default;earlib->default"/>
+		 
+		<!-- Importador usa poi -->		 
+		<dependency org="org.apache.poi" name="poi" rev="3.13"  conf="compile->default;earlib->default">
+			<exclude org="log4j" module="log4j"/>
+		</dependency>
+		 
+		 
+		
+		<dependency org="javax.mail" name="mail" rev="1.4.1" conf="compile->compile(*),master(*)"/>
+		<dependency org="com.caucho" name="hessian" rev="4.0.7" conf="compile->compile(*),master(*)" />
+		<dependency org="org.hibernate" name="hibernate-validator" rev="${hibernate-validator.version}" conf="compile->compile(*),master(*)"/>
+		<dependency org="javax.annotation" name="javax.annotation-api" rev="1.2" conf="compile->compile(*),master(*)"/>
+		<dependency org="commons-logging" name="commons-logging" rev="1.1.1" conf="compile->compile(*),master(*)"/>
+		<dependency org="commons-collections" name="commons-collections" rev="3.1" conf="compile->compile(*),master(*)"/>
+		<dependency org="org.apache.commons" name="commons-collections4" rev="4.1" conf="compile->compile(*),master(*);earlib->runtime,master"/>
+		<dependency org="org.apache.commons" name="commons-compress" rev="1.8" conf="compile->compile(*),master(*);war->default;earlib->default"/>
+		
+		
+ 		<dependency org="org.directwebremoting" name="dwr" rev="${dwr.version}" conf="compile->compile(*),master(*);earlib->runtime,master"/>
+		<dependency org="org.springframework" name="spring-web" rev="${spring.version}" conf="compile->compile(*),master(*);earlib->runtime,master"/>
+
+		<dependency org="org.springframework" name="spring-tx" rev="${spring.version}" conf="compile->compile(*),master(*);war->runtime,master;earlib->runtime,master"/>
+		<dependency org="org.springframework" name="spring-jdbc" rev="${spring.version}" conf="compile->compile(*),master(*);war->runtime,master;earlib->runtime,master"/>
+		<!--  dependencias sólo para war en hotdeploy -->
+		<dependency org="org.springframework" name="spring-orm" rev="${spring.version}" conf="war->runtime,master"/>
+		<dependency org="org.slf4j" name="slf4j-api" rev="1.7.5" conf="compile->compile(*),master(*);war->runtime,master"/>
+		<dependency org="org.slf4j" name="slf4j-log4j12" rev="1.7.5" conf="war->runtime,master"/>
+		
+		
+
+		<!-- dependencias para tests -->
+   		<dependency org="org.springframework" name="spring-test" rev="${spring.version}" conf="tests->default" />
+		<dependency org="org.springframework" name="spring-webmvc" rev="${spring.version}" conf="tests->default" />
+	<!--  dependencias postgres para tests -->
+		<dependency org="org.postgresql" name="postgresql" rev="9.4-1201-jdbc41" conf="tests->default;compile->compile(*),master(*)"/>
+	<!-- dependencias oracle para tests -->	
+		<dependency org="com.oracle" name="ojdbc6" rev="11.2.0.3.0" conf="tests->default"/>
+   		<dependency org="org.glassfish.main.extras" name="glassfish-embedded-all" rev="3.1.2.2" conf="tests->default"/>
+		<dependency org="junit" name="junit" rev="4.11" conf="tests->default" />
+		
+		<!--  estos módulos fallan! -->
+		<exclude org="javax.security" module="jacc" />
+		<exclude org="javax.security" module="jaas" />
+    </dependencies>
+
+</ivy-module>

@@ -1,0 +1,74 @@
+<project name="properties.common">
+
+   <dirname property="project.dir" file="${ant.file.properties.common}"/>
+
+   <property file="${project.dir}/build.properties"/>
+   <property file="${project.dir}/deploy.properties"/>
+
+   <property file="deploy.properties"/>
+
+	
+   <property name="lib" location="${project.dir}/lib.local"/>
+   <property name="lib.build" location="${project.dir}/lib.retrieved/build"/>
+   <property name="lib.retrieved" location="${project.dir}/lib.retrieved"/>
+   <property name="etc" location="${project.dir}/etc"/>
+   <property name="tags" location="${project.dir}/tags"/>
+   <property name="output" location="${project.dir}/output"/>
+   <property name="product" location="${output}/product"/>
+   <property name="hotdeploy" location="${project.dir}/hotdeploy/${application.name}"/>
+   <property name="gendeploy" location="${project.dir}/hotdeploy/${application.name}_generated"/>
+   <property name="ivy.settings.file" location="${project.dir}/ivysettings.xml"/>
+   <property name="ivy.reports.dir"  location="${output}/ivy-reports"/>
+
+   <property name="modules" value="${output}/modules"/>
+   <property name="doc" value="${output}/doc"/>
+
+   <taskdef resource="net/sf/antcontrib/antlib.xml">
+      <classpath>
+         <pathelement location="${lib}/ant-contrib.jar"/>
+      </classpath>
+   </taskdef>
+
+   <var name="at4forms.home" value="${project.dir}/components/at4forms"/>
+   <var name="at4forms.ejb.src" value="${at4forms.home}/logic/src"/>
+   <var name="at4forms.front.src" value="${at4forms.home}/front/src"/>
+   <var name="at4forms.tests.src" value="${at4forms.home}/tests/src"/>
+
+   <!-- usado sólo en tiempo de desarrollo/generacion para agilizar --> 
+   <var name="generator.src" value="${project.dir}/generator/gen-src"/>
+	
+   <var name="common" value="${output}/components/${component}"/>
+   <var name="output.front" value="${output}/components/front"/>
+   <var name="output.logic" value="${output}/components/logic"/>
+   <var name="ejb.home" value="${project.dir}/components/logic"/>
+   <var name="ejb.src" value="${ejb.home}/src"/>
+   <var name="ejb.etc" value="${ejb.home}/etc"/>
+
+   <var name="ejb.tests.src" value="${ejb.home}/tests/src"/>
+   <var name="logic.report.dir" value="${output.logic}/tests" />
+   <var name="logic.test-classes" value="${common}/logic-test-classes"/>
+
+   <var name="ejb.classes" value="${common}/ejb-classes"/>
+   <var name="ejb.gen-etc" value="${common}/gen-etc-ejb"/>
+   <var name="ejb.client" value="${common}/ejb-client"/>
+   <var name="gen.ejb.uptodate.file" value="${ejb.gen-etc}/ejb-uptodate.txt" />
+
+   <var name="front.home" value="${basedir}"/>
+   <var name="front.src" value="${front.home}/src"/>
+
+   <var name="front.tests.src" value="${front.home}/tests/src"/>
+   <var name="front.report.dir" value="${output.front}/tests" />
+   <var name="front.test-classes" value="${common}/front-test-classes"/>
+	
+   <var name="front.lib" value="${common}/front-lib"/>
+   <var name="front.classes" value="${common}/front-classes"/>
+   <var name="front.gen-etc" value="${common}/gen-etc-front"/>
+   <var name="front.gen-js" value="${output.front}/gen-js-front"/>
+   <var name="front.gen-css" value="${common}/gen-css-front"/>
+   <var name="gen.front.uptodate.file" value="${front.gen-etc}/front-uptodate.txt" />
+   <var name="gen.hotdeploy.uptodate.file" value="${front.gen-etc}/hotdeploy-uptodate.txt" />
+
+   <var name="front.httpdocs.applet" value="${front.home}/httpdocs/applet/es/caib/gestoli/front/applet"/>
+   <var name="front.classes.applet" value="${front.classes}/es/caib/gestoli/front/applet/"/>
+
+</project>

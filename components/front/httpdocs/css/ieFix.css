@@ -1,0 +1,32 @@
+.x-btn-default-toolbar-small-mc{
+	background-color: transparent !important;
+}
+.x-btn-over .x-btn-default-toolbar-small-mc{
+	background-color: transparent !important;
+}
+
+.x-btn-default-toolbar-small-mc{
+	background-color: transparent !important; 
+}
+.x-btn-over.x-btn-default-toolbar-small-mc{
+	background-color: transparent !important;
+}
+
+.at4-top-toolbar .x-tab-default .x-tab-close-btn{
+	  background: url("images/tab/tab-default-close-dark.png") 0 0;
+}
+.x-tab td.x-frame-mc{
+	padding: 4px;
+}
+.at4-top-toolbar > .x-tab-bar .x-tab-default-top-mc{
+	background-color: #404040;
+}
+
+td.x-tab-default-top-mc{
+	background-color: #f5f5f5;
+}
+
+
+.x-nbr a.x-btn-default-small{
+	border-width: 1px !important;
+}

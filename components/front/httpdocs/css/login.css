@@ -1,0 +1,264 @@
+@import url(https://fonts.googleapis.com/css?family=Open+Sans:400,600);
+body, ul, li, h1, h2, h3, h4, h5, h6, p {
+    margin: 0px;
+    padding: 0px;
+    list-style: none;
+    font-size: 12px;
+    font-family: 'Open Sans', sans-serif;
+    color: #000000;
+}
+fieldset {
+    margin: 0px;
+    border: none;
+    padding: 0px;
+}
+html {
+    height: 100%;
+}
+body {
+    height: 100%;
+    background: #3A67A9;
+    background: -moz-radial-gradient(circle at 60% 29%, #4868A6 15%, #33569E 65%);
+    background: -webkit-radial-gradient(circle at 60% 29%, #4868A6 15%, #33569E 65%);
+    background: radial-gradient(circle at 60% 29%, #4868A6 15%, #33569E 65%);
+    filter: progid: DXImageTransform.Microsoft.gradient( startColorstr='#4868A6', endColorstr='#33569E', GradientType=1);
+}
+
+.content {
+    height: 100%;
+    display: table;
+    vertical-align: middle;
+    margin: 0 auto;
+}
+.content h1 {
+    display: none;
+    text-indent: -1000px;
+    width: 345px;
+    height: 140px;
+    margin-left: auto;
+    margin-right: auto;
+    position: relative;
+    bottom: 35px;
+    left: 4px;
+}
+.content .shadowApp {
+    width: 149px;
+    height: 13px;
+    display: block;
+    margin: 0 auto;
+    margin-bottom: 0;
+    padding-bottom: 0;
+    position: relative;
+    top: 58px;
+    box-shadow: 1px -12px 33px grey;
+}
+.content .capa1 {
+    width: 367px;
+    margin: 0 auto;
+    position: relative;
+    bottom: 20px;
+    display: table-cell;
+    vertical-align: middle;
+}
+.content .capa1 .capaSup {
+    /*background: #4F8AC6;*/
+    height: 2px;
+}
+.content .capa1 .capaInf {
+    /*background: #4F8AC6;*/
+    height: 2px;
+}
+.content .capa1 .capa2 {
+    display: block;
+    width: 455px;
+    height: 310px;
+}
+.content .capa1 div#inner_login {
+    display: block;
+    background-color: #EEEEEE;
+    width: 380px;
+    box-shadow: -6px 6px 18px -1px rgba(0, 0, 0, 0.2);
+}
+.content .capa1 .headerApp {
+    background-color: white;
+    border-bottom: 1px solid #CACACA;
+    padding: 15px 0;
+}
+.content .capa1 .headerApp .logoApp {
+    background: url(../img/login/caib-inicio.png) 50% 50% no-repeat;
+    width: 100%;
+    height: 74px;
+    display: block;
+}
+.content .capa1 .headerApp p {
+    margin-top: -17px;
+    color: #FFF;
+    text-align: center;
+    font-size: 18px;
+    text-shadow: 2px 1px #2E5E8D;
+}
+.content .capa1 .extra {
+    text-align: center;
+    border-top: 1px solid white;
+    padding: 15px 0;
+    font-family: arial;
+    font-weight: bold;
+    font-size: 15px;
+    color: #444444;
+}
+.content .capa1 .extra .logo {
+    width: 28px;
+    height: 28px;
+    display: inline-block;
+    vertical-align: middle;
+    line-height: 28px;
+    background: url(../img/login/ico_bus@x2.png) 50% 50% no-repeat;
+    background-size: contain;
+}
+.content .capa1 .extra .texto {
+    line-height: 28px;
+    height: 28px;
+    top: 3px;
+    position: relative;
+}
+.content .capa1 #inner_login form {
+    padding: 19px 39px 29px;
+    overflow: hidden;
+}
+.content .capa1 #inner_login form label {
+    font-size: 13px;
+    font-family: 'Open Sans', sans-serif;
+    color: #444444;
+    position: relative;
+    bottom: 2px;
+    font-size: 12px;
+}
+.content .capa1 #inner_login form label.labelGran {
+    font-weight: bold;
+    font-size: 14px;
+    font-family: 'Open Sans', sans-serif;
+    word-spacing: 0.5px;
+    margin-top: 20px;
+    color: #444444;
+}
+.content .capa1 #inner_login form .campUser #username, .content .capa1 #inner_login form .campPsw #password {
+    font-size: 24px;
+    font-family: 'Open Sans', sans-serif;
+    color: #333333;
+    border: 0;
+    padding: 0;
+    padding-left: 10px;
+    background-color: #EEEEEE;
+    width: 290px;
+    height: 40px;
+}
+.content .capa1 #inner_login form .campUser input:-webkit-autofill, .content .capa1 #inner_login form .campPsw input:-webkit-autofill {
+    -webkit-text-fill-color: #333333;
+    -webkit-box-shadow: 0 0 0px 1000px white inset;
+}
+.content .capa1 #inner_login form .campUser input, .content .capa1 #inner_login form .campPsw input {
+    background-color: white !important;
+}
+.content .capa1 #inner_login form .campUser #username, .content .capa1 #inner_login form .campPsw #password, .content .capa1 #inner_login form #checkCopia {
+    border: 1px solid #CACACA;
+}
+.content .capa1 #inner_login form .campUser #username:focus, .content .capa1 #inner_login form .campPsw #password:focus, .content .capa1 #inner_login form #checkCopia:focus {
+    outline-color: #0169B6;
+    ;
+}
+.content .capa1 #inner_login form .campPsw {
+    margin-top: 15px;
+}
+.content .capa1 #inner_login form #checkCopia {
+    margin-top: 14px;
+    margin-left: 0px;
+    margin-right: 4px;
+    width: 15px;
+    height: 15px;
+}
+.content .capa1 #inner_login form .botoLogin {
+    margin-top: 30px;
+    margin-bottom: 15px;
+    text-align: center;
+    overflow: hidden;
+}
+.content .capa1 #inner_login form .botoLogin input {
+    padding: 15px 62px;
+    font-size: 14px;
+    font-family: 'Open Sans', sans-serif;
+    font-weight: bold;
+    border-radius: 5px;
+    -webkit-appearance: none;
+    width: 100%;
+    background-color: #3A65AA;
+    color: #FFFFFF;
+    border: none;
+    cursor: pointer;
+}
+.content .capa1 #inner_login form .botoLogin input:focus, .content .capa1 #inner_login form .botoLogin input:hover {
+    text-decoration: underline;
+    outline: none;
+}
+.content .capa1 #inner_login #error_msg {
+	height: 88px;
+	/* border-bottom: 1px dashed #cccccc; */
+	padding: 18px 23px 0px 23px;
+	background-color: #990000;
+	clear: both;
+	color: white;
+}
+.content .capa1 #inner_login #error_msg span.iconoAtencio {
+    display: block;
+    width: 30px;
+    height: 34px;
+    background: url(../img/login/error.png) left top no-repeat transparent;
+    background-size: contain;
+    float: left;
+    margin-right: 9px;
+}
+.content .capa1 #inner_login #error_msg p {
+	font-size: 13px;
+    font-family: 'Open Sans', sans-serif;
+    color: white;
+    text-align: justify;
+    width: 85%;
+    float: left;
+}
+.content .capa1 #inner_login #error_msg p strong {
+	font-weight: bold;
+    /* color: #990000; */
+}
+.content .capa1 .otro-usuario {
+    margin-top: 6px;
+    display: block;
+}
+#username[readonly=readonly] {
+    background-color: #aaa !important;
+    cursor: not-allowed;
+}
+@media (max-width: 1200px) {
+    body {
+        background: #4868A6;
+        background: -moz-radial-gradient(70% 30%, circle cover, #4868A6 7%, #33569E 60%);
+        background: -webkit-radial-gradient(70% 30%, circle cover, #4868A6 7%, #33569E 60%);
+        background: radial-gradient(circle at 70% 30%, #4868A6 7%, #33569E 60%);
+        filter: progid: DXImageTransform.Microsoft.gradient( startColorstr='#4868A6', endColorstr='#33569E', GradientType=1);
+    }
+}
+@media (max-width: 425px) {
+    .content .capa1 {
+        width: 312px;
+    }
+    .content .capa1 div#inner_login {
+        width: 310px;
+    }
+    /*.content .capa1 .headerApp .logoApp {
+        background-size: 90%;
+    }*/
+    .content .capa1 #inner_login form {
+        padding: 20px;
+    }
+    .content .capa1 #inner_login form .campUser #username, .content .capa1 #inner_login form .campPsw #password {
+        width: 255px;
+    }
+}

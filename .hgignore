@@ -1,0 +1,52 @@
+
+syntax: regexp
+^generator/gen-src$
+^bin$
+syntax: regexp
+^output$
+syntax: regexp
+^generator/bin$
+syntax: regexp
+^hotdeploy$
+syntax: regexp
+^lib\.retrieved$
+
+syntax: regexp
+^components/front/httpdocs/ext4/docs$
+syntax: regexp
+^components/front/httpdocs/old$
+syntax: regexp
+^test$
+syntax: regexp
+^generator/gen-src\.1$
+syntax: glob
+components/front/httpdocs/ext5/packages/ext-theme-at4/build/resources/backup2
+components/front/httpdocs/ext5/packages/ext-theme-at4-touch/build/resources/backup
+components/front/httpdocs/ext5/packages/ext-theme-at4-touch/build/resources/backup2
+components/front/httpdocs/ext5/packages/ext-theme-at4/build/resources/backup
+**.orig
+**/*Readme.md
+components/front/httpdocs/ext5/uxAt4/ckeditor/ckeditor3/_samples
+components/front/httpdocs/ext5/uxAt4/ckeditor/ckeditor3/_source
+components/front/httpdocs/ext5/uxAt4/ckeditor/ckeditor3
+components/front/httpdocs/ext5/ux/colorpick2
+components/front/httpdocs/ext5/packages/ext-theme-at4-touch/build/resources/images/.sencha
+components/front/httpdocs/ext5/packages/ext-theme-at4/build/resources/images/.sencha
+^components/front/httpdocs/ext5/packages/ext-theme-at4-touch/build/resources/images/sass$
+components/front/httpdocs/ext5/packages/ext-theme-at4/build/resources/images/sass
+
+components/front/httpdocs/gen-js-front
+components/front/httpdocs/js/core/excludes/ListadoGridRowEdit.js
+components/front/httpdocs/js/form/excludes
+components/front/httpdocs/js/coreBackup
+components/front/httpdocs/ext5/uxAt4/ckeditor/ckeditor41
+*.DS_Store
+generator/gen-src.v1/
+components/at4forms/front/src/es/at4/forms/front/controller/pruebas/MainTests.java
+generator/.classpath
+generator/.project
+generator/.settings/
+components/front/httpdocs/ext5/packages/unused/
+components/front/httpdocs/ext5/ux/HeaderFilterFail
+makethemesymlink.sh
+generator/gen-src.emt

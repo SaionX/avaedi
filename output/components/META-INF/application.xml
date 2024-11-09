@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE application PUBLIC "-//Sun Microsystems, Inc.//DTD J2EE Application 1.3//EN" "http://java.sun.com/dtd/application_1_3.dtd">
+<application id="Application_ID">
+
+	<display-name>avaedi</display-name>
+	
+<!-- 
+	<module>
+		<java>lib/collections-generic-4.01.jar</java> 
+	</module>
+	<module>
+		<java>lib/dwr.jar</java> 
+	</module>
+	<module>
+		<java>lib/spring-core-3.2.0.RELEASE.jar</java> 
+	</module>
+	<module>
+		<java>lib/spring-tx-3.2.0.RELEASE.jar</java> 
+	</module>
+	<module>
+		<java>lib/spring-beans-3.2.0.RELEASE.jar</java> 
+	</module>
+ -->	
+	<module>
+		<web>
+			<web-uri>avaediback.war</web-uri>
+			<context-root>avaediback</context-root>
+		</web>
+	</module>
+
+	<module>
+		<ejb>avaedi.jar</ejb>
+	</module>
+</application>

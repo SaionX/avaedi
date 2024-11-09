@@ -1,0 +1,941 @@
+/* CSS Document */
+
+body {
+    font: normal 75% Arial, Helvetica, sans-serif;
+    color: #494949;
+    background-color: #fff;
+    margin: 0;
+    padding: 0;
+}
+
+#contenedor {
+    padding: 1em;
+}
+
+
+/* capçal */
+
+#capsal {
+    background: url(../img/govern/fondo.gif) repeat-x #ff8400;
+    color: #fff;
+    max-height: 49px;
+    position: absolute;
+    border-bottom: 5px solid #be6200;
+    top: 0;
+    width: 100%;
+}
+
+#capsal a {
+    float: right;
+    margin-right: 1em;
+    display: block;
+    padding: 1em 2em 1em 0;
+    background: url(../img/govern/marcsup_tornar.gif) no-repeat right 1em;
+    color: #fff;
+    font-weight: bold;
+}
+
+#capsal img {
+    float: left;
+}
+
+#capsal h1 {
+    background: url(../img/govern/marcsup_titol_ico.gif) no-repeat;
+    margin: 0 0 0 140px;
+    padding: .5em 0 .6em 75px;
+    font-size: 1.5em;
+}
+
+
+/* peu */
+
+#peu {
+    padding-top: 1em;
+    height: 3.5em;
+    color: #000;
+    border-top: .3em solid #ff8400;
+    background: url(../img/govern/fondo_peu.gif) repeat-x;
+}
+
+#peu img#logoAD {
+    float: left;
+    position: relative;
+    top: -0.5em;
+    margin-left: 1em;
+}
+
+
+/* GENERALES */
+
+
+/* pàrrafs */
+
+p {
+    margin: 1em 0;
+}
+
+
+/***** iconos de menu **********/
+
+.x-btn-text-icon .x-btn-center .x-btn-text {
+    background-position: 0pt 2px;
+    background-repeat: no-repeat;
+    padding-top: 3px;
+    padding-bottom: 0px;
+    padding-right: 0pt;
+    height: 21px !important;
+}
+
+
+/***** iconos ********/
+
+.icon-update {
+    background-image: url(../img/ico/Actualizar_boton.png) ! important;
+}
+
+.icon-minus {
+    background-image: url(../img/ico/Eliminar_ico.png) ! important;
+}
+
+.icon-open {
+    background-image: url(../img/ico/Editar_ico.png) !important;
+}
+
+
+/* AVAEDI (todo: esto es necesario?) */
+
+.at4-menuButton .x-btn-wrap-default-toolbar-small.x-btn-arrow-right:after {
+    background-image: url(../img/menu/flecha-gris.png) !important;
+    /*background-image: url(../img/menu/flecha-blanco.png) !important;*/
+    background-position: center;
+    background-size: 11px 7px;
+}
+
+.at4-menuButton.x-btn-over .x-btn-wrap-default-toolbar-small.x-btn-arrow-right:after, .at4-menuButton.x-btn-focus .x-btn-wrap-default-toolbar-small.x-btn-arrow-right:after, .at4-menuButton.x-btn-menu-active .x-btn-wrap-default-toolbar-small.x-btn-arrow-right:after {
+    /*background-image: url(../img/menu/flecha-color.png) !important;*/
+    background-image: url(../img/menu/flecha-blanco.png) !important;
+}
+
+
+/* FIN AVAEDI */
+
+.x-item-disabled-icon-disk {
+    display: none;
+}
+
+
+/***** fin iconos ********/
+
+
+/***** estilos para el sumario de grids ********/
+
+.x-grid3-cell-first .x-grid3-cell-inner {
+    padding-left: 8px;
+}
+
+
+/***** fin estilos para el sumario de grids ********/
+
+.bgcover {
+    background-size: cover;
+}
+
+div.x-column-header.editable-cell-header {
+    background-image: url(../img/editable.png) !important;
+    background-repeat: no-repeat;
+    background-position: 0 0;
+}
+
+.x-column-header-over, .x-column-header-sort-ASC, .x-column-header-sort-DESC {
+    background-image: inherit !important;
+    background-repeat: no-repeat;
+}
+
+.listadoPanel .filaListadoPanel.inactivo td.fin {
+    background-image: url(../img/aviso.png);
+    background-repeat: no-repeat;
+    background-position: center left;
+}
+
+
+/* ROLLOVER DE SUBMENUS */
+
+.x-focus.x-menu-item-focus.x-menu-item-default-focus .x-hmenu-sort-asc {
+    background-image: url(../img/menu/hmenu-asc-rollover.png) !important;
+}
+
+.x-focus.x-menu-item-focus.x-menu-item-default-focus .x-hmenu-sort-desc {
+    background-image: url(../img/menu/hmenu-desc-rollover.png) !important;
+}
+
+.x-menu-item-active .x-focus.x-menu-item-focus.x-menu-item-default-focus .x-cols-icon, .x-menu-item-active .x-menu-item-link .x-cols-icon {
+    background-image: url(../img/menu/columns-rollover.png) !important;
+}
+
+.x-menu-item-active .x-focus.x-focus.x-menu-item-focus.x-menu-item-default-focus .x-group-by-icon {
+    background-image: url(../img/menu/group-by-rollover.png) !important;
+}
+
+.x-menu-item-active.x-menu-item-checked .x-menu-item-link .x-menu-item-icon-default.x-menu-item-checkbox, .x-menu-item-active.x-menu-item-checked .x-focus.x-menu-item-focus.x-menu-item-link .x-menu-item-icon-default.x-menu-item-checkbox {
+    background-image: url(../img/menu/default-checked-rollover.png) !important;
+}
+
+
+/*.x-menu-item-active .x-menu-item-link .x-menu-item-arrow-default {
+    background-image: url(../img/menu/default-menu-parent-rollover.png) !important;
+}*/
+
+
+/** ESTILOS DE AUDITOR/VALIDADOR TODO: PASAR A OTRO CSS**/
+
+.at4-infraccionForm {
+    border: none;
+}
+
+.at4-infraccionForm .matricula .texto {
+    text-align: center;
+    margin: 11px 0 8px 0;
+}
+
+.at4-infraccionForm .matricula .texto span {
+    font-size: 19px;
+    font-weight: bold;
+    font-family: sans-serif;
+}
+
+.at4-infraccionForm .matricula .matricula {
+    margin: auto;
+}
+
+.at4-infraccionForm .matricula .id-infraccion {
+    margin: 6px auto;
+}
+
+.at4-infraccionForm .matricula .id-infraccion * {
+    border: none !important;
+    vertical-align: middle;
+    padding: 0;
+}
+
+.at4-infraccionForm .matricula .x-form-trigger-wrap-default {
+    border: 1px solid #BBBBBB;
+}
+
+.at4-infraccionForm .matricula.x-field-focus .x-form-trigger-wrap-default {
+    border: 1px solid #2880F8;
+}
+
+.at4-infraccionForm .matricula .matricula.x-field-focus input {
+    background: white;
+}
+
+.at4-infraccionForm .matricula .matricula input {
+    text-align: center;
+    height: 45px;
+    font-size: 27px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    background: #F5F5F5;
+}
+
+.at4-infraccionForm .botones .texto {
+    text-align: center;
+}
+
+.at4-infraccionForm .botones table {
+    margin: auto;
+}
+
+.at4-infraccionForm .botones .texto span {
+    font-size: 18px;
+    font-weight: bold;
+    font-family: sans-serif;
+}
+
+.at4-infraccionForm .botones .x-btn.validarbtn {
+    background-color: #8FBF00;
+}
+
+.at4-infraccionForm .botones .x-btn.validarbtn.x-btn-focus.x-btn-over.x-btn-default-small, .at4-infraccionForm .botones .x-btn.validarbtn.x-btn-focus.x-btn-menu-active.x-btn-default-small, .at4-infraccionForm .botones .x-btn.validarbtn.x-btn-focus.x-btn-default-small, .at4-infraccionForm .botones .x-btn.validarbtn.x-btn-focus.x-btn-pressed.x-btn-default-small {
+    box-shadow: #8FBF00 0 1px 0px 0 inset, #8FBF00 0 -1px 0px 0 inset, #8FBF00 -1px 0 0px 0 inset, #8FBF00 1px 0 0px 0 inset;
+    -moz-box-shadow: #8FBF00 0 1px 0px 0 inset, #8FBF00 0 -1px 0px 0 inset, #8FBF00 -1px 0 0px 0 inset, #8FBF00 1px 0 0px 0 inset;
+    -webkit-box-shadow: #8FBF00 0 1px 0px 0 inset, #8FBF00 0 -1px 0px 0 inset, #8FBF00 -1px 0 0px 0 inset, #8FBF00 1px 0 0px 0 inset;
+}
+
+.at4-infraccionForm .botones .x-btn.rechazarbtn {
+    background-color: #D90000;
+}
+
+.at4-infraccionForm .botones .x-btn.rechazarbtn.x-btn-focus.x-btn-over.x-btn-default-small, .at4-infraccionForm .botones .x-btn.rechazarbtn.x-btn-focus.x-btn-menu-active.x-btn-default-small, .at4-infraccionForm .botones .x-btn.rechazarbtn.x-btn-focus.x-btn-default-small, .at4-infraccionForm .botones .x-btn.rechazarbtn.x-btn-focus.x-btn-pressed.x-btn-default-small {
+    box-shadow: #D90000 0 1px 0px 0 inset, #D90000 0 -1px 0px 0 inset, #D90000 -1px 0 0px 0 inset, #D90000 1px 0 0px 0 inset;
+    -moz-box-shadow: #D90000 0 1px 0px 0 inset, #D90000 0 -1px 0px 0 inset, #D90000 -1px 0 0px 0 inset, #D90000 1px 0 0px 0 inset;
+    -webkit-box-shadow: #D90000 0 1px 0px 0 inset, #D90000 0 -1px 0px 0 inset, #D90000 -1px 0 0px 0 inset, #D90000 1px 0 0px 0 inset;
+}
+
+.at4-infraccionForm .botones .x-btn.postponerbtn {
+    background-color: #CCCCCC;
+}
+
+.at4-infraccionForm .botones .x-btn.postponerbtn.x-btn-focus.x-btn-over.x-btn-default-small, .at4-infraccionForm .botones .x-btn.postponerbtn.x-btn-focus.x-btn-menu-active.x-btn-default-small, .at4-infraccionForm .botones .x-btn.postponerbtn.x-btn-focus.x-btn-default-small, .at4-infraccionForm .botones .x-btn.postponerbtn.x-btn-focus.x-btn-pressed.x-btn-default-small {
+    box-shadow: #CCCCCC 0 1px 0px 0 inset, #CCCCCC 0 -1px 0px 0 inset, #CCCCCC -1px 0 0px 0 inset, #CCCCCC 1px 0 0px 0 inset;
+    -moz-box-shadow: #CCCCCC 0 1px 0px 0 inset, #CCCCCC 0 -1px 0px 0 inset, #CCCCCC -1px 0 0px 0 inset, #CCCCCC 1px 0 0px 0 inset;
+    -webkit-box-shadow: #CCCCCC 0 1px 0px 0 inset, #CCCCCC 0 -1px 0px 0 inset, #CCCCCC -1px 0 0px 0 inset, #CCCCCC 1px 0 0px 0 inset;
+}
+
+.at4-infraccionForm .keylisten-box {
+    background-color: #F7F7F9;
+    border: 1px solid #E1E1E8;
+    color: #666666;
+    font-size: 14px;
+    padding: 1px 8px;
+    border-radius: 3px;
+}
+
+.at4-infraccionForm .botones .keylisten-box {
+    box-sizing: border-box;
+    height: 100%;
+    width: 100%;
+}
+
+.at4-infraccionForm span.matricula.keylisten-box {
+    font-size: 14px;
+    margin: 0 9px;
+    font-family: monospace;
+    font-weight: normal;
+    padding: 0px 8px;
+}
+
+.at4-infraccionForm .botones .x-btn.operario {
+    color: transparent;
+    border-radius: 100px;
+    width: 65px !important;
+    height: 65px;
+    background-repeat: no-repeat;
+    background-position: center;
+    padding: 0;
+}
+
+.at4-infraccionForm .botones .x-btn.cochebtn {
+    margin-right: 25px;
+}
+
+.at4-infraccionForm .botones .x-btn.cochebtn~div, .at4-infraccionForm .botones .x-btn.motobtn~div {
+    margin-right: 21px;
+}
+
+.at4-infraccionForm .botones .x-btn.cochebtn {
+    /*background-color: orange;*/
+    background: url("../img/formvalidar/coche.png");
+}
+
+.at4-infraccionForm .botones .x-btn.motobtn {
+    /*background-color: pink;*/
+    background-image: url("../img/formvalidar/moto.png");
+}
+
+.at4-infraccionForm .botones .x-btn.camionbtn {
+    /*background-color: green;*/
+    background-image: url("../img/formvalidar/camion.png");
+}
+
+.at4-infraccionForm .botones .x-btn.otrosbtn {
+    /*background-color: blue;*/
+    background-image: url("../img/formvalidar/otros.png");
+}
+
+.at4-infraccionForm .botones .x-btn {
+    /*background-color: red;*/
+    border-radius: 50px;
+    margin: 5px;
+    border: 0;
+    height: 50px;
+    color: white;
+}
+
+.at4-infraccionForm .botones .x-btn span {
+    color: inherit;
+    font-size: 18px;
+    letter-spacing: 0.5px;
+}
+
+.at4-infraccionForm .botones .x-btn span.x-btn-icon-el::before {
+    padding: 3px 6px;
+}
+
+.at4-infraccionForm .closebutton {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    color: white;
+    font-size: 18px;
+    height: 32px;
+    border-radius: 0;
+}
+
+.at4-infraccionForm .closebutton .x-btn-inner {
+    color: inherit;
+    font-size: inherit;
+}
+
+.at4-infraccionForm .closebutton .x-btn-button {
+    background-color: #555555;
+    padding-bottom: 15px;
+}
+
+.at4-infraccionForm .closebutton .glyphicons {
+    font-size: 25px;
+    margin-right: 15px !important;
+    margin-top: -4px;
+}
+
+.at4-infraccionForm .camara .texto {
+    text-align: center;
+}
+
+.at4-infraccionForm .camara .texto .glyphicons {
+    font-size: 38px;
+}
+
+.at4-infraccionForm .audit-titulo {
+    color: #444444;
+    font-weight: bold;
+}
+
+.at4-infraccionForm .audit-texto, .at4-infraccionForm .audit-texto input, .at4-infraccionForm .audit-texto textarea {
+    color: #959595;
+    font-weight: normal;
+}
+
+.at4-infraccionForm .titulo, .at4-infraccionForm .localizacion, .at4-infraccionForm .fechafield {
+    filter: none !important;
+    opacity: 1 !important;
+}
+
+.at4-infraccionForm .camara .titulo {
+    margin: 0;
+}
+
+.at4-infraccionForm .camara .titulo * {
+    border: 0;
+    font-size: 19px;
+    font-weight: bold;
+    color: #444444;
+    text-align: center;
+    font-family: sans-serif;
+    padding-bottom: 0;
+}
+
+.at4-infraccionForm .camara .localizacion textarea {
+    font-size: 12px;
+    height: 40px;
+    padding-top: 0;
+}
+
+.at4-infraccionForm .camara .localizacion * {
+    border: 0;
+    font-size: 18px;
+    text-align: center;
+    font-family: sans-serif;
+}
+
+.at4-infraccionForm .fecha .texto {
+    margin-bottom: 10px;
+}
+
+.at4-infraccionForm .fecha .texto span {
+    display: block;
+    font-size: 19px;
+    font-weight: bold;
+    margin: 6px 6px 3px;
+    text-align: center;
+}
+
+.at4-infraccionForm .fecha .texto .glyphicons {
+    font-size: 38px;
+}
+
+.at4-infraccionForm .fecha .fechafield {
+    margin: 0;
+    height: 30px;
+}
+
+.at4-infraccionForm .fecha .fechafield * {
+    border: 0;
+    padding: 0;
+    font-size: 18px;
+    text-align: center;
+    font-family: sans-serif;
+}
+
+.at4-infraccionForm .spacer {}
+
+.at4-infraccionForm .spacer .x-autocontainer-innerCt {
+    background-color: #F7F7F7;
+    border-top: 1px solid #DDDDDD;
+    height: 2px;
+    display: block;
+    margin: 0 30px;
+}
+
+.at4-infraccionForm .imagespanel {
+    border-top: 8px solid orange;
+}
+
+.at4-infraccionForm .formpanel {
+    box-shadow: 3px 0px 20px black;
+}
+
+.at4-infraccionForm .infraccionImagen {
+    background-color: orange;
+}
+
+.imageSelectorField {}
+
+.imageSelectorField .body {
+    display: table;
+    height: 100%;
+    width: 100%;
+}
+
+.imageSelectorField .body div {
+    display: table-row;
+}
+
+.imageSelectorField .lista {
+    height: 150px;
+    width: 100%;
+    margin: 0 50px;
+    background-color: #EEEEEE;
+    overflow: hidden;
+}
+
+.imageSelectorField .lista ul {
+    padding: 5px 0px 2px 0px;
+    margin: 0;
+}
+
+.imageSelectorField .lista ul li {
+    display: inline-block;
+    position: relative;
+    width: 165px;
+    height: 165px;
+    padding-bottom: 5px;
+    margin: 7px 7px -2px 7px;
+    box-sizing: content-box;
+}
+
+.imageSelectorField .lista ul li input {
+    position: absolute;
+    right: 0;
+    width: 15px;
+    height: 15px;
+}
+
+.imageSelectorField .lista ul li img {
+    width: 100%;
+    height: 100%;
+}
+
+.imageSelectorField .preview img {
+    height: 100%;
+    width: 100%;
+}
+
+.imageSelectorField .preview div {
+    display: block;
+    height: 100%;
+    width: 100%;
+}
+
+.imageSelectorField .preview {
+    display: block;
+    height: 100%;
+    width: 100%;
+}
+
+.imageSelectorField div.navbutton {
+    position: absolute;
+    display: table;
+    z-index: 9999;
+    background-color: #EEEEEE;
+    width: 50px;
+    height: 160px;
+}
+
+.imageSelectorField .navbutton.after {
+    right: 0;
+}
+
+.imageSelectorField .navbutton.before {
+    left: 0;
+}
+
+.imageSelectorField .navbutton.after .inner {
+    background: url("../img/formvalidar/siguiente.png");
+}
+
+.imageSelectorField .navbutton.before .inner {
+    float: right;
+    background: url("../img/formvalidar/anterior.png");
+}
+
+.imageSelectorField .navbutton .inner {
+    background-color: red;
+    background-size: contain !important;
+    cursor: pointer;
+    display: inline-block;
+    width: 30px;
+    height: 30px;
+}
+
+.imageSelectorField div.navbutton .outer {
+    display: table-cell;
+    vertical-align: middle;
+}
+
+
+/*.imageSelectorField .lista ul li.selected {
+position: relative;
+background: orange;
+border: 6px solid #c2e1f5;
+}*/
+
+
+/* FLECHA HECHA EN CSS GRACIAS A http://www.cssarrowplease.com/ */
+
+
+/*.imageSelectorField .foto-seleccionada .x-autocontainer-innerCt:after, .imageSelectorField .foto-seleccionada .x-autocontainer-innerCt:before {
+    top: 100%;
+    left: 50%;
+    border: solid transparent;
+    content: " ";
+    height: 0;
+    width: 0;
+    position: absolute;
+    pointer-events: none;
+}
+
+.imageSelectorField .foto-seleccionada .x-autocontainer-innerCt:after {
+    border-color: rgba(136, 183, 213, 0);
+    border-top-color: #E8A300;
+    border-width: 7px;
+    margin-left: -7px;
+}
+.imageSelectorField .foto-seleccionada .x-autocontainer-innerCt:before {
+    border-color: rgba(194, 225, 245, 0);
+    border-top-color: #E8A300;
+    border-width: 15px;
+    margin-left: -15px;
+}*/
+
+.imageSelectorField .foto-seleccionada:after {
+    content: " ";
+    position: absolute;
+    width: 100%;
+    height: 20px;
+    bottom: -20px;
+    background: url("../img/formvalidar/seleccionado.png");
+    z-index: 9;
+    background-repeat: no-repeat;
+}
+
+.imageSelectorField .x-box-inner {
+    overflow: visible;
+}
+
+.imageSelectorField .nav {
+    width: 40px !important;
+    height: 40px !important;
+    background-repeat: no-repeat !important;
+    background-size: contain !important;
+}
+
+.imageSelectorField .nav.derecha {
+    background: url("../img/formvalidar/siguiente.png");
+}
+
+.imageSelectorField .nav.izquierda {
+    background: url("../img/formvalidar/anterior.png");
+}
+
+.imageSelectorField a.x-btn.button {
+    color: orange;
+    background-color: #eeeeee;
+    border: 0;
+    box-shadow: none !important;
+}
+
+.imageSelectorField a.x-btn.button>span {}
+
+.imageSelectorField a.x-btn.button .x-btn-icon-el {
+    display: block;
+    margin: auto !important;
+}
+
+.imageSelectorField a.x-btn.button .x-btn-inner {
+    color: #666666;
+    padding: 1px 8px;
+    background-color: #F7F7F9;
+    border: 1px solid #E1E1E8;
+    border-radius: 7px;
+    box-sizing: border-box;
+    height: 24px;
+    margin: auto;
+    font-size: 14px;
+    width: 100%;
+    display: block;
+    font-family: monospace;
+    margin-top: 4px;
+}
+
+.imageSelectorField .img-panel {
+    background-color: #EEEEEE;
+}
+
+
+/*.at4-infraccionForm .fecha, .at4-infraccionForm .camara {
+    padding-top: 12px;
+}*/
+
+.at4-infraccionForm .x-form-radio-default {
+    background: url("../img/formvalidar/radio.png") no-repeat;
+}
+
+.imageSelectorField .image-preview {
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-position-x: 50%;
+}
+
+.imageSelectorField .foto-seleccionada .imgsel {
+    display: block !important;
+}
+
+.closebutton .cerraricono {
+    background: url("../img/formvalidar/cerrar.png");
+    width: 36px !important;
+    height: 34px;
+}
+
+.closebutton .x-btn-inner.x-btn-inner-default-small:after {
+    content: "ESC";
+    background-color: #F7F7F9;
+    border: 1px solid #E1E1E8;
+    color: #666666;
+    font-size: 14px;
+    padding: 1px 8px;
+    border-radius: 3px;
+    margin-left: 15px;
+}
+
+
+/** LOADER SPINNER **/
+
+.loader {
+    margin: 100px auto;
+    font-size: 25px;
+    width: 1em;
+    height: 1em;
+    border-radius: 50%;
+    position: relative;
+    text-indent: -9999em;
+    -webkit-animation: load5 1.1s infinite ease;
+    animation: load5 1.1s infinite ease;
+    -webkit-transform: translateZ(0);
+    -ms-transform: translateZ(0);
+    transform: translateZ(0);
+}
+
+@-webkit-keyframes load5 {
+    0%, 100% {
+        box-shadow: 0em -2.6em 0em 0em #890038, 1.8em -1.8em 0 0em rgba(137, 0, 56, 0.2), 2.5em 0em 0 0em rgba(137, 0, 56, 0.2), 1.75em 1.75em 0 0em rgba(137, 0, 56, 0.2), 0em 2.5em 0 0em rgba(137, 0, 56, 0.2), -1.8em 1.8em 0 0em rgba(137, 0, 56, 0.2), -2.6em 0em 0 0em rgba(137, 0, 56, 0.5), -1.8em -1.8em 0 0em rgba(137, 0, 56, 0.7);
+    }
+    12.5% {
+        box-shadow: 0em -2.6em 0em 0em rgba(137, 0, 56, 0.7), 1.8em -1.8em 0 0em #890038, 2.5em 0em 0 0em rgba(137, 0, 56, 0.2), 1.75em 1.75em 0 0em rgba(137, 0, 56, 0.2), 0em 2.5em 0 0em rgba(137, 0, 56, 0.2), -1.8em 1.8em 0 0em rgba(137, 0, 56, 0.2), -2.6em 0em 0 0em rgba(137, 0, 56, 0.2), -1.8em -1.8em 0 0em rgba(137, 0, 56, 0.5);
+    }
+    25% {
+        box-shadow: 0em -2.6em 0em 0em rgba(137, 0, 56, 0.5), 1.8em -1.8em 0 0em rgba(137, 0, 56, 0.7), 2.5em 0em 0 0em #890038, 1.75em 1.75em 0 0em rgba(137, 0, 56, 0.2), 0em 2.5em 0 0em rgba(137, 0, 56, 0.2), -1.8em 1.8em 0 0em rgba(137, 0, 56, 0.2), -2.6em 0em 0 0em rgba(137, 0, 56, 0.2), -1.8em -1.8em 0 0em rgba(137, 0, 56, 0.2);
+    }
+    37.5% {
+        box-shadow: 0em -2.6em 0em 0em rgba(137, 0, 56, 0.2), 1.8em -1.8em 0 0em rgba(137, 0, 56, 0.5), 2.5em 0em 0 0em rgba(137, 0, 56, 0.7), 1.75em 1.75em 0 0em #890038, 0em 2.5em 0 0em rgba(137, 0, 56, 0.2), -1.8em 1.8em 0 0em rgba(137, 0, 56, 0.2), -2.6em 0em 0 0em rgba(137, 0, 56, 0.2), -1.8em -1.8em 0 0em rgba(137, 0, 56, 0.2);
+    }
+    50% {
+        box-shadow: 0em -2.6em 0em 0em rgba(137, 0, 56, 0.2), 1.8em -1.8em 0 0em rgba(137, 0, 56, 0.2), 2.5em 0em 0 0em rgba(137, 0, 56, 0.5), 1.75em 1.75em 0 0em rgba(137, 0, 56, 0.7), 0em 2.5em 0 0em #890038, -1.8em 1.8em 0 0em rgba(137, 0, 56, 0.2), -2.6em 0em 0 0em rgba(137, 0, 56, 0.2), -1.8em -1.8em 0 0em rgba(137, 0, 56, 0.2);
+    }
+    62.5% {
+        box-shadow: 0em -2.6em 0em 0em rgba(137, 0, 56, 0.2), 1.8em -1.8em 0 0em rgba(137, 0, 56, 0.2), 2.5em 0em 0 0em rgba(137, 0, 56, 0.2), 1.75em 1.75em 0 0em rgba(137, 0, 56, 0.5), 0em 2.5em 0 0em rgba(137, 0, 56, 0.7), -1.8em 1.8em 0 0em #890038, -2.6em 0em 0 0em rgba(137, 0, 56, 0.2), -1.8em -1.8em 0 0em rgba(137, 0, 56, 0.2);
+    }
+    75% {
+        box-shadow: 0em -2.6em 0em 0em rgba(137, 0, 56, 0.2), 1.8em -1.8em 0 0em rgba(137, 0, 56, 0.2), 2.5em 0em 0 0em rgba(137, 0, 56, 0.2), 1.75em 1.75em 0 0em rgba(137, 0, 56, 0.2), 0em 2.5em 0 0em rgba(137, 0, 56, 0.5), -1.8em 1.8em 0 0em rgba(137, 0, 56, 0.7), -2.6em 0em 0 0em #890038, -1.8em -1.8em 0 0em rgba(137, 0, 56, 0.2);
+    }
+    87.5% {
+        box-shadow: 0em -2.6em 0em 0em rgba(137, 0, 56, 0.2), 1.8em -1.8em 0 0em rgba(137, 0, 56, 0.2), 2.5em 0em 0 0em rgba(137, 0, 56, 0.2), 1.75em 1.75em 0 0em rgba(137, 0, 56, 0.2), 0em 2.5em 0 0em rgba(137, 0, 56, 0.2), -1.8em 1.8em 0 0em rgba(137, 0, 56, 0.5), -2.6em 0em 0 0em rgba(137, 0, 56, 0.7), -1.8em -1.8em 0 0em #890038;
+    }
+}
+
+@keyframes load5 {
+    0%, 100% {
+        box-shadow: 0em -2.6em 0em 0em #890038, 1.8em -1.8em 0 0em rgba(137, 0, 56, 0.2), 2.5em 0em 0 0em rgba(137, 0, 56, 0.2), 1.75em 1.75em 0 0em rgba(137, 0, 56, 0.2), 0em 2.5em 0 0em rgba(137, 0, 56, 0.2), -1.8em 1.8em 0 0em rgba(137, 0, 56, 0.2), -2.6em 0em 0 0em rgba(137, 0, 56, 0.5), -1.8em -1.8em 0 0em rgba(137, 0, 56, 0.7);
+    }
+    12.5% {
+        box-shadow: 0em -2.6em 0em 0em rgba(137, 0, 56, 0.7), 1.8em -1.8em 0 0em #890038, 2.5em 0em 0 0em rgba(137, 0, 56, 0.2), 1.75em 1.75em 0 0em rgba(137, 0, 56, 0.2), 0em 2.5em 0 0em rgba(137, 0, 56, 0.2), -1.8em 1.8em 0 0em rgba(137, 0, 56, 0.2), -2.6em 0em 0 0em rgba(137, 0, 56, 0.2), -1.8em -1.8em 0 0em rgba(137, 0, 56, 0.5);
+    }
+    25% {
+        box-shadow: 0em -2.6em 0em 0em rgba(137, 0, 56, 0.5), 1.8em -1.8em 0 0em rgba(137, 0, 56, 0.7), 2.5em 0em 0 0em #890038, 1.75em 1.75em 0 0em rgba(137, 0, 56, 0.2), 0em 2.5em 0 0em rgba(137, 0, 56, 0.2), -1.8em 1.8em 0 0em rgba(137, 0, 56, 0.2), -2.6em 0em 0 0em rgba(137, 0, 56, 0.2), -1.8em -1.8em 0 0em rgba(137, 0, 56, 0.2);
+    }
+    37.5% {
+        box-shadow: 0em -2.6em 0em 0em rgba(137, 0, 56, 0.2), 1.8em -1.8em 0 0em rgba(137, 0, 56, 0.5), 2.5em 0em 0 0em rgba(137, 0, 56, 0.7), 1.75em 1.75em 0 0em #890038, 0em 2.5em 0 0em rgba(137, 0, 56, 0.2), -1.8em 1.8em 0 0em rgba(137, 0, 56, 0.2), -2.6em 0em 0 0em rgba(137, 0, 56, 0.2), -1.8em -1.8em 0 0em rgba(137, 0, 56, 0.2);
+    }
+    50% {
+        box-shadow: 0em -2.6em 0em 0em rgba(137, 0, 56, 0.2), 1.8em -1.8em 0 0em rgba(137, 0, 56, 0.2), 2.5em 0em 0 0em rgba(137, 0, 56, 0.5), 1.75em 1.75em 0 0em rgba(137, 0, 56, 0.7), 0em 2.5em 0 0em #890038, -1.8em 1.8em 0 0em rgba(137, 0, 56, 0.2), -2.6em 0em 0 0em rgba(137, 0, 56, 0.2), -1.8em -1.8em 0 0em rgba(137, 0, 56, 0.2);
+    }
+    62.5% {
+        box-shadow: 0em -2.6em 0em 0em rgba(137, 0, 56, 0.2), 1.8em -1.8em 0 0em rgba(137, 0, 56, 0.2), 2.5em 0em 0 0em rgba(137, 0, 56, 0.2), 1.75em 1.75em 0 0em rgba(137, 0, 56, 0.5), 0em 2.5em 0 0em rgba(137, 0, 56, 0.7), -1.8em 1.8em 0 0em #890038, -2.6em 0em 0 0em rgba(137, 0, 56, 0.2), -1.8em -1.8em 0 0em rgba(137, 0, 56, 0.2);
+    }
+    75% {
+        box-shadow: 0em -2.6em 0em 0em rgba(137, 0, 56, 0.2), 1.8em -1.8em 0 0em rgba(137, 0, 56, 0.2), 2.5em 0em 0 0em rgba(137, 0, 56, 0.2), 1.75em 1.75em 0 0em rgba(137, 0, 56, 0.2), 0em 2.5em 0 0em rgba(137, 0, 56, 0.5), -1.8em 1.8em 0 0em rgba(137, 0, 56, 0.7), -2.6em 0em 0 0em #890038, -1.8em -1.8em 0 0em rgba(137, 0, 56, 0.2);
+    }
+    87.5% {
+        box-shadow: 0em -2.6em 0em 0em rgba(137, 0, 56, 0.2), 1.8em -1.8em 0 0em rgba(137, 0, 56, 0.2), 2.5em 0em 0 0em rgba(137, 0, 56, 0.2), 1.75em 1.75em 0 0em rgba(137, 0, 56, 0.2), 0em 2.5em 0 0em rgba(137, 0, 56, 0.2), -1.8em 1.8em 0 0em rgba(137, 0, 56, 0.5), -2.6em 0em 0 0em rgba(137, 0, 56, 0.7), -1.8em -1.8em 0 0em #890038;
+    }
+}
+
+
+/*
+Maquetacion del importador de inspecciones. IEE
+*/
+
+.importariee {
+    position: relative;
+}
+
+.importariee .iee .icono {
+    height: 24px;
+    width: 19px;
+    display: inline-block;
+    float: left;
+    background-repeat: no-repeat;
+    margin-top: -8px;
+    background-size: contain;
+    background-position: 0 0;
+}
+
+.importariee .iee .icono.pdf {
+    background-image: url("../img/iee/pdf.png");
+}
+
+.importariee .iee .icono.iee {
+    background-image: url("../img/iee/iee.png");
+}
+
+.importariee .regimg {
+    height: 65px;
+    display: block;
+    width: 311px;
+    margin: 0 auto;
+    background-repeat: no-repeat;
+    background-position: 0 0;
+    background-size: cover;
+    background-image: url("../img/iee/logo.png");
+}
+
+.importariee .iee .texto {
+    margin-left: 3px;
+    font-weight: bold;
+    color: #666666;
+}
+
+.importariee .at4-field .x-autocontainer-innerCt .ok-valid {
+    color: #469957;
+    font-weight: bold;
+    width: 100%;
+    text-align: center;
+    display: block;
+    margin-top: 15px;
+    font-size: 15px;
+}
+
+.importariee .at4-field .x-autocontainer-innerCt .ok-valid .mensaje{
+    display: inline-block;
+    text-align: left;
+    margin-top: 0px;
+}
+
+.importariee .at4-field .x-autocontainer-innerCt .ok-valid .block {
+    display: block;
+    text-align: left;
+    color: #666666;
+    font-weight: normal;
+}
+
+.importariee .at4-field .x-autocontainer-innerCt .ok-valid .glyphicons {
+    font-size: 31px;
+    color: #53B065;
+    display: inline-block;
+    /* float: left; */
+    margin-right: 7px;
+    top: 0;
+    vertical-align: baseline;
+}
+
+.importariee .x-form-item-label-default.x-form-item-label-top>.x-form-item-label-inner {
+    font-weight: bold;
+}
+
+.importariee .ko-invalid {
+    color: #D72D40;
+    font-weight: bold;
+    width: 470px;
+    text-align: center;
+    margin: 0 auto;
+}
+
+.importariee .x-autocontainer-innerCt .ko-invalid .glyphicons {
+    font-size: 55px;
+    color: #D72D40;
+    display: block;
+    width: 100%;
+    margin: 0 0 9px 0 !important;
+}
+
+.importarieewindow .x-window-header .x-title .x-title-item {
+    text-align: center;
+}
+
+.importariee .edificio-existente {
+    /*margin: 22px 0 0 0; */
+    font-size: 13px;
+    line-height: 27px;
+    /* color: #0178af; */
+    background-color: #fcf8e3;
+    /* font-weight: bold; */
+    color: #8a6d3b;
+    background-color: #fcf8e3;
+    /* border-color: #faebcc; */
+    border: 1px solid #faebcc;
+    /* padding: 0px 22px 0; */
+    border-radius: 3px;
+    text-align: center;
+}
+
+.importariee .edificio-existente .glyphicons {
+    font-size: 17px;
+    margin-top: -5px;
+    margin-right: 7px;
+}
+
+.importarieewindow .x-btn span{
+    font-weight: bold;
+}
+.importarieewindow .x-btn.alert span{
+    color: #CD5A5A;
+}
+.importarieewindow .x-btn.info span{
+    color: #2c7dc9;
+}
+.importarieewindow .x-btn.done span{
+    color: #3b8940;
+}
+.importarieewindow .x-btn.warn span{
+    color: #8a6d3b;
+}

@@ -1,0 +1,285 @@
+<project xmlns:ivy="antlib:org.apache.ivy.ant" name="component" default="prepare" basedir="">
+
+   <!-- properties -->
+
+   <import file="properties.common.xml" />
+   <import file="build.common.xml" />
+
+	<path id="ivy.lib.path">
+	    <fileset dir="${lib}" includes="*.jar"/>
+	</path>
+	<taskdef resource="org/apache/ivy/ant/antlib.xml"
+	         uri="antlib:org.apache.ivy.ant" classpathref="ivy.lib.path"/>
+
+	<taskdef name="junit"
+			classname="org.apache.tools.ant.taskdefs.optional.junit.JUnitTask">
+		<classpath refid="ivy.lib.path"/>
+	</taskdef>
+
+	<!-- dependencias necesarias para el ant build -->
+	<ivy:retrieve pattern="${lib.retrieved}/[conf]/[artifact].[ext]" conf="build" file="ivy.xml" />
+
+   <!--  macrodefs -->
+
+    <!-- crida a tots els common dels subbuild -->
+    <macrodef name="common.logic">
+        <sequential>
+            <subant target="common" inheritall="false" >
+                <filelist dir="components" >
+                    <file name="logic/build.xml"/>
+                </filelist>
+                <property name="component" value="${component.logic}" />
+            </subant> 
+        </sequential>
+    </macrodef>
+
+    <macrodef name="common.front">
+        <sequential>
+            <subant target="common" inheritall="false" >
+                <filelist dir="components" >
+                    <file name="front/build.xml"/>
+                </filelist>
+                <property name="component" value="${component.front}" />
+                <property name="component.logic" value="${component.logic}" />
+            </subant>
+        </sequential>
+    </macrodef>
+
+    <macrodef name="common">
+        <sequential>
+            <common.logic />
+            <common.front />
+        </sequential>
+    </macrodef>
+
+   <!-- testeo multiples jars y wars -->
+   <macrodef name="vers">
+      <sequential>
+         <common.logic/>
+         <common.front/>
+         <customize origen="etc" desti="${output}/components/META-INF"/>
+      </sequential>
+   </macrodef>
+
+
+   <target name="deploy" description="Despliega el ear de la aplicación en deploy.dir ">
+       <copy file="${product}/${application.name}.ear" todir="${deploy.dir}"/>
+   </target>
+
+   <target name="deploy.remote" description="Despliega el ear de la aplicación en deploy.remote.dir">
+      <copy file="${product}/${application.name}.ear" todir="${deploy.remote.dir}"/>
+   </target>
+
+   <target name="undeploy" description="Repliega el ear de la aplicación de deploy.dir">
+       <echo>${deploy.dir}/${application.name}.ear</echo>
+       <delete file="${deploy.dir}/${application.name}.ear" />
+   </target>
+
+   <target name="undeploy.remote" description="Repliega el ear de la aplicación de deploy.remote.dir">
+      <echo>${deploy.remote.dir}\${application.name}.ear</echo>
+       <delete file="${deploy.remote.dir}/${application.name}.ear" />
+   </target>
+
+
+   <!-- tasques -->
+
+   <target name="lib.retrieve" description="Descarga todas las librerías necesarias para la compilación">
+       <subant target="lib.retrieve" inheritall="false" >
+           <filelist dir="components" >
+               <file name="logic/build.xml"/>
+               <file name="front/build.xml"/>
+           </filelist>
+       </subant>
+   </target>
+
+	
+   <target name="prepare" description="Crea la estructura de directorios necesaria">
+       <mkdir dir="${product}" />
+       <mkdir dir="${output}/components" />
+       <mkdir dir="${doc}" />
+       <subant target="prepare" inheritall="false" >
+           <filelist dir="components" >
+               <file name="logic/build.xml"/>
+               <file name="front/build.xml"/>
+           </filelist>
+       </subant>
+   </target>
+
+   <target name="clean" description="Elimina todos los artefactos creados">
+       <delete dir="${output}"/>
+   </target>
+
+   <target name="generate" depends="prepare">
+      <subant target="generate" inheritall="false" >
+         <filelist dir="components" >
+            <file name="logic/build.xml"/>
+            <file name="front/build.xml"/>
+         </filelist>
+      </subant>
+   </target>
+
+   <target name="compile" depends="prepare" description="Compila las clases">
+      <antcall target="generate"/>
+      <subant target="compile" inheritall="false" >
+         <filelist dir="components" >
+            <file name="logic/build.xml"/>
+            <file name="front/build.xml"/>
+         </filelist>
+      </subant>
+   </target>
+
+   <target name="make" depends="prepare" description="Construye la aplicación completamente">
+      <sequential>
+         <var file="${project.dir}/deploy.properties"/>
+	     <vers />
+      </sequential>
+      <def.ear.uptodate />
+      <customize origen="etc" desti="${modules}/META-INF"/>
+	  <assemble.ear modules="${modules}" />
+   </target>
+	
+	<target name="assemble">
+	  <assemble.ear modules="${modules}" />
+	</target>
+
+   <target name="make.hotdeploy" depends="prepare" description="Construye la aplicación para correr en modo tomcat-hotdeploy">
+   		<sequential>
+          <var file="${project.dir}/deploy.properties"/>
+		  <!--  IMPORTANTE: no se puede borrar ${hotdeploy} con delete porque ant
+		  					sigue los symlinks y borra el contenido original  -->
+		  <exec executable="rm">
+		    <arg value="-r"/>
+		    <arg value="${hotdeploy}"/>
+		  </exec>
+
+	       <mkdir dir="${hotdeploy}" />
+	       <mkdir dir="${hotdeploy}/WEB-INF" />
+	       <mkdir dir="${hotdeploy}/WEB-INF/lib" />
+	       <mkdir dir="${hotdeploy}/WEB-INF/classes" />
+	       <mkdir dir="${hotdeploy}/WEB-INF/classes/${application.package.dir}" />
+		   <mkdir dir="${hotdeploy}/WEB-INF/classes/es/caib/avaedi/at4forms" />
+            <subant target="make.hotdeploy" inheritall="false" >
+                <filelist dir="components" >
+                    <file name="logic/build.xml"/>
+                    <file name="front/build.xml"/>
+                </filelist>
+            </subant>
+	   </sequential>
+   </target>
+
+
+	   <target name="make.gendeploy" depends="prepare" description="Construye la aplicación para correr en modo tomcat-hotdeploy directamente sobre archivos generados">
+	   		<sequential>
+	          <var file="${project.dir}/deploy.properties"/>
+			  <!--  IMPORTANTE: no se puede borrar ${hotdeploy} con delete porque ant
+			  					sigue los symlinks y borra el contenido original  -->
+			  <exec executable="rm">
+			    <arg value="-r"/>
+			    <arg value="${gendeploy}"/>
+			  </exec>
+
+		       <mkdir dir="${gendeploy}" />
+			   <mkdir dir="${gendeploy}/js" />
+		       <mkdir dir="${gendeploy}/WEB-INF" />
+		       <mkdir dir="${gendeploy}/WEB-INF/lib" />
+			   <mkdir dir="${gendeploy}/WEB-INF/jsp" />
+			   <mkdir dir="${gendeploy}/WEB-INF/jsp/js" />
+			   <mkdir dir="${gendeploy}/WEB-INF/jsp/js/lang" />
+			   <mkdir dir="${gendeploy}/WEB-INF/messages" />
+		       <mkdir dir="${gendeploy}/WEB-INF/classes" />
+		       <mkdir dir="${gendeploy}/WEB-INF/classes/${application.package.dir}" />
+	   			<mkdir dir="${gendeploy}/WEB-INF/classes/es/caib/avaedi/at4forms" />
+	            <subant target="make.gendeploy" inheritall="false" >
+	                <filelist dir="components" >
+	                    <file name="logic/build.xml"/>
+	                    <file name="front/build.xml"/>
+	                </filelist>
+	            </subant>
+		   </sequential>
+	   </target>
+	
+	 <target name="make.minifyjs" depends="prepare" description="Minifica solo los JS">
+            <subant target="front.js.generate" inheritall="false" >
+                <filelist dir="components" >
+                    <file name="front/build.xml"/>
+                </filelist>
+            </subant>
+	   </target>
+	<!-- 
+		TODO: work-in-progress entorno de tests
+		no se si esto irá aquí o en un build específico en tests 
+	-->
+   <target name="run.all.tests" description="Ejecuta todos los tests">
+		<!-- dependencias necesarias para el ant build -->
+		<ivy:retrieve pattern="${lib.retrieved}/[conf]/[artifact].[ext]" conf="tests" file="ivy.xml" />
+            <subant target="tests" inheritall="false" >
+                <filelist dir="components" >
+                    <file name="logic/build.xml"/>
+                    <file name="front/build.xml"/>
+                </filelist>
+            </subant>
+   </target>
+
+   <target name="run.logic.custom.tests" description="Ejecuta un test custom de logic">
+		<!-- dependencias necesarias para el ant build -->
+		<ivy:retrieve pattern="${lib.retrieved}/[conf]/[artifact].[ext]" conf="tests" file="ivy.xml" />
+            <subant target="custom.tests" inheritall="false" >
+                <filelist dir="components" >
+                    <file name="logic/build.xml"/>
+                </filelist>
+            </subant>
+   </target>
+	
+   <target name="run.logic.tests" description="Ejecuta los tests de logic">
+		<!-- dependencias necesarias para el ant build -->
+		<ivy:retrieve pattern="${lib.retrieved}/[conf]/[artifact].[ext]" conf="tests" file="ivy.xml" />
+            <subant target="tests" inheritall="false" >
+                <filelist dir="components" >
+                    <file name="logic/build.xml"/>
+                </filelist>
+            </subant>
+   </target>
+	
+   <target name="run.front.tests" description="Ejecuta los tests de front">
+		<!-- dependencias necesarias para el ant build -->
+		<ivy:retrieve pattern="${lib.retrieved}/[conf]/[artifact].[ext]" conf="tests" file="ivy.xml" />
+            <subant target="tests" inheritall="false" >
+                <filelist dir="components" >
+                    <file name="front/build.xml"/>
+                </filelist>
+            </subant>
+   </target>
+
+	
+<!--  TODO: lista de librerías -->
+   <target name="javadoc">
+      <javadoc access="public"
+         author="true"
+         encoding="UTF-8" 
+         classpath="output/modules/${application.name}.jar;
+	lib/RXTXcomm.jar;
+	lib/specs/servlet-2.4.jar;
+	lib/specs/ejb-2_1-api.jar;
+	lib/log4j-1.2.12.jar;
+	lib/reports/jasperreports-3.5.3.jar;
+	lib/mail.jar;
+	lib/activation.jar;
+	components/test/lib/junit.jar;" 
+         destdir="docs/javadoc" 
+         doctitle="${application.name}" 
+         nodeprecated="false" 
+         nodeprecatedlist="false" 
+         noindex="false" 
+         nonavbar="false"
+         notree="false"
+         packagenames="${application.package}.*,${application.package}.at4forms.*"
+         source="1.4"
+         sourcepath="components/logic/src;components/front/src;components/test/src;"
+         splitindex="true"
+         use="true"
+         version="true"/>
+   </target>
+
+	
+	
+</project>

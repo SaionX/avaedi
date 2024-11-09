@@ -1,0 +1,91 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<MENUDEFINITION>
+
+	<MENU TITLE="menu.importar.title" ICON="glyphicons glyphicons-disk-import" PERMS="AED_MUNICIPI AED_OPERADOR AED_ADMIN">
+		<FORM ICON="glyphicons glyphicons-disk-import" TITLE="menus.top.importariee" MODE="plain" TABLE="openImportForm" PERMS="AED_MUNICIPI AED_OPERADOR AED_ADMIN"/>
+		<FORM ICON="glyphicons glyphicons-disk-import" TITLE="menus.top.subsanacio" MODE="plain" TABLE="openImportSubForm" PERMS="AED_MUNICIPI AED_OPERADOR AED_ADMIN"/>
+		<FORM ICON="glyphicons glyphicons-disk-import" TITLE="menus.top.importarite" MODE="plain" TABLE="openImportIteForm" PERMS="AED_MUNICIPI AED_OPERADOR AED_ADMIN"/>
+	</MENU>
+
+    <FORM TABLE="informe" ICON="glyphicons glyphicons-newspaper" MODE="list" TITLE="forms.informe.title" PERMS="AED_MUNICIPI AED_CONSULTA AED_OPERADOR AED_ADMIN" />
+     
+    <MENU TITLE="menus.top.datosinformes" ICON="glyphicons glyphicons-search  glyph-white">
+    	<FORM TABLE="inspeccion" ICON="icon-menu-inspeccion" MODE="list"
+    		TITLE="forms.inspeccion.title" />
+    	<FORM TABLE="accesibilidadajustesrazonables"
+    		ICON="icon-menu-accesibilidadajustesrazonables" MODE="list"
+    		TITLE="forms.accesibilidadajustesrazonables.title" />
+    	<FORM TABLE="accesibilidadpublicos"
+    		ICON="icon-menu-accesibilidadpublicos" MODE="list"
+    		TITLE="forms.accesibilidadpublicos.title" />
+    	<FORM TABLE="accesibilidadvaloracionfinales"
+    		ICON="icon-menu-accesibilidadvaloracionfinales" MODE="list"
+    		TITLE="forms.accesibilidadvaloracionfinales.title" />
+    	<FORM TABLE="acusticacomprobaciones"
+    		ICON="icon-menu-acusticacomprobaciones" MODE="list"
+    		TITLE="forms.acusticacomprobaciones.title" />
+    	<FORM TABLE="acusticadatosgenerales"
+    		ICON="icon-menu-acusticadatosgenerales" MODE="list"
+    		TITLE="forms.acusticadatosgenerales.title" />
+    	<FORM TABLE="acusticamejorasacusticas"
+    		ICON="icon-menu-acusticamejorasacusticas" MODE="list"
+    		TITLE="forms.acusticamejorasacusticas.title" />
+    	<FORM TABLE="acusticaruidoinstalaciones"
+    		ICON="icon-menu-acusticaruidoinstalaciones" MODE="list"
+    		TITLE="forms.acusticaruidoinstalaciones.title" />
+    	<FORM TABLE="acusticaruidosexteriores"
+    		ICON="icon-menu-acusticaruidosexteriores" MODE="list"
+    		TITLE="forms.acusticaruidosexteriores.title" />
+    	<FORM TABLE="acusticaruidosinterioreshorizontales"
+    		ICON="icon-menu-acusticaruidosinterioreshorizontales" MODE="list"
+    		TITLE="forms.acusticaruidosinterioreshorizontales.title" />
+    	<FORM TABLE="acusticaruidosinterioresuniones"
+    		ICON="icon-menu-acusticaruidosinterioresuniones" MODE="list"
+    		TITLE="forms.acusticaruidosinterioresuniones.title" />
+    	<FORM TABLE="acusticaruidosinterioresverticales"
+    		ICON="icon-menu-acusticaruidosinterioresverticales" MODE="list"
+    		TITLE="forms.acusticaruidosinterioresverticales.title" />
+    	<FORM TABLE="acusticas" ICON="icon-menu-acusticas" MODE="list"
+    		TITLE="forms.acusticas.title" />
+    	<FORM TABLE="acusticavaloracionfinal"
+    		ICON="icon-menu-acusticavaloracionfinal" MODE="list"
+    		TITLE="forms.acusticavaloracionfinal.title" />
+    	<FORM TABLE="cerramientoscubiertas"
+    		ICON="icon-menu-cerramientoscubiertas" MODE="list"
+    		TITLE="forms.cerramientoscubiertas.title" />
+    	<FORM TABLE="cimentaciones" ICON="icon-menu-cimentaciones"
+    		MODE="list" TITLE="forms.cimentaciones.title" />
+    	<FORM TABLE="conservacion" ICON="icon-menu-conservacion"
+    		MODE="list" TITLE="forms.conservacion.title" />
+    	<FORM TABLE="eficienciasenergeticas"
+    		ICON="icon-menu-eficienciasenergeticas" MODE="list"
+    		TITLE="forms.eficienciasenergeticas.title" />
+    	<FORM TABLE="estructura" ICON="icon-menu-estructura" MODE="list"
+    		TITLE="forms.estructura.title" />
+    	<FORM TABLE="instalaciones" ICON="icon-menu-instalaciones"
+    		MODE="list" TITLE="forms.instalaciones.title" />
+    </MENU>
+     
+     
+     <FORM TABLE="edificio" ICON="glyphicons glyphicons-building" MODE="list" TITLE="forms.edificio.title" PERMS="AED_MUNICIPI AED_CONSULTA AED_OPERADOR AED_ADMIN" />
+     
+     <FORM TABLE="via" ICON="glyphicons glyphicons-road" MODE="list" TITLE="forms.via.title" PERMS="AED_MUNICIPI AED_CONSULTA AED_OPERADOR AED_ADMIN" />
+
+     <FORM TABLE="municipio" ICON="glyphicons glyphicons-map" MODE="list" TITLE="forms.municipio.title" PERMS="AED_MUNICIPI AED_CONSULTA AED_OPERADOR AED_ADMIN" />
+        
+    <MENU TITLE="menu.administracion.title" ICON="glyphicons glyphicons-cogwheels glyph-white" PERMS="AED_CONSULTA AED_ADMIN">
+    
+        <FORM TABLE="usuario" ICON="glyphicons glyphicons-user"  MODE="list" TITLE="forms.usuario.title"/>
+        <FORM TABLE="tipovia" ICON="glyphicons glyphicons-transport" MODE="list" TITLE="forms.tipovia.title" />
+        <FORM TABLE="isla" ICON="glyphicons glyphicons-globe" MODE="list" TITLE="forms.isla.title" />
+        <!-- estadoinforme No es administrable 
+        <FORM TABLE="estadoinforme" ICON="glyphicons glyphicons-important-day" MODE="list" TITLE="forms.estadoinforme.title" />
+         -->
+    </MENU>
+    <FORM ICON="glyphicons glyphicons-question-sign" TITLE="menus.top.manual" MODE="plain" TABLE="obrirManualGeneral"/>
+
+	<!--  TODO: desactivado para que no salga canjaume
+    <FORM ICON="glyphicons glyphicons-question-sign" TITLE="menus.top.manual" MODE="plain" TABLE="obrirManualGeneral"/>
+     -->
+    
+</MENUDEFINITION>

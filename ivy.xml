@@ -1,0 +1,37 @@
+<ivy-module version="2.0">
+    <info organisation="${organization.name}" module="${application.name}"/>
+
+	<configurations>
+	      <conf name = "build" description = "dependencias necesarias para el proceso build" />
+	      <conf name = "tests" description = "dependencias necesarias para correr los tests" />
+	</configurations>
+    
+    <dependencies>
+        <dependency org="ant-contrib" name="ant-contrib" rev="1.0b3" conf="build->default"/>
+		<dependency org="com.yahoo.platform.yui" name="yuicompressor" rev="2.4.7" conf="build->default"/>
+        
+   		<dependency org="org.springframework" name="spring-test" rev="${spring.version}" conf="tests->default" />
+		<dependency org="org.springframework" name="spring-webmvc" rev="${spring.version}" conf="tests->default" />
+
+	<!--  dependencias postgres para tests -->
+		<dependency org="org.postgresql" name="postgresql" rev="9.4-1201-jdbc41" conf="tests->default"/>
+	<!-- dependencias oracle para tests -->	
+		<dependency org="com.oracle" name="ojdbc6" rev="11.2.0.3.0" conf="tests->default"/>
+		
+   		<dependency org="org.glassfish.main.extras" name="glassfish-embedded-all" rev="4.1.1" conf="tests->default"/>
+		<dependency org="junit" name="junit" rev="4.11" conf="tests->default" />
+		<dependency org="ant" name="ant-junit" rev="1.6.5" conf="tests->default"/>
+		<dependency org="org.apache.ant" name="ant-junit4" rev="1.8.3" conf="tests->default"/>
+		<dependency org="junit" name="junit" rev="4.11" conf="tests->default" />
+		<dependency org="org.hibernate" name="hibernate-core" rev="${hibernate.version}" conf="tests->runtime,master(*)"/>
+		 <!--  a partir de 3.6, está integrado en core
+		<dependency org="org.hibernate" name="hibernate-annotations" rev="${hibernate.version}" conf="tests->runtime,master(*)"/>
+		 -->
+		<dependency org="org.springframework" name="spring-tx" rev="${spring.version}" conf="tests->runtime,master"/>
+		<dependency org="org.springframework" name="spring-jdbc" rev="${spring.version}" conf="tests->runtime,master"/>
+		<dependency org="org.springframework" name="spring-orm" rev="${spring.version}" conf="tests->runtime,master"/>
+		<dependency org="org.slf4j" name="slf4j-api" rev="1.7.5" conf="tests->runtime,master"/>
+		<dependency org="org.slf4j" name="slf4j-log4j12" rev="1.7.5" conf="tests->runtime,master"/>
+
+    </dependencies>
+</ivy-module>

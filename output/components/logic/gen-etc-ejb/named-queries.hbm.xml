@@ -1,0 +1,98 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+ <query name="es.caib.avaedi.common.model.Usuario.findUsuarioByUsername"><![CDATA[ 
+	 from Usuario usu where usu.username = :username
+	]]>
+ <query-param name="username" type="java.lang.String"/>
+ </query>
+ <query name="es.caib.avaedi.common.model.ConfigAplicacion.findByEtiqueta"> <![CDATA[ 
+	from ConfigAplicacion eap where eap.etiqueta = :etiqueta and eap.nombre = :nombre and eap.username = :usuario
+	]]>
+	<query-param name="etiqueta" type="java.lang.String"/>
+  <query-param name="nombre" type="java.lang.String"/>
+  <query-param name="usuario" type="java.lang.String"/>
+ </query>
+ <query name="es.caib.avaedi.common.model.ConfigExportacion.findByEtiqueta"> <![CDATA[ 
+	from ConfigExportacion eex where eex.etiqueta = :etiqueta and eex.nombre = :nombre and (eex.username = :usuario or eex.privada = 'f')
+	]]>
+	<query-param name="etiqueta" type="java.lang.String"/>
+  <query-param name="nombre" type="java.lang.String"/>
+  <query-param name="usuario" type="java.lang.String"/>
+ </query>
+ 
+ <query name="es.caib.avaedi.common.model.ConfigExportacion.searchAvailables"> <![CDATA[ 
+	from ConfigExportacion eex where  eex.nombre = :nombre and (eex.username = :usuario or eex.privada = 'f')
+	]]>
+	<query-param name="nombre" type="java.lang.String"/>
+	<query-param name="usuario" type="java.lang.String"/>
+ </query>
+ 
+ 
+ 
+ <query name="es.caib.avaedi.common.model.Valor.findByCarId"> <![CDATA[ 
+	from Valor val where  val.id.caracteristica = :caracteristica  and val.id.id = :valId
+	]]>
+	<query-param name="caracteristica" type="java.lang.String"/>
+	<query-param name="valId" type="java.lang.Integer"/>
+ </query>
+ 
+ 
+ <query name="es.caib.avaedi.common.model.Via.findByCodigoCatastro"> <![CDATA[ 
+	from Via via where  via.codigoCatastro = :codigo  and via.municipio.clave = :municipio
+	]]>
+	<query-param name="codigo" type="java.lang.Integer"/>
+	<query-param name="municipio" type="java.lang.Integer"/>
+ </query>
+ <query name="es.caib.avaedi.common.model.Via.findViaDeMunicipio"> <![CDATA[ 
+	from Via via where  via.codigoCatastro = :codigo and via.municipio.clave = :municipioId
+	]]>
+	<query-param name="codigo" type="java.lang.Integer"/>
+	<query-param name="municipioId" type="java.lang.Integer"/>
+ </query>
+ <query name="es.caib.avaedi.common.model.Via.findViaDeMunicipioNombre"> <![CDATA[ 
+	from Via via where  via.nombre = :nombre  and via.municipio.clave = :municipioId
+	]]>
+	<query-param name="nombre" type="java.lang.String"/>
+	<query-param name="municipioId" type="java.lang.Integer"/>
+ </query>
+ <query name="es.caib.avaedi.common.model.Via.findByNombre"> <![CDATA[ 
+	from Via via where  via.nombre = :nombre 
+	]]>
+	<query-param name="nombre" type="java.lang.String"/>
+ </query>
+ 
+ 
+ <query name="es.caib.avaedi.common.model.Via.findViaDuplicada"> <![CDATA[ 
+	from Via via where  via.nombre = :nombre  and via.municipio.clave = :municipioId and via.tipoVia.clave = :tipoViaId
+	]]>
+	<query-param name="nombre" type="java.lang.String"/>
+	<query-param name="municipioId" type="java.lang.Integer"/>
+	<query-param name="tipoViaId" type="java.lang.Integer"/>
+ </query>
+ 
+ 
+ 
+ <query name="es.caib.avaedi.common.model.TipoVia.findByCodigoCatastro"> <![CDATA[ 
+	from TipoVia tv where  tv.codigoCatastro = :codigo
+	]]>
+	<query-param name="codigo" type="java.lang.String"/>
+ </query>
+ <query name="es.caib.avaedi.common.model.Municipio.findByNombre"> <![CDATA[ 
+	from Municipio mun where mun.nombre = :nombre
+	]]>
+	<query-param name="nombre" type="java.lang.String"/>
+ </query>
+ <query name="es.caib.avaedi.common.model.Municipio.findByCodigoCatastro"> <![CDATA[ 
+	from Municipio mun where mun.codigoCatastro = :codigoCatastro
+	]]>
+	<query-param name="codigoCatastro" type="java.lang.Integer"/>
+ </query>
+ 
+ <query name="es.caib.avaedi.common.model.Edificio.findByCodigoCatastro"> <![CDATA[ 
+	from Edificio edi where edi.referenciaCatastral = :codigoCatastro
+	]]>
+	<query-param name="codigoCatastro" type="java.lang.String"/>
+ </query>
+ 
+</hibernate-mapping>

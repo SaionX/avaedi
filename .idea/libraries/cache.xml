@@ -1,0 +1,11 @@
+<component name="libraryTable">
+  <library name="cache">
+    <CLASSES>
+      <root url="file://$USER_HOME$/.ivy2/cache" />
+      <root url="jar://$USER_HOME$/.ivy2/cache/io.swagger/swagger-jaxrs/bundles/swagger-jaxrs-1.5.9.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+    <jarDirectory url="file://$USER_HOME$/.ivy2/cache" recursive="false" />
+  </library>
+</component>

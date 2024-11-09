@@ -1,0 +1,7 @@
+  		<property name="hibernate.jndi.class">org.springframework.mock.jndi.SimpleNamingContextBuilder</property>
+		<property name="hibernate.transaction.auto_close_session">false</property>	    
+		<property name="hibernate.transaction.factory_class">org.hibernate.transaction.JDBCTransactionFactory</property>
+        <property name="hibernate.transaction.flush_before_completion">true</property>
+        <property name="hibernate.use_identifier_rollback">false</property>
+		<property name="show_sql">false</property>
+        

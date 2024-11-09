@@ -1,0 +1,185 @@
+<?xml version="1.0" encoding="utf-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:aop="http://www.springframework.org/schema/aop"
+xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd">
+    <description>Este descriptor incluye los beans EJB3 para la capa BO en entorno jboss.</description>
+<!-- *********************************************************************** 
+        
+                                BEANS DE LA CAPA DE NEGOCIO
+        
+             *********************************************************************** -->
+    <bean id="AcusticaRuidosInterioresHorizontalesBean" class="org.springframework.ejb.access.LocalStatelessSessionProxyFactoryBean">
+        <property name="jndiName" value="avaedi/AcusticaRuidosInterioresHorizontalesBeanEjb/local" />
+        <property name="businessInterface" value="es.caib.avaedi.logic.bo.AcusticaRuidosInterioresHorizontalesBO" />
+    </bean>
+    <bean id="BlobBean" class="org.springframework.ejb.access.LocalStatelessSessionProxyFactoryBean">
+        <property name="jndiName" value="avaedi/BlobBeanEjb/local" />
+        <property name="businessInterface" value="es.caib.avaedi.logic.bo.BlobBO" />
+    </bean>
+    <bean id="EdificioBean" class="org.springframework.ejb.access.LocalStatelessSessionProxyFactoryBean">
+        <property name="jndiName" value="avaedi/EdificioBeanEjb/local" />
+        <property name="businessInterface" value="es.caib.avaedi.logic.bo.EdificioBO" />
+    </bean>
+    <bean id="CimentacionesBean" class="org.springframework.ejb.access.LocalStatelessSessionProxyFactoryBean">
+        <property name="jndiName" value="avaedi/CimentacionesBeanEjb/local" />
+        <property name="businessInterface" value="es.caib.avaedi.logic.bo.CimentacionesBO" />
+    </bean>
+    <bean id="DeficienciaBean" class="org.springframework.ejb.access.LocalStatelessSessionProxyFactoryBean">
+        <property name="jndiName" value="avaedi/DeficienciaBeanEjb/local" />
+        <property name="businessInterface" value="es.caib.avaedi.logic.bo.DeficienciaBO" />
+    </bean>
+    <bean id="ConfigExportacionBean" class="org.springframework.ejb.access.LocalStatelessSessionProxyFactoryBean">
+        <property name="jndiName" value="avaedi/ConfigExportacionBeanEjb/local" />
+        <property name="businessInterface" value="es.caib.avaedi.logic.bo.ConfigExportacionBO" />
+    </bean>
+    <bean id="UsuarioBean" class="org.springframework.ejb.access.LocalStatelessSessionProxyFactoryBean">
+        <property name="jndiName" value="avaedi/UsuarioBeanEjb/local" />
+        <property name="businessInterface" value="es.caib.avaedi.logic.bo.UsuarioBO" />
+    </bean>
+    <bean id="EstructuraBean" class="org.springframework.ejb.access.LocalStatelessSessionProxyFactoryBean">
+        <property name="jndiName" value="avaedi/EstructuraBeanEjb/local" />
+        <property name="businessInterface" value="es.caib.avaedi.logic.bo.EstructuraBO" />
+    </bean>
+    <bean id="AcusticaDatosGeneralesBean" class="org.springframework.ejb.access.LocalStatelessSessionProxyFactoryBean">
+        <property name="jndiName" value="avaedi/AcusticaDatosGeneralesBeanEjb/local" />
+        <property name="businessInterface" value="es.caib.avaedi.logic.bo.AcusticaDatosGeneralesBO" />
+    </bean>
+    <bean id="EstadoInformeBean" class="org.springframework.ejb.access.LocalStatelessSessionProxyFactoryBean">
+        <property name="jndiName" value="avaedi/EstadoInformeBeanEjb/local" />
+        <property name="businessInterface" value="es.caib.avaedi.logic.bo.EstadoInformeBO" />
+    </bean>
+    <bean id="ValoracionParcialBean" class="org.springframework.ejb.access.LocalStatelessSessionProxyFactoryBean">
+        <property name="jndiName" value="avaedi/ValoracionParcialBeanEjb/local" />
+        <property name="businessInterface" value="es.caib.avaedi.logic.bo.ValoracionParcialBO" />
+    </bean>
+    <bean id="ValorBean" class="org.springframework.ejb.access.LocalStatelessSessionProxyFactoryBean">
+        <property name="jndiName" value="avaedi/ValorBeanEjb/local" />
+        <property name="businessInterface" value="es.caib.avaedi.logic.bo.ValorBO" />
+    </bean>
+    <bean id="InstalacionesBean" class="org.springframework.ejb.access.LocalStatelessSessionProxyFactoryBean">
+        <property name="jndiName" value="avaedi/InstalacionesBeanEjb/local" />
+        <property name="businessInterface" value="es.caib.avaedi.logic.bo.InstalacionesBO" />
+    </bean>
+    <bean id="CaracteristicaBean" class="org.springframework.ejb.access.LocalStatelessSessionProxyFactoryBean">
+        <property name="jndiName" value="avaedi/CaracteristicaBeanEjb/local" />
+        <property name="businessInterface" value="es.caib.avaedi.logic.bo.CaracteristicaBO" />
+    </bean>
+    <bean id="AcusticaRuidosExterioresBean" class="org.springframework.ejb.access.LocalStatelessSessionProxyFactoryBean">
+        <property name="jndiName" value="avaedi/AcusticaRuidosExterioresBeanEjb/local" />
+        <property name="businessInterface" value="es.caib.avaedi.logic.bo.AcusticaRuidosExterioresBO" />
+    </bean>
+    <bean id="ConfigAplicacionBean" class="org.springframework.ejb.access.LocalStatelessSessionProxyFactoryBean">
+        <property name="jndiName" value="avaedi/ConfigAplicacionBeanEjb/local" />
+        <property name="businessInterface" value="es.caib.avaedi.logic.bo.ConfigAplicacionBO" />
+    </bean>
+    <bean id="AcusticaRuidoInstalacionesBean" class="org.springframework.ejb.access.LocalStatelessSessionProxyFactoryBean">
+        <property name="jndiName" value="avaedi/AcusticaRuidoInstalacionesBeanEjb/local" />
+        <property name="businessInterface" value="es.caib.avaedi.logic.bo.AcusticaRuidoInstalacionesBO" />
+    </bean>
+    <bean id="AcusticaComprobacionesBean" class="org.springframework.ejb.access.LocalStatelessSessionProxyFactoryBean">
+        <property name="jndiName" value="avaedi/AcusticaComprobacionesBeanEjb/local" />
+        <property name="businessInterface" value="es.caib.avaedi.logic.bo.AcusticaComprobacionesBO" />
+    </bean>
+    <bean id="ViaBean" class="org.springframework.ejb.access.LocalStatelessSessionProxyFactoryBean">
+        <property name="jndiName" value="avaedi/ViaBeanEjb/local" />
+        <property name="businessInterface" value="es.caib.avaedi.logic.bo.ViaBO" />
+    </bean>
+    <bean id="AcusticaRuidosInterioresUnionesBean" class="org.springframework.ejb.access.LocalStatelessSessionProxyFactoryBean">
+        <property name="jndiName" value="avaedi/AcusticaRuidosInterioresUnionesBeanEjb/local" />
+        <property name="businessInterface" value="es.caib.avaedi.logic.bo.AcusticaRuidosInterioresUnionesBO" />
+    </bean>
+    <bean id="AccesibilidadValoracionFinalesBean" class="org.springframework.ejb.access.LocalStatelessSessionProxyFactoryBean">
+        <property name="jndiName" value="avaedi/AccesibilidadValoracionFinalesBeanEjb/local" />
+        <property name="businessInterface" value="es.caib.avaedi.logic.bo.AccesibilidadValoracionFinalesBO" />
+    </bean>
+    <bean id="InspeccionBean" class="org.springframework.ejb.access.LocalStatelessSessionProxyFactoryBean">
+        <property name="jndiName" value="avaedi/InspeccionBeanEjb/local" />
+        <property name="businessInterface" value="es.caib.avaedi.logic.bo.InspeccionBO" />
+    </bean>
+    <bean id="AcusticasBean" class="org.springframework.ejb.access.LocalStatelessSessionProxyFactoryBean">
+        <property name="jndiName" value="avaedi/AcusticasBeanEjb/local" />
+        <property name="businessInterface" value="es.caib.avaedi.logic.bo.AcusticasBO" />
+    </bean>
+    <bean id="MunicipioBean" class="org.springframework.ejb.access.LocalStatelessSessionProxyFactoryBean">
+        <property name="jndiName" value="avaedi/MunicipioBeanEjb/local" />
+        <property name="businessInterface" value="es.caib.avaedi.logic.bo.MunicipioBO" />
+    </bean>
+    <bean id="InformeBean" class="org.springframework.ejb.access.LocalStatelessSessionProxyFactoryBean">
+        <property name="jndiName" value="avaedi/InformeBeanEjb/local" />
+        <property name="businessInterface" value="es.caib.avaedi.logic.bo.InformeBO" />
+    </bean>
+    <bean id="DocumentacionOtroBean" class="org.springframework.ejb.access.LocalStatelessSessionProxyFactoryBean">
+        <property name="jndiName" value="avaedi/DocumentacionOtroBeanEjb/local" />
+        <property name="businessInterface" value="es.caib.avaedi.logic.bo.DocumentacionOtroBO" />
+    </bean>
+    <bean id="AcusticaRuidosInterioresVerticalesBean" class="org.springframework.ejb.access.LocalStatelessSessionProxyFactoryBean">
+        <property name="jndiName" value="avaedi/AcusticaRuidosInterioresVerticalesBeanEjb/local" />
+        <property name="businessInterface" value="es.caib.avaedi.logic.bo.AcusticaRuidosInterioresVerticalesBO" />
+    </bean>
+    <bean id="GrupoCaracteristicasBean" class="org.springframework.ejb.access.LocalStatelessSessionProxyFactoryBean">
+        <property name="jndiName" value="avaedi/GrupoCaracteristicasBeanEjb/local" />
+        <property name="businessInterface" value="es.caib.avaedi.logic.bo.GrupoCaracteristicasBO" />
+    </bean>
+    <bean id="TipoViaBean" class="org.springframework.ejb.access.LocalStatelessSessionProxyFactoryBean">
+        <property name="jndiName" value="avaedi/TipoViaBeanEjb/local" />
+        <property name="businessInterface" value="es.caib.avaedi.logic.bo.TipoViaBO" />
+    </bean>
+    <bean id="CerramientosCubiertasBean" class="org.springframework.ejb.access.LocalStatelessSessionProxyFactoryBean">
+        <property name="jndiName" value="avaedi/CerramientosCubiertasBeanEjb/local" />
+        <property name="businessInterface" value="es.caib.avaedi.logic.bo.CerramientosCubiertasBO" />
+    </bean>
+    <bean id="FechaVisitaBean" class="org.springframework.ejb.access.LocalStatelessSessionProxyFactoryBean">
+        <property name="jndiName" value="avaedi/FechaVisitaBeanEjb/local" />
+        <property name="businessInterface" value="es.caib.avaedi.logic.bo.FechaVisitaBO" />
+    </bean>
+    <bean id="EstadoAplicacionBean" class="org.springframework.ejb.access.LocalStatelessSessionProxyFactoryBean">
+        <property name="jndiName" value="avaedi/EstadoAplicacionBeanEjb/local" />
+        <property name="businessInterface" value="es.caib.avaedi.logic.bo.EstadoAplicacionBO" />
+    </bean>
+    <bean id="AccesibilidadAjustesRazonablesBean" class="org.springframework.ejb.access.LocalStatelessSessionProxyFactoryBean">
+        <property name="jndiName" value="avaedi/AccesibilidadAjustesRazonablesBeanEjb/local" />
+        <property name="businessInterface" value="es.caib.avaedi.logic.bo.AccesibilidadAjustesRazonablesBO" />
+    </bean>
+    <bean id="ConservacionBean" class="org.springframework.ejb.access.LocalStatelessSessionProxyFactoryBean">
+        <property name="jndiName" value="avaedi/ConservacionBeanEjb/local" />
+        <property name="businessInterface" value="es.caib.avaedi.logic.bo.ConservacionBO" />
+    </bean>
+    <bean id="EficienciasEnergeticasBean" class="org.springframework.ejb.access.LocalStatelessSessionProxyFactoryBean">
+        <property name="jndiName" value="avaedi/EficienciasEnergeticasBeanEjb/local" />
+        <property name="businessInterface" value="es.caib.avaedi.logic.bo.EficienciasEnergeticasBO" />
+    </bean>
+    <bean id="AcusticaValoracionFinalBean" class="org.springframework.ejb.access.LocalStatelessSessionProxyFactoryBean">
+        <property name="jndiName" value="avaedi/AcusticaValoracionFinalBeanEjb/local" />
+        <property name="businessInterface" value="es.caib.avaedi.logic.bo.AcusticaValoracionFinalBO" />
+    </bean>
+    <bean id="DeficienciaTipoBean" class="org.springframework.ejb.access.LocalStatelessSessionProxyFactoryBean">
+        <property name="jndiName" value="avaedi/DeficienciaTipoBeanEjb/local" />
+        <property name="businessInterface" value="es.caib.avaedi.logic.bo.DeficienciaTipoBO" />
+    </bean>
+    <bean id="AccesibilidadPublicosBean" class="org.springframework.ejb.access.LocalStatelessSessionProxyFactoryBean">
+        <property name="jndiName" value="avaedi/AccesibilidadPublicosBeanEjb/local" />
+        <property name="businessInterface" value="es.caib.avaedi.logic.bo.AccesibilidadPublicosBO" />
+    </bean>
+    <bean id="AcusticaMejorasAcusticasBean" class="org.springframework.ejb.access.LocalStatelessSessionProxyFactoryBean">
+        <property name="jndiName" value="avaedi/AcusticaMejorasAcusticasBeanEjb/local" />
+        <property name="businessInterface" value="es.caib.avaedi.logic.bo.AcusticaMejorasAcusticasBO" />
+    </bean>
+    <bean id="HistoricoBean" class="org.springframework.ejb.access.LocalStatelessSessionProxyFactoryBean">
+        <property name="jndiName" value="avaedi/HistoricoBeanEjb/local" />
+        <property name="businessInterface" value="es.caib.avaedi.logic.bo.HistoricoBO" />
+    </bean>
+    <bean id="IslaBean" class="org.springframework.ejb.access.LocalStatelessSessionProxyFactoryBean">
+        <property name="jndiName" value="avaedi/IslaBeanEjb/local" />
+        <property name="businessInterface" value="es.caib.avaedi.logic.bo.IslaBO" />
+    </bean>
+
+
+    <bean id="DatosCatastroBean" class="org.springframework.ejb.access.LocalStatelessSessionProxyFactoryBean">
+        <property name="jndiName" value="avaedi/DatosCatastroBeanEjb/local" />
+        <property name="businessInterface" value="es.caib.avaedi.logic.bo.DatosCatastroBO" />
+    </bean>
+    <bean id="ImportadorBean" class="org.springframework.ejb.access.LocalStatelessSessionProxyFactoryBean">
+        <property name="jndiName" value="avaedi/ImportadorBeanEjb/local" />
+        <property name="businessInterface" value="es.caib.avaedi.logic.bo.ImportadorBO" />
+    </bean>
+
+</beans>
