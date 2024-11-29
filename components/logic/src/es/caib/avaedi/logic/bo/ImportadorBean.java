@@ -36,6 +36,7 @@ import javax.xml.transform.TransformerFactoryConfigurationError;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
+import es.caib.avaedi.at4forms.common.util.Constants;
 import org.apache.commons.compress.archivers.ArchiveEntry;
 import org.apache.commons.compress.archivers.zip.ZipArchiveInputStream;
 import org.slf4j.Logger;
@@ -399,7 +400,7 @@ public class ImportadorBean implements ImportadorBO {
 	//FIN DE BEANS PARA ACCEDER A DATOS ESPECIFICOS DE INSPECCION 
 
 	@Override
-	public ResultadoImportacionFormVO importarInforme(ArchivoDTO iee, ArchivoDTO pdf, String user, boolean validarMunicipio, Integer municipioId) throws GenericBusinessException {
+	public ResultadoImportacionFormVO importarInforme(ArchivoDTO iee, ArchivoDTO pdf, String user, boolean validarMunicipio, Integer municipioId, Date dataFirma, String tipusIEE, boolean renovacio, boolean subsana) throws GenericBusinessException {
 
 		Date now = new Date();
 		InspeccionType inspeccionImportada = null;
@@ -429,6 +430,168 @@ public class ImportadorBean implements ImportadorBO {
 			referenciaCatastral = inspeccionImportada.getInspeccionIdentificacionedificioReferenciacatastrales().getReferencia().getReferenciaCatastral();
 		}
 
+		ValidacioEdifici validacioEdifici = getValidacioEdifici(user, validarMunicipio, municipioId, referenciaCatastral, inspeccionImportada);
+
+		InformeFormVO informeraw = new InformeFormVO();
+
+		informeraw.setEdificioId(validacioEdifici.edificiosDisponibles[0].getClave());
+
+		int estado = 5;
+
+		informeraw.setEstadoInformeId(estado);
+		informeraw.setFechaAlta(now);
+//		informeraw.setFechaInforme(now);
+		informeraw.setFechaInforme(dataFirma);
+
+		setResumenAuditoria(informeraw, user, now);
+		InformeFormVO informe = this.informeBO.add(informeraw);
+
+		BlobFormVO archivoPDF = new BlobFormVO();
+		BlobFormVO archivoIEE = new BlobFormVO();
+		try {
+			archivoPDF.setDatos(pdf.getByteData());
+		} catch (IOException e) {
+			String error = "Error leyendo los datos del archivo PDF";
+			log.error(error, e);
+			throw new GenericBusinessException(error, e);
+		}
+		archivoIEE.setDatos(zipBytes);
+
+		setResumenAuditoria(archivoPDF, user, now);
+		setResumenAuditoria(archivoIEE, user, now);
+
+		archivoPDF = this.blobBO.add(archivoPDF);
+		//TODO: Creo que el mime que usa es incorrecto porque luego se descarga en un formato raro
+		archivoIEE = this.blobBO.add(archivoIEE);
+
+		informe.setPdfArxiu(new Long(archivoPDF.getClave()));
+		informe.setPdfArxiuMime(pdf.getMimeType());
+		informe.setIeeArxiu(new Long(archivoIEE.getClave()));
+		informe.setIeeArxiuMime(iee.getMimeType());
+		informe.setTipusIee(tipusIEE);
+		informe.setRenovacio(renovacio);
+		informe.setSubsana(subsana);
+
+		informe = this.informeBO.update(informe.getClave(), informe);
+
+		//InspeccionFormVO inspeccion = this.generarInforme(inspeccionImportada, informe.getClave()); // Por ahora no necesitamos la inspeccion generada
+		this.generarInforme(inspeccionImportada, informe.getClave());
+
+		EstadoInformeFormVO[] estadosDisponibles = this.getEstadosDisponibles(inspeccionImportada);
+
+		ResultadoImportacionFormVO ret = new ResultadoImportacionFormVO(validacioEdifici.edificiosDisponibles, estadosDisponibles, informe, validacioEdifici.existia);
+		//ret.setEdificioExistia(existia);
+		//ret.setEdificio(edificioBD);
+		//ret.setInforme(informe);
+		//ret.setInspeccion(inspeccion);
+		ret.setCorrecto(true);
+
+		return ret;
+	}
+
+	@Override
+	public ResultadoImportacionFormVO importarInformeIte(ArchivoDTO pdf, String user, boolean validarMunicipio, Integer municipioId, Date dataFirma, String numeroCadastre, boolean favorable) throws GenericBusinessException {
+
+		ValidacioEdifici validacioEdifici = getValidacioEdifici(user, validarMunicipio, municipioId, numeroCadastre, null);
+
+		InformeFormVO informeraw = new InformeFormVO();
+
+		informeraw.setEdificioId(validacioEdifici.edificiosDisponibles[0].getClave());
+
+		Date now = new Date();
+		int estado = 5;
+
+		informeraw.setEstadoInformeId(estado);
+		informeraw.setFechaAlta(now);
+		informeraw.setFechaInforme(dataFirma);
+
+		setResumenAuditoria(informeraw, user, now);
+		InformeFormVO informe = this.informeBO.add(informeraw);
+
+		BlobFormVO archivoPDF = new BlobFormVO();
+		BlobFormVO archivoIEE = new BlobFormVO();
+		try {
+			archivoPDF.setDatos(pdf.getByteData());
+		} catch (IOException e) {
+			String error = "Error leyendo los datos del archivo PDF";
+			log.error(error, e);
+			throw new GenericBusinessException(error, e);
+		}
+
+		setResumenAuditoria(archivoPDF, user, now);
+		archivoPDF = this.blobBO.add(archivoPDF);
+
+		informe.setPdfArxiu(new Long(archivoPDF.getClave()));
+		informe.setPdfArxiuMime(pdf.getMimeType());
+		informe = this.informeBO.update(informe.getClave(), informe);
+
+		// Nous camps
+		informe.setTipusIee(TipusIee.T30);
+		informe.setEstadoInformeId(favorable ? Constants.ESTADO_INFORME_FAVORABLE : Constants.ESTADO_INFORME_DESFAVORABLE);
+
+		this.generarInforme(inspeccionImportada, informe.getClave());
+
+		EstadoInformeFormVO[] estadosDisponibles = this.getEstadosDisponibles(inspeccionImportada);
+
+		ResultadoImportacionFormVO ret = new ResultadoImportacionFormVO(validacioEdifici.edificiosDisponibles, estadosDisponibles, informe, validacioEdifici.existia);
+		ret.setCorrecto(true);
+
+		return ret;
+	}
+
+	@Override
+	public ResultadoImportacionFormVO importarInformeSubsana(ArchivoDTO pdf, String user, boolean validarMunicipio, Integer municipioId, Date dataFirma, String numeroCadastre) throws GenericBusinessException {
+
+		ValidacioEdifici validacioEdifici = getValidacioEdifici(user, validarMunicipio, municipioId, numeroCadastre, null);
+
+		InformeFormVO informeraw = new InformeFormVO();
+
+		EdificioFormVO edifici = validacioEdifici.edificiosDisponibles[0];
+		TipusIee tipusIee = edifici.getTipusIeeUltimInforme();
+		informeraw.setEdificioId(edifici.getClave());
+
+		Date now = new Date();
+		int estado = 5;
+
+		informeraw.setEstadoInformeId(estado);
+		informeraw.setFechaAlta(now);
+		informeraw.setFechaInforme(dataFirma);
+
+		setResumenAuditoria(informeraw, user, now);
+		InformeFormVO informe = this.informeBO.add(informeraw);
+
+		BlobFormVO archivoPDF = new BlobFormVO();
+		BlobFormVO archivoIEE = new BlobFormVO();
+		try {
+			archivoPDF.setDatos(pdf.getByteData());
+		} catch (IOException e) {
+			String error = "Error leyendo los datos del archivo PDF";
+			log.error(error, e);
+			throw new GenericBusinessException(error, e);
+		}
+
+		setResumenAuditoria(archivoPDF, user, now);
+		archivoPDF = this.blobBO.add(archivoPDF);
+
+		informe.setPdfArxiu(new Long(archivoPDF.getClave()));
+		informe.setPdfArxiuMime(pdf.getMimeType());
+		informe = this.informeBO.update(informe.getClave(), informe);
+
+		// Nous camps
+		informe.setTipusIee(tipusIeeCada);
+		informe.setSubsana(true);
+
+		this.generarInforme(inspeccionImportada, informe.getClave());
+
+		EstadoInformeFormVO[] estadosDisponibles = this.getEstadosDisponibles(inspeccionImportada);
+
+		ResultadoImportacionFormVO ret = new ResultadoImportacionFormVO(validacioEdifici.edificiosDisponibles, estadosDisponibles, informe, validacioEdifici.existia);
+		ret.setCorrecto(true);
+
+		return ret;
+	}
+
+	private ValidacioEdifici getValidacioEdifici(String user, boolean validarMunicipio, Integer municipioId, String referenciaCatastral, InspeccionType inspeccionImportada) throws GenericBusinessException {
 		ConsultaDnp consulta;
 
 		try {
@@ -500,7 +663,9 @@ public class ImportadorBean implements ImportadorBO {
 		boolean enBaleares = false;
 		boolean canImport = false;
 
-		municipio = municipioBO.findByCodigoCatastro(Integer.parseInt(String.valueOf(codigoCatastroMunicipio)));
+		if (codigoCatastroMunicipio != null) {
+			municipio = municipioBO.findByCodigoCatastro(Integer.parseInt(String.valueOf(codigoCatastroMunicipio)));
+		}
 
 		if (municipio != null) {
 			via = viaBO.findByCodigoCatastro(Integer.parseInt(codigoVia), municipio.getClave());
@@ -534,7 +699,7 @@ public class ImportadorBean implements ImportadorBO {
 			//no hay edificio, creamos uno nuevo
 			existia = false;
 			EdificioFormVO edificioRaw = this.generateEdificio(edificioSoap, user, via.getClave());
-			if (inspeccionImportada.getInspeccionIdentificacionedificioDirecciones() != null && inspeccionImportada.getInspeccionIdentificacionedificioDirecciones().getDireccion() != null) {
+			if (inspeccionImportada != null && inspeccionImportada.getInspeccionIdentificacionedificioDirecciones() != null && inspeccionImportada.getInspeccionIdentificacionedificioDirecciones().getDireccion() != null) {
 				edificioRaw.setNumeroCatastro(String.valueOf(inspeccionImportada.getInspeccionIdentificacionedificioDirecciones().getDireccion().getNumero()));
 			} else {
 				String error = "Error al recuperar el numero (del catastro) del edificio";
@@ -547,59 +712,8 @@ public class ImportadorBean implements ImportadorBO {
 		} else {
 			edificiosDisponibles = edificiosBDD.getResultados().toArray(new EdificioFormVO[0]);
 		}
-
-		InformeFormVO informeraw = new InformeFormVO();
-
-		informeraw.setEdificioId(edificiosDisponibles[0].getClave());
-
-		int estado = 5;
-
-		informeraw.setEstadoInformeId(estado);
-		informeraw.setFechaAlta(now);
-		informeraw.setFechaInforme(now);
-//		informeraw.setFechaInforme(getDataInformeValoracioFinal(inspeccionImportada));
-
-		setResumenAuditoria(informeraw, user, now);
-		InformeFormVO informe = this.informeBO.add(informeraw);
-
-		BlobFormVO archivoPDF = new BlobFormVO();
-		BlobFormVO archivoIEE = new BlobFormVO();
-		try {
-			archivoPDF.setDatos(pdf.getByteData());
-		} catch (IOException e) {
-			String error = "Error leyendo los datos del archivo PDF";
-			log.error(error, e);
-			throw new GenericBusinessException(error, e);
-		}
-		archivoIEE.setDatos(zipBytes);
-
-		setResumenAuditoria(archivoPDF, user, now);
-		setResumenAuditoria(archivoIEE, user, now);
-
-		archivoPDF = this.blobBO.add(archivoPDF);
-		//TODO: Creo que el mime que usa es incorrecto porque luego se descarga en un formato raro
-		archivoIEE = this.blobBO.add(archivoIEE);
-
-		informe.setPdfArxiu(new Long(archivoPDF.getClave()));
-		informe.setPdfArxiuMime(pdf.getMimeType());
-		informe.setIeeArxiu(new Long(archivoIEE.getClave()));
-		informe.setIeeArxiuMime(iee.getMimeType());
-
-		informe = this.informeBO.update(informe.getClave(), informe);
-
-		//InspeccionFormVO inspeccion = this.generarInforme(inspeccionImportada, informe.getClave()); // Por ahora no necesitamos la inspeccion generada
-		this.generarInforme(inspeccionImportada, informe.getClave());
-
-		EstadoInformeFormVO[] estadosDisponibles = this.getEstadosDisponibles(inspeccionImportada);
-
-		ResultadoImportacionFormVO ret = new ResultadoImportacionFormVO(edificiosDisponibles, estadosDisponibles, informe, existia);
-		//ret.setEdificioExistia(existia);
-		//ret.setEdificio(edificioBD);
-		//ret.setInforme(informe);
-		//ret.setInspeccion(inspeccion);
-		ret.setCorrecto(true);
-
-		return ret;
+		ValidacioEdifici result = new ValidacioEdifici(existia, edificiosDisponibles);
+		return result;
 	}
 
 	private Date getDataInformeValoracioFinal(InspeccionType inspeccionImportada) {
@@ -2211,6 +2325,16 @@ public class ImportadorBean implements ImportadorBO {
 			return false;
 		}
 		return bean.delete(id);
+	}
+
+	private static class ValidacioEdifici {
+		public final boolean existia;
+		public final EdificioFormVO[] edificiosDisponibles;
+
+		public ValidacioEdifici(boolean existia, EdificioFormVO[] edificiosDisponibles) {
+			this.existia = existia;
+			this.edificiosDisponibles = edificiosDisponibles;
+		}
 	}
 
 }

@@ -3,6 +3,7 @@ package es.caib.avaedi.front.service.general;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -66,14 +67,13 @@ public class FormDataService extends BaseFormDataService {
 	private ImportadorBO importadorBO;
 
 	@RemoteMethod
-	public ResultadoImportacionListadoVO importIee(FileTransfer fileIEE, FileTransfer filePDF, HttpServletRequest request) throws GenericBusinessException {
+	public ResultadoImportacionListadoVO importIee(FileTransfer fileIEE, FileTransfer filePDF, Date dataFirma, String tipusIEE, boolean renovacio, boolean subsana, HttpServletRequest request) throws GenericBusinessException {
 		ResultadoImportacionListadoVO ret = new ResultadoImportacionListadoVO();
 		BaseFrontPrincipal usuari = this.getUsuari(request);
 		String municipioIdS = AuthUtils.municipioId(usuari);
 		Integer municipioId = municipioIdS == null ? null : Integer.parseInt(municipioIdS);
 		boolean validarMunicipio = usuari.isInRole(Constants.MUNICIPI);
 		String user = usuari.getUsername();
-		
 		
 		try {
 			if (fileIEE == null) {
@@ -93,7 +93,80 @@ public class FormDataService extends BaseFormDataService {
 				pdf.setMimeType(filePDF.getMimeType());
 				pdf.setStream(filePDF.getInputStream());
 				
-				ret = importadorBO.importarInforme(iee, pdf, user, validarMunicipio, municipioId);
+				ret = importadorBO.importarInforme(iee, pdf, user, validarMunicipio, municipioId, dataFirma, tipusIEE, renovacio, subsana);
+			} catch (IOException e) {
+				throw new GenericBusinessException("Error al abrir túnel de lectura de datos con los archivos subidos");
+			}
+		} catch (GenericBusinessException e) {
+			ret.setCorrecto(false);
+			ret.setErrorMsg(e.getMessage());
+			ret.addException(e);
+		} catch (Exception e) {
+			log.error("Excepcion no controlada en la importacion", e);
+			ret.setCorrecto(false);
+			ret.setErrorMsg("Error inesperado, para más información, consulte la traza del error.");
+			ret.addException(e);
+		}
+		return ret;
+	}
+
+	@RemoteMethod
+	public ResultadoImportacionListadoVO importIte(FileTransfer filePDF, Date dataFirma, String numeroCadastre, boolean favorable, HttpServletRequest request) throws GenericBusinessException {
+		ResultadoImportacionListadoVO ret = new ResultadoImportacionListadoVO();
+		BaseFrontPrincipal usuari = this.getUsuari(request);
+		String municipioIdS = AuthUtils.municipioId(usuari);
+		Integer municipioId = municipioIdS == null ? null : Integer.parseInt(municipioIdS);
+		boolean validarMunicipio = usuari.isInRole(Constants.MUNICIPI);
+		String user = usuari.getUsername();
+
+
+		try {
+			if (filePDF == null) {
+				throw new GenericBusinessException("No se ha enviado correctamente el archivo .pdf");
+			}
+			try {
+				ArchivoDTO pdf = new ArchivoDTO();
+				pdf.setFilename(filePDF.getFilename());
+				pdf.setMimeType(filePDF.getMimeType());
+				pdf.setStream(filePDF.getInputStream());
+
+				ret = importadorBO.importarInformeIte(pdf, user, validarMunicipio, municipioId, dataFirma, numeroCadastre, favorable);
+			} catch (IOException e) {
+				throw new GenericBusinessException("Error al abrir túnel de lectura de datos con los archivos subidos");
+			}
+		} catch (GenericBusinessException e) {
+			ret.setCorrecto(false);
+			ret.setErrorMsg(e.getMessage());
+			ret.addException(e);
+		} catch (Exception e) {
+			log.error("Excepcion no controlada en la importacion", e);
+			ret.setCorrecto(false);
+			ret.setErrorMsg("Error inesperado, para más información, consulte la traza del error.");
+			ret.addException(e);
+		}
+		return ret;
+	}
+
+	@RemoteMethod
+	public ResultadoImportacionListadoVO subsanacio(FileTransfer filePDF, Date dataFirma, String numeroCadastre, HttpServletRequest request) throws GenericBusinessException {
+		ResultadoImportacionListadoVO ret = new ResultadoImportacionListadoVO();
+		BaseFrontPrincipal usuari = this.getUsuari(request);
+		String municipioIdS = AuthUtils.municipioId(usuari);
+		Integer municipioId = municipioIdS == null ? null : Integer.parseInt(municipioIdS);
+		boolean validarMunicipio = usuari.isInRole(Constants.MUNICIPI);
+		String user = usuari.getUsername();
+
+		try {
+			if (filePDF == null) {
+				throw new GenericBusinessException("No se ha enviado correctamente el archivo .pdf");
+			}
+			try {
+				ArchivoDTO pdf = new ArchivoDTO();
+				pdf.setFilename(filePDF.getFilename());
+				pdf.setMimeType(filePDF.getMimeType());
+				pdf.setStream(filePDF.getInputStream());
+
+				ret = importadorBO.importarInformeSubsana(pdf, user, validarMunicipio, municipioId, dataFirma, numeroCadastre);
 			} catch (IOException e) {
 				throw new GenericBusinessException("Error al abrir túnel de lectura de datos con los archivos subidos");
 			}

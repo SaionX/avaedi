@@ -1,6 +1,6 @@
 Ext.define("At4FrameworkIntranet.SubsanacioWindow", {
 	extend: "At4FrameworkIntranet.Window",
-	title: "Dar de alta una Inspección",
+	title: "Anexo que subsana una IEE desfavorable",
 	closable: false,
 	closeAction: "destroy",
 	height: 400,
@@ -96,19 +96,22 @@ Ext.define("At4FrameworkIntranet.SubsanacioForm", {
 	acciones: {
 		enviarImportacion: function () {
 			var layout = this.getLayout();
-			var ieeItem = this.primerFormFields.documentoIee;
 			var pdfItem = this.primerFormFields.documentoPdf;
-			var ieevalid = ieeItem.isValid();
+			var dataItem = this.primerFormFields.fechaFirma;
+			var cadastreItem = this.primerFormFields.numeroCatastro;
 			var pdfvalid = pdfItem.isValid();
-			if (!ieevalid || !pdfvalid) {
+			var dataValida = dataItem.isValid();
+			var cadastreValid = cadastreItem.isValid();
+			if (!pdfvalid || !dataValida || !cadastreValid) {
 				return;
 			}
-			var ieeInput = ieeItem.getTrigger("filebutton").component.fileInputEl.dom;
 			var pdfInput = pdfItem.getTrigger("filebutton").component.fileInputEl.dom;
+			var dataValue = this.primerFormFields.fechaFirma.getValue();
+			var cadastreValue = this.primerFormFields.numeroCatastro.getValue();
 			if (!this.requestactive) {
 				this.requestactive = true;
 				//TODO:
-				serverDatabaseActions.runAction(FormDataService.subsanacio, [ieeInput, pdfInput], function (data, callee) {
+				serverDatabaseActions.runAction(FormDataService.subsanacio, [pdfInput, dataValue, cadastreValue], function (data, callee) {
 					var itemToGo = 1;
 					this.requestactive = false;
 					//TODO:
@@ -321,35 +324,59 @@ Ext.define("At4FrameworkIntranet.SubsanacioForm", {
 			width: 500,
 			name: "filePDF"
 		});
-
-		var tipus = Ext.create('Ext.data.Store', {
-			fields: ['abbr', 'name'],
-			data : [
-				{"abbr":"0", "name":"--"},
-				{"abbr":"30", "name":"30"},
-				{"abbr":"50", "name":"50"}
-			]
-		});
-		primerFormFields.tipusIee = Ext.create({
+		primerFormFields.fechaFirma = new Ext.form.DateField({
+			name: 'fechaFirma',
+			fieldLabel: "Fecha firma",
+			// fieldLabel: this.fechaInformeHeaderLabel,
+			// tabIndex: tabHelper.getNext(),
+			margin: "0 30px",
+			width: 170,
+			editable: true,
+			disabled: false,
 			allowBlank: false,
-			width: 500,
-			margin: "0 30px",
-			xtype: "combobox",
-			store: tipus,
-			queryMode: 'local',
-			displayField: 'name',
-			valueField: 'abbr',
-			autoSelect: true,
-			editable: false,
-			forceSelection: true,
-			name: "tipusIee"
+			format: 'd-m-Y'
 		});
-		primerFormFields.renovacio = Ext.create({
-			margin: "0 30px",
-			xtype: "checkbox",
-			name: 'renovacio',
-			boxLable: 'renovación'
+		primerFormFields.numeroCatastro = new Ext.form.TextField({
+			name: 'numeroCatastro',
+			fieldLabel: "Numero catastro",
+			// labelAttrTpl: " data-qtip='" + this.numeroCatastroDescriptionLabel + "'",
+			// tabIndex: tabHelper.getNext(),
+			margin: "0px",
+			editable: true,
+			disabled: false,
+			allowBlank: false,
+			width: 300,
+			maxLength: 64
 		});
+
+		// var tipus = Ext.create('Ext.data.Store', {
+		// 	fields: ['abbr', 'name'],
+		// 	data : [
+		// 		{"abbr":"0", "name":"--"},
+		// 		{"abbr":"30", "name":"30"},
+		// 		{"abbr":"50", "name":"50"}
+		// 	]
+		// });
+		// primerFormFields.tipusIee = Ext.create({
+		// 	allowBlank: false,
+		// 	width: 500,
+		// 	margin: "0 30px",
+		// 	xtype: "combobox",
+		// 	store: tipus,
+		// 	queryMode: 'local',
+		// 	displayField: 'name',
+		// 	valueField: 'abbr',
+		// 	autoSelect: true,
+		// 	editable: false,
+		// 	forceSelection: true,
+		// 	name: "tipusIee"
+		// });
+		// primerFormFields.renovacio = Ext.create({
+		// 	margin: "0 30px",
+		// 	xtype: "checkbox",
+		// 	name: 'renovacio',
+		// 	boxLable: 'renovación'
+		// });
 
 		/*primerFormFields.submit = Ext.create({
 			xtype: "button",
@@ -378,18 +405,18 @@ Ext.define("At4FrameworkIntranet.SubsanacioForm", {
 							html: "<span class='iee'><span class='icono pdf'></span><span class='texto'>Documento PDF </span>(.pdf)</span>"
 						}],
 						[primerFormFields.documentoPdf],
-						[{
-							xtype: "container",
-							margin: "15px 15px 0px 30px",
-							html: "<span class='iee'><span class='texto'>Tipo IEE </span></span>"
-						}],
-						[primerFormFields.tipusIee],
-						[{
-							xtype: "container",
-							margin: "15px 15px 0px 30px",
-							html: "<span class='iee'><span class='texto'>Es renovación </span></span>"
-						}],
-						[primerFormFields.renovacio],
+						// [{
+						// 	xtype: "container",
+						// 	margin: "15px 15px 0px 30px",
+						// 	html: "<span class='iee'><span class='texto'>Fecha firma </span></span>"
+						// }],
+						[primerFormFields.fechaFirma,
+						// [{
+						// 	xtype: "container",
+						// 	margin: "15px 15px 0px 30px",
+						// 	html: "<span class='iee'><span class='texto'>Referencia catastral </span></span>"
+						// }],
+						primerFormFields.numeroCatastro],
 						[{
 							xtype: "container",
 							margin: "15px 0 0 15px",

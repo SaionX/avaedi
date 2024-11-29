@@ -58,6 +58,8 @@ import es.caib.avaedi.logic.vo.MunicipioListadoVO;
 import es.caib.avaedi.logic.vo.NumeroSoapVO;
 import es.caib.avaedi.meh.catastro.CatastroSoapException;
 
+import static es.caib.avaedi.at4forms.common.util.Constants.*;
+
 /**
  * Servicio rest
  * 
@@ -384,23 +386,53 @@ public class RestService extends BaseRestService {
 
 	}
 
-	
+	/* Calculadora!!
+
+		La calculadora actual i d' acord a la normativa actual ha de calcular les següents dades:
+			a) Quan he de fer la IAE (parcial) de 30 anys : als 30 anys de la data de construcció.
+			b) Quan he de fer la IAE (completa) de 50 anys: als 50 anys de la data de construcció.
+			c) Quan he de renovar la IAE que ja s' ha elaborat i registre a l' aplicació; als 10 anys de la data d' informe favorable.
+	 */
 	private void setEstadoITE(EdificioVO ediVO, Integer antiguedad, EdificioFormVO edi) {
 
 		int plazoIte = 0;
-		int anyoActual = Calendar.getInstance().get(Calendar.YEAR);
-		
+//		String estatInspeccio = "Sense dades";
+
+		Calendar calendar = Calendar.getInstance();
+		int anyoActual = calendar.get(Calendar.YEAR);
+		Integer anyUltimInformeFavorable = null;
+		Integer estatUltimInforme = null;
+		if (edi != null) {
+			anyUltimInformeFavorable = edi.getAnyUltimInformeFavorable();
+			estatUltimInforme = edi.getEstatUltimInforme();
+		}
+
+		int anyIeeParcial = antiguedad + PLAZO_IEE_PARCIAL;
+		int anyIeeTotal = antiguedad + PLAZO_IEE_TOTAL;
+
 		//Buscamos el año en que debe pasarse inspección (plazoIte)
 		if (antiguedad == null || antiguedad == 0) {
 			plazoIte = 0;
-		} else if (antiguedad < Constants.ANYO_CORTE) {
-			plazoIte = Constants.ANYO_CORTE_ITE;
-		} else {
-			plazoIte = antiguedad + Constants.PLAZO_INICIAL_IEE;
+		} else if (anyoActual <= anyIeeParcial) {
+			plazoIte = anyIeeParcial;
+		} else if (anyoActual > anyIeeParcial && anyoActual <= anyIeeTotal) {
+			if (anyUltimInformeFavorable < anyIeeParcial) {
+				plazoIte = anyIeeParcial;
+			} else if (anyUltimInformeFavorable < anyIeeParcial + PLAZO_IEE_SIG) {
+				plazoIte = anyIeeParcial + PLAZO_IEE_SIG;
+			} else {
+				plazoIte = antiguedad + PLAZO_IEE_TOTAL;
+			}
+		} else { // (anyoActual > anyIeeTotal) {
+			if (anyUltimInformeFavorable < anyIeeTotal) {
+				plazoIte = anyIeeTotal;
+			} else {
+				plazoIte = antiguedad + ((anyUltimInformeFavorable - antiguedad + PLAZO_IEE_SIG) / PLAZO_IEE_SIG) * PLAZO_IEE_SIG;
+			}
 		}
-		
+
 		if (plazoIte == 0) {
-			ediVO.setEstadoInspeccionCa("Sense dades"); //TODO: extraer las etiquetas
+			ediVO.setEstadoInspeccionCa("Sense dades");
 			ediVO.setEstadoInspeccionEs("Sin datos");
 		} else if (plazoIte >= anyoActual) {
 			ediVO.setEstadoInspeccionCa("En termini");
@@ -408,40 +440,28 @@ public class RestService extends BaseRestService {
 			ediVO.setProximaIEE( plazoIte );
 		} else {
 			//El plazo ha pasado
-			ediVO.setProximaIEE( plazoIte );
 			ediVO.setEstadoInspeccionCa("No presentat");
 			ediVO.setEstadoInspeccionEs("No presentado");
-			
+			ediVO.setProximaIEE( plazoIte );
 		}
 
-		if (edi != null && edi.getInformes() != null && edi.getInformes().size() > 0) {
+		if (edi != null && estatUltimInforme != null) {
 			//Tenemos informe para el edificio
-			InformeListadoVO informe = edi.getInformes().iterator().next();
-			if (informe.getEstadoInformeId() == Constants.ESTADO_INFORME_FAVORABLE) {
-				Calendar cal = Calendar.getInstance();
-				cal.setTime(informe.getFechaInforme());
-				int anyoSiguienteInforme = cal.get(Calendar.YEAR) + Constants.PLAZO_SIGUIENTE_IEE;
+			if (estatUltimInforme == Constants.ESTADO_INFORME_FAVORABLE) {
+				int anyoSiguienteInforme = anyUltimInformeFavorable + PLAZO_IEE_SIG;
 				if (anyoSiguienteInforme > plazoIte) { //El informe mejora la fecha previa de plazo
 					ediVO.setProximaIEE( anyoSiguienteInforme );
 					ediVO.setEstadoInspeccionCa("Favorable");
 					ediVO.setEstadoInspeccionEs("Favorable");
 				}
-			} else if (informe.getEstadoInformeId() == Constants.ESTADO_INFORME_EN_TRAMITE) {
+			} else if (estatUltimInforme == Constants.ESTADO_INFORME_EN_TRAMITE) {
 				ediVO.setEstadoInspeccionCa("En tramitació");
 				ediVO.setEstadoInspeccionEs("En tramitación");
-			} else if (informe.getEstadoInformeId() == Constants.ESTADO_INFORME_DESFAVORABLE) {
-				
-				if (plazoIte < anyoActual) { //Tenemos un informe desfavorable y el plazo caducado
+			} else if (estatUltimInforme == Constants.ESTADO_INFORME_DESFAVORABLE && plazoIte < anyoActual) { //Tenemos un informe desfavorable y el plazo caducado
 					ediVO.setEstadoInspeccionCa("Desfavorable");
 					ediVO.setEstadoInspeccionEs("Desfavorable");
-				}
-					
 			}
-			
 		}
-		
-		
 	}
 
-	
 }

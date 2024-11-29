@@ -17,10 +17,9 @@ public class Constants {
 	public static final List<String> TABLAS_NO_AUDITABLES				= Arrays.asList( new String[]{"Auditoria","ArchivoBlob","EstadoAplicacion"} );
 
 	
-	public static final Integer PLAZO_INICIAL_IEE = 55;
-	public static final Integer PLAZO_SIGUIENTE_IEE = 10;
-	public static final int ANYO_CORTE = 1963;
-	public static final int ANYO_CORTE_ITE = 2018;
+	public static final Integer PLAZO_IEE_PARCIAL = 30;
+	public static final Integer PLAZO_IEE_TOTAL = 50;
+	public static final Integer PLAZO_IEE_SIG = 10;
 
 	public static final int ESTADO_INFORME_FAVORABLE = 1;
 	public static final int ESTADO_INFORME_DESFAVORABLE = 2;

@@ -3,7 +3,7 @@ Ext.define("At4FrameworkIntranet.ImportIeeWindow", {
 	title: "Dar de alta una Inspección",
 	closable: false,
 	closeAction: "destroy",
-	height: 400,
+	height: 460,
 	width: 600,
 	resizable: false,
 	modal: true,
@@ -98,17 +98,25 @@ Ext.define("At4FrameworkIntranet.ImportIeeForm", {
 			var layout = this.getLayout();
 			var ieeItem = this.primerFormFields.documentoIee;
 			var pdfItem = this.primerFormFields.documentoPdf;
+			var dataItem = this.primerFormFields.fechaFirma;
+			var tipusItem = this.primerFormFields.tipusIee;
 			var ieevalid = ieeItem.isValid();
 			var pdfvalid = pdfItem.isValid();
-			if (!ieevalid || !pdfvalid) {
+			var dataValida = dataItem.isValid();
+			var tipusValid = tipusItem.isValid();
+			if (!ieevalid || !pdfvalid || !dataValida || !tipusValid) {
 				return;
 			}
 			var ieeInput = ieeItem.getTrigger("filebutton").component.fileInputEl.dom;
 			var pdfInput = pdfItem.getTrigger("filebutton").component.fileInputEl.dom;
+			var dataValue = this.primerFormFields.fechaFirma.getValue();
+			var tipusValue = this.primerFormFields.tipusIee.getValue();
+			var renovacioValue = this.primerFormFields.renovacio.getValue();
+			var subsanaValue = this.primerFormFields.subsana.getValue();
 			if (!this.requestactive) {
 				this.requestactive = true;
 				//TODO:
-				serverDatabaseActions.runAction(FormDataService.importIee, [ieeInput, pdfInput], function (data, callee) {
+				serverDatabaseActions.runAction(FormDataService.importIee, [ieeInput, pdfInput, dataValue, tipusValue, renovacioValue, subsanaValue], function (data, callee) {
 					var itemToGo = 1;
 					this.requestactive = false;
 					//TODO:
@@ -322,18 +330,31 @@ Ext.define("At4FrameworkIntranet.ImportIeeForm", {
 			name: "filePDF"
 		});
 
+		primerFormFields.fechaFirma = new Ext.form.DateField({
+			name: 'fechaFirma',
+			fieldLabel: "Fecha firma IEE",
+			// fieldLabel: this.fechaInformeHeaderLabel,
+			// tabIndex: tabHelper.getNext(),
+			margin: "0 30px",
+			width: 170,
+			disabled: false,
+			allowBlank: false,
+			format: 'd-m-Y'
+		});
+
 		var tipus = Ext.create('Ext.data.Store', {
 			fields: ['abbr', 'name'],
 			data : [
-				{"abbr":"0", "name":"--"},
-				{"abbr":"30", "name":"30"},
-				{"abbr":"50", "name":"50"}
+				{"abbr":"T30", "name":"30"},
+				{"abbr":"T40", "name":"Renov. 30"},
+				{"abbr":"T50", "name":"50"},
+				{"abbr":"T50R", "name":"Renov. 50"}
 			]
 		});
 		primerFormFields.tipusIee = Ext.create({
 			allowBlank: false,
-			width: 500,
-			margin: "0 30px",
+			width: 300,
+			margin: "0px",
 			xtype: "combobox",
 			store: tipus,
 			queryMode: 'local',
@@ -342,14 +363,26 @@ Ext.define("At4FrameworkIntranet.ImportIeeForm", {
 			autoSelect: true,
 			editable: false,
 			forceSelection: true,
-			name: "tipusIee"
+			allowBlank: false,
+			name: "tipusIee",
+			fieldLabel: "Tipo IEE (30 o 50 años)",
 		});
 		primerFormFields.renovacio = Ext.create({
 			margin: "0 30px",
+			width: 170,
 			xtype: "checkbox",
 			name: 'renovacio',
-			boxLable: 'renovación'
-		})
+			boxLable: 'renovación',
+			fieldLabel: "Es renovación IEE?",
+		});
+		primerFormFields.subsana = Ext.create({
+			margin: "0px",
+			width: 300,
+			xtype: "checkbox",
+			name: 'subsana',
+			boxLable: 'renovación',
+			fieldLabel: "IEE que subsana una anterior desfavorable?",
+		});
 
 		/*primerFormFields.submit = Ext.create({
 			xtype: "button",
@@ -384,18 +417,24 @@ Ext.define("At4FrameworkIntranet.ImportIeeForm", {
 							html: "<span class='iee'><span class='icono pdf'></span><span class='texto'>Documento PDF </span>(.pdf)</span>"
 						}],
 						[primerFormFields.documentoPdf],
-						[{
-							xtype: "container",
-							margin: "15px 15px 0px 30px",
-							html: "<span class='iee'><span class='texto'>Tipo IEE </span></span>"
-						}],
-						[primerFormFields.tipusIee],
-						[{
-							xtype: "container",
-							margin: "15px 15px 0px 30px",
-							html: "<span class='iee'><span class='texto'>Es renovación </span></span>"
-						}],
-						[primerFormFields.renovacio],
+						// [{
+						// 	xtype: "container",
+						// 	margin: "15px 15px 0px 30px",
+						// 	html: "<span class='iee'><span class='texto'>Fecha firma IEE </span></span>"
+						// }],
+						[primerFormFields.fechaFirma,
+						// [{
+						// 	xtype: "container",
+						// 	margin: "15px 15px 0px 30px",
+						// 	html: "<span class='iee'><span class='texto'>Tipo IEE (30 o 50 años)</span></span>"
+						// }],
+						primerFormFields.tipusIee],
+						// [{
+						// 	xtype: "container",
+						// 	margin: "15px 15px 0px 30px",
+						// 	html: "<span class='iee'><span class='texto'>Es renovación IEE</span></span>"
+						// }],
+						[primerFormFields.renovacio, primerFormFields.subsana],
 						[{
 							xtype: "container",
 							margin: "15px 0 0 15px",

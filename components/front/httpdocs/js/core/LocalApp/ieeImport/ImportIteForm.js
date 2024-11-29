@@ -1,9 +1,9 @@
 Ext.define("At4FrameworkIntranet.ImportIteWindow", {
 	extend: "At4FrameworkIntranet.Window",
-	title: "Dar de alta una Inspección",
+	title: "ITE (asimilable a IEE de 30 años)",
 	closable: false,
 	closeAction: "destroy",
-	height: 400,
+	height: 460,
 	width: 600,
 	resizable: false,
 	modal: true,
@@ -96,19 +96,23 @@ Ext.define("At4FrameworkIntranet.ImportIteForm", {
 	acciones: {
 		enviarImportacion: function () {
 			var layout = this.getLayout();
-			var ieeItem = this.primerFormFields.documentoIee;
 			var pdfItem = this.primerFormFields.documentoPdf;
-			var ieevalid = ieeItem.isValid();
+			var dataItem = this.primerFormFields.fechaFirma;
+			var cadastreItem = this.primerFormFields.numeroCatastro;
 			var pdfvalid = pdfItem.isValid();
-			if (!ieevalid || !pdfvalid) {
+			var dataValida = dataItem.isValid();
+			var cadastreValid = cadastreItem.isValid();
+			if (!pdfvalid || !dataValida || !cadastreValid) {
 				return;
 			}
-			var ieeInput = ieeItem.getTrigger("filebutton").component.fileInputEl.dom;
 			var pdfInput = pdfItem.getTrigger("filebutton").component.fileInputEl.dom;
+			var dataValue = this.primerFormFields.fechaFirma.getValue();
+			var cadastreValue = this.primerFormFields.numeroCatastro.getValue();
+			var favorableValue = this.primerFormFields.favorable.getValue();
 			if (!this.requestactive) {
 				this.requestactive = true;
 				//TODO:
-				serverDatabaseActions.runAction(FormDataService.importIte, [ieeInput, pdfInput], function (data, callee) {
+				serverDatabaseActions.runAction(FormDataService.importIte, [pdfInput, dataValue, cadastreValue, favorableValue], function (data, callee) {
 					var itemToGo = 1;
 					this.requestactive = false;
 					//TODO:
@@ -313,34 +317,34 @@ Ext.define("At4FrameworkIntranet.ImportIteForm", {
 			width: 500,
 			name: "filePDF"
 		});
-
-		var tipus = Ext.create('Ext.data.Store', {
-			fields: ['abbr', 'name'],
-			data : [
-				{"abbr":"0", "name":"--"},
-				{"abbr":"30", "name":"30"},
-				{"abbr":"50", "name":"50"}
-			]
-		});
-		primerFormFields.tipusIee = Ext.create({
-			allowBlank: false,
-			width: 500,
+		primerFormFields.fechaFirma = new Ext.form.DateField({
+			name: 'fechaFirma',
+			fieldLabel: "Fecha firma",
+			// fieldLabel: this.fechaInformeHeaderLabel,
+			// tabIndex: tabHelper.getNext(),
 			margin: "0 30px",
-			xtype: "combobox",
-			store: tipus,
-			queryMode: 'local',
-			displayField: 'name',
-			valueField: 'abbr',
-			autoSelect: true,
-			editable: false,
-			forceSelection: true,
-			name: "tipusIee"
+			width: 170,
+			disabled: false,
+			allowBlank: false,
+			format: 'd-m-Y'
 		});
-		primerFormFields.renovacio = Ext.create({
+		primerFormFields.numeroCatastro = new Ext.form.TextField({
+			name: 'numeroCatastro',
+			fieldLabel: "Numero catastro",
+			// labelAttrTpl: " data-qtip='" + this.numeroCatastroDescriptionLabel + "'",
+			// tabIndex: tabHelper.getNext(),
+			margin: "0px",
+			editable: true,
+			disabled: false,
+			allowBlank: false,
+			width: 300,
+			maxLength: 64
+		});
+		primerFormFields.favorable = Ext.create({
 			margin: "0 30px",
 			xtype: "checkbox",
-			name: 'renovacio',
-			boxLable: 'renovación'
+			name: 'favorable',
+			boxLable: 'favorable'
 		})
 
 		/*primerFormFields.submit = Ext.create({
@@ -370,18 +374,14 @@ Ext.define("At4FrameworkIntranet.ImportIteForm", {
 							html: "<span class='iee'><span class='icono pdf'></span><span class='texto'>Documento PDF </span>(.pdf)</span>"
 						}],
 						[primerFormFields.documentoPdf],
+						[primerFormFields.fechaFirma,
+						primerFormFields.numeroCatastro],
 						[{
 							xtype: "container",
 							margin: "15px 15px 0px 30px",
-							html: "<span class='iee'><span class='texto'>Tipo IEE </span></span>"
+							html: "<span class='iee'><span class='texto'>Es favorable? </span></span>"
 						}],
-						[primerFormFields.tipusIee],
-						[{
-							xtype: "container",
-							margin: "15px 15px 0px 30px",
-							html: "<span class='iee'><span class='texto'>Es renovación </span></span>"
-						}],
-						[primerFormFields.renovacio],
+						[primerFormFields.favorable],
 						[{
 							xtype: "container",
 							margin: "15px 0 0 15px",

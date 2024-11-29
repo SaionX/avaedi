@@ -3,6 +3,7 @@ package es.caib.avaedi.logic.vo;
 import java.io.Serializable;
 import java.util.Date;
 
+import es.caib.avaedi.logic.bo.TipusIee;
 import org.directwebremoting.annotations.DataTransferObject;
 
 import es.caib.avaedi.at4forms.common.util.FormData2Java;
@@ -191,4 +192,36 @@ public class InformeListadoVO extends BaseVO implements java.io.Serializable {
 		this.municipioId = municipioId;
 	}
 
+
+	private TipusIee tipusIee;
+	private Boolean renovacio;
+	private Boolean subsana;
+
+	public TipusIee getTipusIee() {
+		return tipusIee;
+	}
+
+	public void setTipusIee(TipusIee tipusIee) {
+		this.tipusIee = tipusIee;
+	}
+
+	public void setTipusIee(String tipusIee) {
+		this.tipusIee = TipusIee.fromString(tipusIee);
+	}
+
+	public Boolean getRenovacio() {
+		return renovacio;
+	}
+
+	public void setRenovacio(Boolean renovacio) {
+		this.renovacio = renovacio;
+	}
+
+	public Boolean getSubsana() {
+		return subsana;
+	}
+
+	public void setSubsana(Boolean subsana) {
+		this.subsana = subsana;
+	}
 }
