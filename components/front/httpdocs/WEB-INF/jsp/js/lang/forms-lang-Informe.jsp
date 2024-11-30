@@ -22,8 +22,9 @@ if(At4FrameworkIntranet.InformeForm) {
     	ieeArxiuDescriptionLabel       : '<spring:message code="forms.informe.columns.ieeArxiu.description" javaScriptEscape="true"/>',
     	pdfArxiuHeaderLabel          	: '<spring:message code="forms.informe.columns.pdfArxiu.header" javaScriptEscape="true"/>',
     	inspeccionHeaderLabel       : '<spring:message code="forms.informe.columns.inspeccion.header" javaScriptEscape="true"/>',
+    	tipusIeeHeaderLabel       : '<spring:message code="forms.informe.columns.tipusIee.header" javaScriptEscape="true"/>',
     	municipioHeaderLabel          	: '<spring:message code="forms.edificio.columns.municipio.header" javaScriptEscape="true"/>',
-    	
+
 
   	});
 }
@@ -41,6 +42,7 @@ if(At4FrameworkIntranet.InformeSubForm) {
     	ieeArxiuDescriptionLabel       : '<spring:message code="forms.informe.columns.ieeArxiu.description" javaScriptEscape="true"/>',
     	pdfArxiuHeaderLabel          	: '<spring:message code="forms.informe.columns.pdfArxiu.header" javaScriptEscape="true"/>',
     	pdfArxiuDescriptionLabel       : '<spring:message code="forms.informe.columns.pdfArxiu.description" javaScriptEscape="true"/>',
+		tipusIeeHeaderLabel       : '<spring:message code="forms.informe.columns.tipusIee.header" javaScriptEscape="true"/>',
 
   	});
 }

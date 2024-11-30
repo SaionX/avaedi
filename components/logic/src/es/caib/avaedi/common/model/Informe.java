@@ -136,6 +136,7 @@ public class Informe extends BaseModel implements java.io.Serializable {
 	 */
 	// Delimitar valors amb un caràcter especial, per exemple, "|"
 	private static final String DELIMITER = "|";
+	private static final String SCAPED_DELIMITER = "\\|";
 	private static final String B_TRUE = "T";
 	private static final String B_FALSE = "F";
 
@@ -155,8 +156,16 @@ public class Informe extends BaseModel implements java.io.Serializable {
 
 	@Column(name = "iee_arxiu_mime", length = 128)
 	public String getIeeArxiuMime() {
+		return ieeArxiuMime;
+	}
+
+	public void setIeeArxiuMime(String ieeArxiuMime) {
+		this.ieeArxiuMime = ieeArxiuMime;
+	}
+
+	public String getIeeArxiuMimeType() {
 		if (ieeArxiuMime != null) {
-			String[] parts = ieeArxiuMime.split(DELIMITER);
+			String[] parts = ieeArxiuMime.split(SCAPED_DELIMITER);
 			if (parts.length > 0) {
 				return parts[0];
 			}
@@ -164,11 +173,11 @@ public class Informe extends BaseModel implements java.io.Serializable {
 		return ieeArxiuMime; // Retorna el valor complet si no hi ha delimitadors
 	}
 
-	public void setIeeArxiuMime(String ieeArxiuMime) {
+	public void setIeeArxiuMimeType(String ieeArxiuMime) {
 		StringBuilder sb = new StringBuilder();
 		if (this.ieeArxiuMime != null) {
-			String[] parts = this.ieeArxiuMime.split(DELIMITER);
-			sb.append(ieeArxiuMime); // Timus mime
+			String[] parts = this.ieeArxiuMime.split(SCAPED_DELIMITER);
+			sb.append(ieeArxiuMime != null ? ieeArxiuMime : ""); // Timus mime
 			sb.append(DELIMITER);
 			sb.append(parts.length > 2 ? parts[2] : ""); // Tipus IEE
 			sb.append(DELIMITER);
@@ -176,16 +185,16 @@ public class Informe extends BaseModel implements java.io.Serializable {
 			sb.append(DELIMITER);
 			sb.append(parts.length > 3 ? parts[3] : B_FALSE); // Subsanacio
 		} else {
-			sb.append(ieeArxiuMime).append(DELIMITER).append("").append(DELIMITER).append(B_FALSE).append(DELIMITER).append(B_FALSE);
+			sb.append(ieeArxiuMime != null ? ieeArxiuMime : "").append(DELIMITER).append("").append(DELIMITER).append(B_FALSE).append(DELIMITER).append(B_FALSE);
 		}
-		this.ieeArxiuMime = ieeArxiuMime;
+		this.ieeArxiuMime = sb.toString();
 	}
 
 	// TipusIee
 	@Transient
 	public TipusIee getTipusIee() {
 		if (ieeArxiuMime != null) {
-			String[] parts = ieeArxiuMime.split(DELIMITER);
+			String[] parts = ieeArxiuMime.split(SCAPED_DELIMITER);
 			if (parts.length > 1) {
 				try {
 					return TipusIee.fromString(parts[1]);
@@ -201,7 +210,7 @@ public class Informe extends BaseModel implements java.io.Serializable {
 	public void setTipusIee(TipusIee tipusIee) {
 		StringBuilder sb = new StringBuilder();
 		if (this.ieeArxiuMime != null) {
-			String[] parts = this.ieeArxiuMime.split(DELIMITER);
+			String[] parts = this.ieeArxiuMime.split(SCAPED_DELIMITER);
 			sb.append(parts.length > 0 ? parts[0] : ""); // Timus mime
 			sb.append(DELIMITER);
 			sb.append(tipusIee.name()); // Tipus IEE
@@ -210,7 +219,7 @@ public class Informe extends BaseModel implements java.io.Serializable {
 			sb.append(DELIMITER);
 			sb.append(parts.length > 3 ? parts[3] : B_FALSE); // Subsanacio
 		} else {
-			sb.append(DELIMITER).append(tipusIee).append(DELIMITER).append(B_FALSE).append(DELIMITER).append(B_FALSE);
+			sb.append(DELIMITER).append(tipusIee.name()).append(DELIMITER).append(B_FALSE).append(DELIMITER).append(B_FALSE);
 		}
 		this.ieeArxiuMime = sb.toString();
 	}
@@ -219,7 +228,7 @@ public class Informe extends BaseModel implements java.io.Serializable {
 	@Transient
 	public Boolean isRenovacio() {
 		if (ieeArxiuMime != null) {
-			String[] parts = ieeArxiuMime.split(DELIMITER);
+			String[] parts = ieeArxiuMime.split(SCAPED_DELIMITER);
 			if (parts.length > 2) {
 				return B_TRUE.equals(parts[2]);
 			}
@@ -230,7 +239,7 @@ public class Informe extends BaseModel implements java.io.Serializable {
 	public void setRenovacio(boolean renovacio) {
 		StringBuilder sb = new StringBuilder();
 		if (this.ieeArxiuMime != null) {
-			String[] parts = this.ieeArxiuMime.split(DELIMITER);
+			String[] parts = this.ieeArxiuMime.split(SCAPED_DELIMITER);
 			sb.append(parts.length > 0 ? parts[0] : ""); // Tipus mime
 			sb.append(DELIMITER);
 			sb.append(parts.length > 1 ? parts[1] : ""); // Tipus IEE
@@ -239,7 +248,7 @@ public class Informe extends BaseModel implements java.io.Serializable {
 			sb.append(DELIMITER);
 			sb.append(parts.length > 3 ? parts[3] : B_FALSE); // Subsanació
 		} else {
-			sb.append(DELIMITER).append(DELIMITER).append(renovacio).append(DELIMITER).append(B_FALSE);
+			sb.append(DELIMITER).append(DELIMITER).append(renovacio ? B_TRUE : B_FALSE).append(DELIMITER).append(B_FALSE);
 		}
 		this.ieeArxiuMime = sb.toString();
 	}
@@ -247,7 +256,7 @@ public class Informe extends BaseModel implements java.io.Serializable {
 	@Transient
 	public boolean isSubsana() {
 		if (ieeArxiuMime != null) {
-			String[] parts = ieeArxiuMime.split(DELIMITER);
+			String[] parts = ieeArxiuMime.split(SCAPED_DELIMITER);
 			if (parts.length > 3) {
 				return B_TRUE.equals(parts[3]);
 			}
@@ -258,7 +267,7 @@ public class Informe extends BaseModel implements java.io.Serializable {
 	public void setSubsana(boolean subsana) {
 		StringBuilder sb = new StringBuilder();
 		if (this.ieeArxiuMime != null) {
-			String[] parts = this.ieeArxiuMime.split(DELIMITER);
+			String[] parts = this.ieeArxiuMime.split(SCAPED_DELIMITER);
 			sb.append(parts.length > 0 ? parts[0] : ""); // Tipus mime
 			sb.append(DELIMITER);
 			sb.append(parts.length > 1 ? parts[1] : ""); // Tipus IEE
@@ -267,7 +276,7 @@ public class Informe extends BaseModel implements java.io.Serializable {
 			sb.append(DELIMITER);
 			sb.append(subsana ? B_TRUE : B_FALSE); // Subsanacio
 		} else {
-			sb.append(DELIMITER).append("").append(DELIMITER).append(B_FALSE).append(DELIMITER).append(subsana);
+			sb.append(DELIMITER).append("").append(DELIMITER).append(B_FALSE).append(DELIMITER).append(subsana ? B_TRUE : B_FALSE);
 		}
 		this.ieeArxiuMime = sb.toString();
 	}

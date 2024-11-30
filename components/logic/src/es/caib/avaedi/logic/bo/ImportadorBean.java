@@ -11,7 +11,9 @@ import java.math.BigInteger;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -37,6 +39,8 @@ import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
 import es.caib.avaedi.at4forms.common.util.Constants;
+import es.caib.avaedi.common.model.AcusticaMejorasAcusticas;
+import es.caib.avaedi.logic.vo.*;
 import org.apache.commons.compress.archivers.ArchiveEntry;
 import org.apache.commons.compress.archivers.zip.ZipArchiveInputStream;
 import org.slf4j.Logger;
@@ -159,44 +163,6 @@ import es.caib.avaedi.iee.model.InstalacionesVentilacioncuartoshumedosType;
 import es.caib.avaedi.iee.model.ValoracionParcialType;
 import es.caib.avaedi.logic.util.ArchivoDTO;
 import es.caib.avaedi.logic.util.At4Utilities;
-import es.caib.avaedi.logic.vo.AccesibilidadAjustesRazonablesFormVO;
-import es.caib.avaedi.logic.vo.AccesibilidadPublicosFormVO;
-import es.caib.avaedi.logic.vo.AccesibilidadValoracionFinalesFormVO;
-import es.caib.avaedi.logic.vo.AcusticaComprobacionesFormVO;
-import es.caib.avaedi.logic.vo.AcusticaDatosGeneralesFormVO;
-import es.caib.avaedi.logic.vo.AcusticaMejorasAcusticasFormVO;
-import es.caib.avaedi.logic.vo.AcusticaRuidoInstalacionesFormVO;
-import es.caib.avaedi.logic.vo.AcusticaRuidosExterioresFormVO;
-import es.caib.avaedi.logic.vo.AcusticaRuidosInterioresHorizontalesFormVO;
-import es.caib.avaedi.logic.vo.AcusticaRuidosInterioresUnionesFormVO;
-import es.caib.avaedi.logic.vo.AcusticaRuidosInterioresVerticalesFormVO;
-import es.caib.avaedi.logic.vo.AcusticaValoracionFinalFormVO;
-import es.caib.avaedi.logic.vo.AcusticasFormVO;
-import es.caib.avaedi.logic.vo.BlobFormVO;
-import es.caib.avaedi.logic.vo.CerramientosCubiertasFormVO;
-import es.caib.avaedi.logic.vo.CimentacionesFormVO;
-import es.caib.avaedi.logic.vo.ConservacionFormVO;
-import es.caib.avaedi.logic.vo.DeficienciaFormVO;
-import es.caib.avaedi.logic.vo.DocumentacionOtroFormVO;
-import es.caib.avaedi.logic.vo.EdificioFormVO;
-import es.caib.avaedi.logic.vo.EdificioListadoVO;
-import es.caib.avaedi.logic.vo.EdificioSoapVO;
-import es.caib.avaedi.logic.vo.EficienciasEnergeticasFormVO;
-import es.caib.avaedi.logic.vo.EstadoInformeFormVO;
-import es.caib.avaedi.logic.vo.EstructuraFormVO;
-import es.caib.avaedi.logic.vo.FechaVisitaFormVO;
-import es.caib.avaedi.logic.vo.HistoricoFormVO;
-import es.caib.avaedi.logic.vo.InformeFormVO;
-import es.caib.avaedi.logic.vo.InspeccionFormVO;
-import es.caib.avaedi.logic.vo.InstalacionesFormVO;
-import es.caib.avaedi.logic.vo.MunicipioFormVO;
-import es.caib.avaedi.logic.vo.ResultadoImportacionFormVO;
-import es.caib.avaedi.logic.vo.ResultadoImportacionListadoVO;
-import es.caib.avaedi.logic.vo.UsuarioFormVO;
-import es.caib.avaedi.logic.vo.ValorFormVO;
-import es.caib.avaedi.logic.vo.ValorListadoVO;
-import es.caib.avaedi.logic.vo.ValoracionParcialFormVO;
-import es.caib.avaedi.logic.vo.ViaFormVO;
 import es.caib.avaedi.meh.catastro.CatastroSoapException;
 import es.caib.avaedi.meh.catastro.ConsultaDnp;
 import es.caib.avaedi.meh.catastro.Dtdnp;
@@ -467,7 +433,7 @@ public class ImportadorBean implements ImportadorBO {
 		informe.setPdfArxiu(new Long(archivoPDF.getClave()));
 		informe.setPdfArxiuMime(pdf.getMimeType());
 		informe.setIeeArxiu(new Long(archivoIEE.getClave()));
-		informe.setIeeArxiuMime(iee.getMimeType());
+		informe.setIeeArxiuMimeType(iee.getMimeType());
 		informe.setTipusIee(tipusIEE);
 		informe.setRenovacio(renovacio);
 		informe.setSubsana(subsana);
@@ -529,15 +495,25 @@ public class ImportadorBean implements ImportadorBO {
 		informe.setTipusIee(TipusIee.T30);
 		informe.setEstadoInformeId(favorable ? Constants.ESTADO_INFORME_FAVORABLE : Constants.ESTADO_INFORME_DESFAVORABLE);
 
-		this.generarInforme(inspeccionImportada, informe.getClave());
+//		this.generarInformeIte(inspeccionImportada, informe.getClave());
 
-		EstadoInformeFormVO[] estadosDisponibles = this.getEstadosDisponibles(inspeccionImportada);
+		EstadoInformeFormVO[] estadosDisponibles = new EstadoInformeFormVO[] {
+				this.estadoInformeBO.load(Constants.ESTADO_INFORME_FAVORABLE),
+				this.estadoInformeBO.load(Constants.ESTADO_INFORME_DESFAVORABLE) };
 
 		ResultadoImportacionFormVO ret = new ResultadoImportacionFormVO(validacioEdifici.edificiosDisponibles, estadosDisponibles, informe, validacioEdifici.existia);
 		ret.setCorrecto(true);
 
 		return ret;
 	}
+
+//	private InspeccionFormVO generarInformeIte(InformeFormVO informe) throws GenericBusinessException {
+//		InspeccionFormVO instance = new InspeccionFormVO();
+//
+//
+//
+//		return instance;
+//	}
 
 	@Override
 	public ResultadoImportacionFormVO importarInformeSubsana(ArchivoDTO pdf, String user, boolean validarMunicipio, Integer municipioId, Date dataFirma, String numeroCadastre) throws GenericBusinessException {
@@ -547,11 +523,19 @@ public class ImportadorBean implements ImportadorBO {
 		InformeFormVO informeraw = new InformeFormVO();
 
 		EdificioFormVO edifici = validacioEdifici.edificiosDisponibles[0];
+
+		InformeListadoVO ultimInforme = edifici.getUltimInforme();
+		if (ultimInforme == null) {
+			String error = "No se puede realitzar una subsanación, debido a que no existe un informe desfavorable previo.";
+			log.error(error);
+			throw new GenericBusinessException(error);
+		}
+
 		TipusIee tipusIee = edifici.getTipusIeeUltimInforme();
 		informeraw.setEdificioId(edifici.getClave());
 
 		Date now = new Date();
-		int estado = 5;
+		int estado = Constants.ESTADO_INFORME_EN_CURSO;
 
 		informeraw.setEstadoInformeId(estado);
 		informeraw.setFechaAlta(now);
@@ -561,7 +545,6 @@ public class ImportadorBean implements ImportadorBO {
 		InformeFormVO informe = this.informeBO.add(informeraw);
 
 		BlobFormVO archivoPDF = new BlobFormVO();
-		BlobFormVO archivoIEE = new BlobFormVO();
 		try {
 			archivoPDF.setDatos(pdf.getByteData());
 		} catch (IOException e) {
@@ -578,18 +561,89 @@ public class ImportadorBean implements ImportadorBO {
 		informe = this.informeBO.update(informe.getClave(), informe);
 
 		// Nous camps
-		informe.setTipusIee(tipusIeeCada);
+		informe.setTipusIee(tipusIee);
 		informe.setSubsana(true);
 
-		this.generarInforme(inspeccionImportada, informe.getClave());
+//		this.generarInformeSubsanacio(ultimInforme, informe.getClave());
 
-		EstadoInformeFormVO[] estadosDisponibles = this.getEstadosDisponibles(inspeccionImportada);
+		EstadoInformeFormVO[] estadosDisponibles = new EstadoInformeFormVO[] {
+				this.estadoInformeBO.load(Constants.ESTADO_INFORME_FAVORABLE),
+				this.estadoInformeBO.load(Constants.ESTADO_INFORME_DESFAVORABLE) };
 
 		ResultadoImportacionFormVO ret = new ResultadoImportacionFormVO(validacioEdifici.edificiosDisponibles, estadosDisponibles, informe, validacioEdifici.existia);
 		ret.setCorrecto(true);
 
 		return ret;
 	}
+
+//	private InspeccionFormVO generarInformeSubsanacio(InformeListadoVO ultimInforme, InformeFormVO informe) throws GenericBusinessException {
+//		InspeccionFormVO instance = new InspeccionFormVO();
+//		ultimInforme.getInspeccionId();
+//		InspeccionFormVO ultimaInspeccio = inspeccionBO.load(ultimInforme.getInspeccionId());
+//
+//		InspeccionFormVO inspeccioSubsanacio = new InspeccionFormVO();
+////		inspeccioSubsanacio.setDeficiencias(new HashSet<DeficienciaListadoVO>());
+////		inspeccioSubsanacio.setValores(null);
+////		inspeccioSubsanacio.setFechasVisitas(null);
+////		inspeccioSubsanacio.setAcusticaMejorasAcusticas(null);
+////		inspeccioSubsanacio.setValoracionesParciales(null);
+////		inspeccioSubsanacio.setDocumentacionOtros(null);
+////		inspeccioSubsanacio.setHistoricos(null);
+//
+//		return instance;
+//
+//		InspeccionFormVO instance = new InspeccionFormVO();
+//		String user = "Importador";
+//		Date now = new Date();
+//
+//		this.setDatosEdificio(source, instance);
+//		this.setDatosTitular(source, instance);
+//		this.setDatosRepresentante(source, instance);
+//		this.setDatosTecnico(source, instance);
+//
+//		instance.setInformeId(claveInforme);
+//		setResumenAuditoria(instance, user, now);
+//		//instance.setId(claveInforme);
+//		instance = this.inspeccionBO.add(instance);
+//	}
+
+//	private InspeccionFormVO clonaInspeccio(InspeccionFormVO original) {
+//		if (original == null) {
+//			return null;
+//		}
+//
+//		InspeccionFormVO clone = new InspeccionFormVO();
+//
+//		clone.setDeficiencias(cloneSet(original.getDeficiencias()));
+//		clone.setValores(cloneSet(original.getValores()));
+//		clone.setFechasVisitas(cloneSet(original.getFechasVisitas()));
+//		clone.setAcusticaMejorasAcusticas(cloneSet(original.getAcusticaMejorasAcusticas()));
+//		clone.setValoracionesParciales(cloneSet(original.getValoracionesParciales()));
+//		clone.setDocumentacionOtros(cloneSet(original.getDocumentacionOtros()));
+//		clone.setHistoricos(cloneSet(original.getHistoricos()));
+//
+//
+//		return clone;
+//	}
+//
+//	private <T> Set<T> cloneSet(Set<T> originalSet) {
+//		if (originalSet == null) {
+//			return null;
+//		}
+//		Set<T> clonedSet = new HashSet<T>();
+//		for (T item : originalSet) {
+//			if (item instanceof Cloneable) {
+//				try {
+//					// Si les classes implementen un mètode clone, utilitza-ho per fer un clon profund.
+//					clonedSet.add((T) item.getClass().getMethod("clone").invoke(item));
+//				} catch (Exception e) {
+//					e.printStackTrace();
+//					// Pot gestionar errors en la clonació si cal.
+//				}
+//			}
+//		}
+//		return clonedSet;
+//	}
 
 	private ValidacioEdifici getValidacioEdifici(String user, boolean validarMunicipio, Integer municipioId, String referenciaCatastral, InspeccionType inspeccionImportada) throws GenericBusinessException {
 		ConsultaDnp consulta;
@@ -712,8 +766,20 @@ public class ImportadorBean implements ImportadorBO {
 		} else {
 			edificiosDisponibles = edificiosBDD.getResultados().toArray(new EdificioFormVO[0]);
 		}
+		if (edificiosDisponibles.length > 1) {
+			ordena(edificiosDisponibles);
+		}
 		ValidacioEdifici result = new ValidacioEdifici(existia, edificiosDisponibles);
 		return result;
+	}
+
+	private void ordena(EdificioFormVO[] edificis) {
+		Arrays.sort(edificis, new Comparator<EdificioFormVO>() {
+			@Override
+			public int compare(EdificioFormVO o1, EdificioFormVO o2) {
+				return o2.getClave() - o1.getClave();
+			}
+		});
 	}
 
 	private Date getDataInformeValoracioFinal(InspeccionType inspeccionImportada) {

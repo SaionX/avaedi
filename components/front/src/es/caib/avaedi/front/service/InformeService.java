@@ -288,7 +288,7 @@ public class InformeService extends BaseService<InformeBO, InformeListadoVO, Inf
 
 		/** Creamos la columna */
 		metaData.addColumn(new GridColumnMetaData("tipusIee", this.getMessage("forms.informe.columns.tipusIee.header", locale)));
-		metaData.getColumn("tipusIee").setTooltip(this.getMessage("forms.informe.columns.estadoInforme.description", locale));
+		metaData.getColumn("tipusIee").setTooltip(this.getMessage("forms.informe.columns.tipusIee.description", locale));
 		metaData.getColumn("tipusIee").setGroupable(true);
 		metaData.getColumn("tipusIee").setSortable(true);
 		metaData.getColumn("tipusIee").setSofaFilter(GridColumnFilter.TYPE_MULTICOMBO);
@@ -320,6 +320,7 @@ public class InformeService extends BaseService<InformeBO, InformeListadoVO, Inf
 		datosExportacion.add("municipio", this.getMessage("forms.informe.columns.municipio.header", locale), TipoCampoExportacion.STRING);
 		datosExportacion.add("fechaInforme", this.getMessage("forms.informe.columns.fechaInforme.header", locale), TipoCampoExportacion.DATE);
 		datosExportacion.add("fechaAlta", this.getMessage("forms.informe.columns.fechaAlta.header", locale), TipoCampoExportacion.DATE);
+		datosExportacion.add("tipusIee", this.getMessage("forms.informe.columns.tipusIee.header", locale), TipoCampoExportacion.STRING);
 
 		datosExportacion.add("dateCreation", this.getMessage("forms.general.columns.dateCreation.header", locale), TipoCampoExportacion.DATE);
 		datosExportacion.add("lastModified", this.getMessage("forms.general.columns.lastModified.header", locale), TipoCampoExportacion.DATE);

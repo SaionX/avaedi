@@ -170,7 +170,7 @@ public class InformeBean extends BaseBean<Informe, InformeListadoVO, InformeForm
 		}
 		try {
 			//Copiamos las propiedades simples, excluyendo relaciones
-			TransferObjectFactory.copyProperties(record, formData, new String[] { "inspeccion", "edificio", "estadoInforme" });
+			TransferObjectFactory.copyProperties(record, formData, new String[] { "inspeccion", "edificio", "estadoInforme", "renovacio", "subsana", "tipusIee" });
 
 			//----- Relacion EstadoInforme
 			record.setEstadoInforme(this.estadoInformeDao.findById(formData.getEstadoInformeId()));
@@ -180,6 +180,11 @@ public class InformeBean extends BaseBean<Informe, InformeListadoVO, InformeForm
 
 			//----- Relacion Inspeccion
 			record.setInspeccion(this.inspeccionDao.findById(formData.getInspeccionId()));
+
+			record.setRenovacio(formData.getRenovacio() != null ? formData.getRenovacio() : false );
+			record.setSubsana(formData.getSubsana() != null ? formData.getSubsana() : false );
+			if (formData.getTipusIee() != null)
+				record.setTipusIee(formData.getTipusIee());
 
 			return record;
 

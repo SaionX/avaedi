@@ -84,18 +84,23 @@ public class EdificioFormVO extends EdificioListadoVO implements FormVO {
 			return null;
 		}
 
-		Date dataRecent = null;
-		TipusIee tipusIeeRecent = null;
+		InformeListadoVO ultimInforme = getUltimInforme();
+		return ultimInforme.getTipusIee();
+	}
 
+	public InformeListadoVO getUltimInforme() {
+		if (this.informes == null || this.informes.size() == 0) {
+			return null;
+		}
+
+		InformeListadoVO ultimInforme = null;
 		for (InformeListadoVO informe : this.informes) {
-			Date dataInforme = informe.getFechaInforme();
-			if (dataRecent == null || (dataInforme != null && dataInforme.after(dataRecent))) {
-				dataRecent = dataInforme;
-				tipusIeeRecent = informe.getTipusIee();
+			if (ultimInforme == null || informe.getFechaInforme().after(ultimInforme.getFechaInforme())) {
+				ultimInforme = informe;
 			}
 		}
 
-		return tipusIeeRecent;
+		return ultimInforme;
 	}
 
 }

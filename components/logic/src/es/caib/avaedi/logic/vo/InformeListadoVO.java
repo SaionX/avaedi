@@ -193,14 +193,21 @@ public class InformeListadoVO extends BaseVO implements java.io.Serializable {
 	}
 
 
+	private String ieeArxiuMimeType;
 	private TipusIee tipusIee;
 	private Boolean renovacio;
 	private Boolean subsana;
 
+	public String getIeeArxiuMimeType() {
+		return this.ieeArxiuMimeType;
+	}
+	public void setIeeArxiuMimeType(String ieeArxiuMimeType) {
+		this.ieeArxiuMimeType = ieeArxiuMimeType;
+	}
+
 	public TipusIee getTipusIee() {
 		return tipusIee;
 	}
-
 	public void setTipusIee(TipusIee tipusIee) {
 		this.tipusIee = tipusIee;
 	}
@@ -208,7 +215,6 @@ public class InformeListadoVO extends BaseVO implements java.io.Serializable {
 	public void setTipusIee(String tipusIee) {
 		this.tipusIee = TipusIee.fromString(tipusIee);
 	}
-
 	public Boolean getRenovacio() {
 		return renovacio;
 	}
@@ -216,7 +222,6 @@ public class InformeListadoVO extends BaseVO implements java.io.Serializable {
 	public void setRenovacio(Boolean renovacio) {
 		this.renovacio = renovacio;
 	}
-
 	public Boolean getSubsana() {
 		return subsana;
 	}
