@@ -296,6 +296,9 @@ Ext.define("At4FrameworkIntranet.InformeSubForm", {
 
 			'<th>{[this.getLabel("clave")]}</th>',
 			'<th>{[this.getLabel("estadoInforme")]}</th>',
+			// '<th>{[this.getLabel("tipusIee)]}</th>',
+			'<th>Tipo Iee</th>',
+			'<th>Subsana</th>',
 			'<th>{[this.getLabel("fechaInforme")]}</th>',
 			'<th>{[this.getLabel("fechaAlta")]}</th>',
 			'</tr>',
@@ -304,6 +307,8 @@ Ext.define("At4FrameworkIntranet.InformeSubForm", {
 
 			'<td>{clave}</td>',
 			'<td>{estadoInformeLabel}</td>',
+			'<td>{tipusIeeLabel}</td>',
+			'<td>{[this.renderSubsana(values.subsana)]}</td>',
 			'<td>{fechaInforme:date("d/m/Y H:i")}</td>',
 			'<td>{fechaAlta:date("d/m/Y H:i")}</td>',
 			'</tr>',
@@ -312,7 +317,11 @@ Ext.define("At4FrameworkIntranet.InformeSubForm", {
 			'</table>', {
 				getLabel: function (name) {
 					return At4FrameworkIntranet.FormDefaults.getFieldLabel("InformeSubForm", name);
+				},
+				renderSubsana: function(subsana) {
+					return subsana ? "SI" : "NO";
 				}
+
 			}
 		)
 

@@ -69,10 +69,12 @@ public class EdificioFormVO extends EdificioListadoVO implements FormVO {
 		Integer estatRecent = null;
 
 		for (InformeListadoVO informe : this.informes) {
-			Date dataInforme = informe.getFechaInforme();
-			if (dataRecent == null || (dataInforme != null && dataInforme.after(dataRecent))) {
-				dataRecent = dataInforme;
-				estatRecent = informe.getEstadoInformeId();
+			if (informe.getEstadoInformeId() != Constants.ESTADO_INFORME_ANULADO) {
+				Date dataInforme = informe.getFechaInforme();
+				if (dataRecent == null || (dataInforme != null && dataInforme.after(dataRecent))) {
+					dataRecent = dataInforme;
+					estatRecent = informe.getEstadoInformeId();
+				}
 			}
 		}
 
@@ -80,12 +82,37 @@ public class EdificioFormVO extends EdificioListadoVO implements FormVO {
 	}
 
 	public TipusIee getTipusIeeUltimInforme() {
-		if (this.informes == null || this.informes.size() == 0) {
+		InformeListadoVO ultimInforme = getUltimInforme();
+		if (ultimInforme == null) {
 			return null;
 		}
 
-		InformeListadoVO ultimInforme = getUltimInforme();
-		return ultimInforme.getTipusIee();
+		TipusIee tipusIee = ultimInforme.getTipusIee();
+		if (tipusIee != null)
+			return tipusIee;
+
+		Calendar calendar = Calendar.getInstance();
+		Integer anyAnctual = calendar.get(Calendar.YEAR);
+		calendar.setTime(ultimInforme.getFechaInforme());
+//		Integer anyUltimInforme = calendar.get(Calendar.YEAR);
+		Integer anyUltimInformeFavorable = getAnyUltimInformeFavorable();
+		Integer anyConstruccio = this.getAntiguedad();
+
+		if (anyConstruccio == null)
+			return null;
+
+		if (anyUltimInformeFavorable == null) {
+			if (anyAnctual - anyConstruccio >= Constants.PLAZO_IEE_TOTAL)
+				return TipusIee.T50;
+			return TipusIee.T30;
+		} else {
+			if (anyAnctual - anyConstruccio >= Constants.PLAZO_IEE_TOTAL) {
+				if (anyUltimInformeFavorable - anyConstruccio >= Constants.PLAZO_IEE_TOTAL)
+					return TipusIee.T50R;
+				return TipusIee.T50;
+			}
+			return TipusIee.T40;
+		}
 	}
 
 	public InformeListadoVO getUltimInforme() {
@@ -95,8 +122,10 @@ public class EdificioFormVO extends EdificioListadoVO implements FormVO {
 
 		InformeListadoVO ultimInforme = null;
 		for (InformeListadoVO informe : this.informes) {
-			if (ultimInforme == null || informe.getFechaInforme().after(ultimInforme.getFechaInforme())) {
-				ultimInforme = informe;
+			if (informe.getEstadoInformeId() != Constants.ESTADO_INFORME_ANULADO) {
+				if (ultimInforme == null || informe.getFechaInforme().after(ultimInforme.getFechaInforme())) {
+					ultimInforme = informe;
+				}
 			}
 		}
 

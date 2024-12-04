@@ -212,6 +212,18 @@ public class InformeListadoVO extends BaseVO implements java.io.Serializable {
 		this.tipusIee = tipusIee;
 	}
 
+	public String getTipusIeeLabel() {
+		if (this.tipusIee == null) {
+			return "";
+		}
+		return this.tipusIee.getText();
+	}
+	public String getTipusIeeCodi() {
+		if (this.tipusIee == null) {
+			return "";
+		}
+		return this.tipusIee.name();
+	}
 	public void setTipusIee(String tipusIee) {
 		this.tipusIee = TipusIee.fromString(tipusIee);
 	}

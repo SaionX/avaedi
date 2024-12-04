@@ -23,7 +23,10 @@ if(At4FrameworkIntranet.InformeForm) {
     	pdfArxiuHeaderLabel          	: '<spring:message code="forms.informe.columns.pdfArxiu.header" javaScriptEscape="true"/>',
     	inspeccionHeaderLabel       : '<spring:message code="forms.informe.columns.inspeccion.header" javaScriptEscape="true"/>',
     	tipusIeeHeaderLabel       : '<spring:message code="forms.informe.columns.tipusIee.header" javaScriptEscape="true"/>',
+    	renovacioHeaderLabel       : '<spring:message code="forms.informe.columns.renovacio.header" javaScriptEscape="true"/>',
     	municipioHeaderLabel          	: '<spring:message code="forms.edificio.columns.municipio.header" javaScriptEscape="true"/>',
+		pdfArxiuSubsanaLabel          	: '<spring:message code="forms.informe.pdfArxiu.subsana" javaScriptEscape="true"/>',
+		pdfArxiuIteLabel          	: '<spring:message code="forms.informe.pdfArxiu.ite" javaScriptEscape="true"/>',
 
 
   	});
@@ -43,6 +46,9 @@ if(At4FrameworkIntranet.InformeSubForm) {
     	pdfArxiuHeaderLabel          	: '<spring:message code="forms.informe.columns.pdfArxiu.header" javaScriptEscape="true"/>',
     	pdfArxiuDescriptionLabel       : '<spring:message code="forms.informe.columns.pdfArxiu.description" javaScriptEscape="true"/>',
 		tipusIeeHeaderLabel       : '<spring:message code="forms.informe.columns.tipusIee.header" javaScriptEscape="true"/>',
+		renovacioHeaderLabel       : '<spring:message code="forms.informe.columns.renovacio.header" javaScriptEscape="true"/>',
+		pdfArxiuSubsanaLabel          	: '<spring:message code="forms.informe.pdfArxiu.subsana" javaScriptEscape="true"/>',
+		pdfArxiuIteLabel          	: '<spring:message code="forms.informe.pdfArxiu.ite" javaScriptEscape="true"/>',
 
   	});
 }

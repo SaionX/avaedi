@@ -489,7 +489,6 @@ public class ImportadorBean implements ImportadorBO {
 
 		informe.setPdfArxiu(new Long(archivoPDF.getClave()));
 		informe.setPdfArxiuMime(pdf.getMimeType());
-		informe = this.informeBO.update(informe.getClave(), informe);
 
 		// Nous camps
 		informe.setTipusIee(TipusIee.T30);
@@ -500,6 +499,9 @@ public class ImportadorBean implements ImportadorBO {
 		EstadoInformeFormVO[] estadosDisponibles = new EstadoInformeFormVO[] {
 				this.estadoInformeBO.load(Constants.ESTADO_INFORME_FAVORABLE),
 				this.estadoInformeBO.load(Constants.ESTADO_INFORME_DESFAVORABLE) };
+		informe.setEstadoInformeId(favorable ? Constants.ESTADO_INFORME_FAVORABLE : Constants.ESTADO_INFORME_DESFAVORABLE);
+
+		informe = this.informeBO.update(informe.getClave(), informe);
 
 		ResultadoImportacionFormVO ret = new ResultadoImportacionFormVO(validacioEdifici.edificiosDisponibles, estadosDisponibles, informe, validacioEdifici.existia);
 		ret.setCorrecto(true);
@@ -558,7 +560,6 @@ public class ImportadorBean implements ImportadorBO {
 
 		informe.setPdfArxiu(new Long(archivoPDF.getClave()));
 		informe.setPdfArxiuMime(pdf.getMimeType());
-		informe = this.informeBO.update(informe.getClave(), informe);
 
 		// Nous camps
 		informe.setTipusIee(tipusIee);
@@ -569,6 +570,9 @@ public class ImportadorBean implements ImportadorBO {
 		EstadoInformeFormVO[] estadosDisponibles = new EstadoInformeFormVO[] {
 				this.estadoInformeBO.load(Constants.ESTADO_INFORME_FAVORABLE),
 				this.estadoInformeBO.load(Constants.ESTADO_INFORME_DESFAVORABLE) };
+		informe.setEstadoInformeId(Constants.ESTADO_INFORME_FAVORABLE);
+
+		informe = this.informeBO.update(informe.getClave(), informe);
 
 		ResultadoImportacionFormVO ret = new ResultadoImportacionFormVO(validacioEdifici.edificiosDisponibles, estadosDisponibles, informe, validacioEdifici.existia);
 		ret.setCorrecto(true);

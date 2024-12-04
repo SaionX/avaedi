@@ -252,21 +252,31 @@ Ext.define("At4FrameworkIntranet.ImportIteForm", {
 			viaLabel: data.viaLabel
 		})*/
 
-		var estadoSelected = 3;
+		debugger
+		// var estadoSelected = 3;
+		var estadoSelected = data.estadoInformeId;
 		var estadosData = data.estadoInformeDisponibles;
+
+		// Si l'estat no és un dels disponibles, inicialitzam el combo a desfavorable
+		var isEstadoDisponible = estadosData.some(function(estado) {
+			return estado.clave === estadoSelected;
+		});
+		if (!isEstadoDisponible) {
+			estadoSelected = 3;
+		}
 		var estadosInformeStore = Ext.create('Ext.data.Store', {
 			fields: ['clave', 'nombreEs', 'nombreCa'],
 			data: estadosData
 		});
 
-		for (var key in estadosData) {
-			if (estadosData.hasOwnProperty(key)) {
-				var estado = estadosData[key];
-				if (estado.clave != 3) {
-					estadoSelected = estado.clave;
-				}
-			}
-		}
+		// for (var key in estadosData) {
+		// 	if (estadosData.hasOwnProperty(key)) {
+		// 		var estado = estadosData[key];
+		// 		if (estado.clave != 3) {
+		// 			estadoSelected = estado.clave;
+		// 		}
+		// 	}
+		// }
 
 
 		var edificiosData = data.edificiosDisponibles;
@@ -328,6 +338,23 @@ Ext.define("At4FrameworkIntranet.ImportIteForm", {
 			allowBlank: false,
 			format: 'd-m-Y'
 		});
+
+		primerFormFields.tipusIee = Ext.create({
+			xtype: "hidden",
+			name: 'tipusIee',
+			value: 'T30'
+		});
+		primerFormFields.renovacio = Ext.create({
+			xtype: "hidden",
+			name: 'renovacio',
+			value: false
+		});
+		primerFormFields.subsana = Ext.create({
+			xtype: "hidden",
+			name: 'subsana',
+			value: false
+		});
+
 		primerFormFields.numeroCatastro = new Ext.form.TextField({
 			name: 'numeroCatastro',
 			fieldLabel: "Numero catastro",
@@ -388,7 +415,8 @@ Ext.define("At4FrameworkIntranet.ImportIteForm", {
 							width: 500,
 							//height: 120,
 							html: "<span class='regimg'></span>"
-						}]
+						}],
+						[primerFormFields.renovacio, primerFormFields.subsana, primerFormFields.tipusIee]
 						//[primerFormFields.submit]
 						//,
 						//At4FrameworkIntranet.FormDefaults.resumenAuditoria()

@@ -431,37 +431,104 @@ public class RestService extends BaseRestService {
 			}
 		}
 
-		if (plazoIte == 0) {
-			ediVO.setEstadoInspeccionCa("Sense dades");
-			ediVO.setEstadoInspeccionEs("Sin datos");
-		} else if (plazoIte >= anyoActual) {
-			ediVO.setEstadoInspeccionCa("En termini");
-			ediVO.setEstadoInspeccionEs("En plazo");
-			ediVO.setProximaIEE( plazoIte );
-		} else {
-			//El plazo ha pasado
-			ediVO.setEstadoInspeccionCa("No presentat");
-			ediVO.setEstadoInspeccionEs("No presentado");
-			ediVO.setProximaIEE( plazoIte );
-		}
-
-		if (edi != null && estatUltimInforme != null) {
-			//Tenemos informe para el edificio
+		if (estatUltimInforme != null) {
 			if (estatUltimInforme == Constants.ESTADO_INFORME_FAVORABLE) {
 				int anyoSiguienteInforme = anyUltimInformeFavorable + PLAZO_IEE_SIG;
 				if (anyoSiguienteInforme > plazoIte) { //El informe mejora la fecha previa de plazo
-					ediVO.setProximaIEE( anyoSiguienteInforme );
-					ediVO.setEstadoInspeccionCa("Favorable");
-					ediVO.setEstadoInspeccionEs("Favorable");
+					plazoIte = anyoSiguienteInforme;
 				}
-			} else if (estatUltimInforme == Constants.ESTADO_INFORME_EN_TRAMITE) {
-				ediVO.setEstadoInspeccionCa("En tramitació");
-				ediVO.setEstadoInspeccionEs("En tramitación");
-			} else if (estatUltimInforme == Constants.ESTADO_INFORME_DESFAVORABLE && plazoIte < anyoActual) { //Tenemos un informe desfavorable y el plazo caducado
-					ediVO.setEstadoInspeccionCa("Desfavorable");
-					ediVO.setEstadoInspeccionEs("Desfavorable");
 			}
 		}
+
+
+		// Generam el text a mostrar com a estat d'inspecció, i la propera data d'informe
+		if (plazoIte == 0) {
+			// Desconegut
+			ediVO.setEstadoInspeccionCa("Sense dades");
+			ediVO.setEstadoInspeccionEs("Sin datos");
+
+			if (estatUltimInforme != null) {
+				// Si plazoIte == 0, no tenim cap informe favorable
+				if (estatUltimInforme == Constants.ESTADO_INFORME_EN_TRAMITE || estatUltimInforme == ESTADO_INFORME_EN_CURSO) {
+					ediVO.setEstadoInspeccionCa("En tramitació");
+					ediVO.setEstadoInspeccionEs("En tramitación");
+				} else if (estatUltimInforme == Constants.ESTADO_INFORME_DESFAVORABLE) {
+					ediVO.setEstadoInspeccionCa("Sense dades. Amb un últim informe desfavorable.");
+					ediVO.setEstadoInspeccionEs("Sin datos. Con un último informe desfavorable.");
+				}
+			}
+
+		} else if (plazoIte >= anyoActual) {
+			// En termini
+			ediVO.setEstadoInspeccionCa("En termini");
+			ediVO.setEstadoInspeccionEs("En plazo");
+			ediVO.setProximaIEE( plazoIte );
+
+			if (estatUltimInforme != null) {
+				if (estatUltimInforme == Constants.ESTADO_INFORME_FAVORABLE) {
+					if (plazoIte > anyoActual) {
+						ediVO.setEstadoInspeccionCa("Favorable");
+						ediVO.setEstadoInspeccionEs("Favorable");
+					} else if (plazoIte == anyoActual) {
+						ediVO.setEstadoInspeccionCa("Favorable. A punt de caducar.");
+						ediVO.setEstadoInspeccionEs("Favorable. A punto de caducar.");
+					}
+				} else if (estatUltimInforme == Constants.ESTADO_INFORME_EN_TRAMITE || estatUltimInforme == ESTADO_INFORME_EN_CURSO) {
+					ediVO.setEstadoInspeccionCa("En tramitació");
+					ediVO.setEstadoInspeccionEs("En tramitación");
+				} else if (estatUltimInforme == Constants.ESTADO_INFORME_DESFAVORABLE) {
+					ediVO.setEstadoInspeccionCa("En termini. Amb un últim informe desfavorable.");
+					ediVO.setEstadoInspeccionEs("En plazo. Con un último informe desfavorable.");
+				}
+			}
+
+		} else {
+			//El plaç ha passadt
+			ediVO.setEstadoInspeccionCa("No presentat. Es requereix la presentació immediata.");
+			ediVO.setEstadoInspeccionEs("No presentado. Se requiere la presentación inmediata.");
+
+			if (estatUltimInforme != null) {
+				if (estatUltimInforme == Constants.ESTADO_INFORME_FAVORABLE) {
+					ediVO.setEstadoInspeccionCa("Favorable caducada. Es requereix la presentació immediata.");
+					ediVO.setEstadoInspeccionEs("Favorable caducado. Se requiere la presertación inmediate.");
+					ediVO.setProximaIEE( anyoActual );
+				} else if (estatUltimInforme == Constants.ESTADO_INFORME_EN_TRAMITE || estatUltimInforme == ESTADO_INFORME_EN_CURSO) {
+					ediVO.setEstadoInspeccionCa("En tramitació");
+					ediVO.setEstadoInspeccionEs("En tramitación");
+					ediVO.setProximaIEE( anyoActual );
+				} else if (estatUltimInforme == Constants.ESTADO_INFORME_DESFAVORABLE) {
+					//Tenemos un informe desfavorable y el plazo caducado
+					ediVO.setEstadoInspeccionCa("Desfavorable. Es requereix l'esmena immediata.");
+					ediVO.setEstadoInspeccionEs("Desfavorable. Se requiere la enmienda inmediata.");
+					ediVO.setProximaIEE( anyoActual );
+				}
+			}
+		}
+
+//		if (edi != null && estatUltimInforme != null) {
+//			//Tenemos informe para el edificio
+//			if (estatUltimInforme == Constants.ESTADO_INFORME_FAVORABLE) {
+//				int anyoSiguienteInforme = anyUltimInformeFavorable + PLAZO_IEE_SIG;
+//				if (anyoSiguienteInforme > plazoIte) { //El informe mejora la fecha previa de plazo
+//					ediVO.setProximaIEE( anyoSiguienteInforme );
+//					ediVO.setEstadoInspeccionCa("Favorable");
+//					ediVO.setEstadoInspeccionEs("Favorable");
+//				}
+//			} else if (estatUltimInforme == Constants.ESTADO_INFORME_EN_TRAMITE) {
+//				ediVO.setEstadoInspeccionCa("En tramitació");
+//				ediVO.setEstadoInspeccionEs("En tramitación");
+//				ediVO.setProximaIEE( anyoActual );
+//			} else if (estatUltimInforme == Constants.ESTADO_INFORME_DESFAVORABLE) {
+//				if (plazoIte < anyoActual) { //Tenemos un informe desfavorable y el plazo caducado
+//					ediVO.setEstadoInspeccionCa("Desfavorable. Es requereix l'esmena immediata.");
+//					ediVO.setEstadoInspeccionEs("Desfavorable. Se requiere la enmienda inmediata.");
+//					ediVO.setProximaIEE(anyoActual);
+//				} else {
+//					ediVO.setEstadoInspeccionCa("En termini, amb un últim informe desfavorable.");
+//					ediVO.setEstadoInspeccionEs("En plazo, con un último informe desfavorable.");
+//				}
+//			}
+//		}
 	}
 
 }

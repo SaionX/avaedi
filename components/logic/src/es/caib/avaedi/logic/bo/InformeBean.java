@@ -208,7 +208,7 @@ public class InformeBean extends BaseBean<Informe, InformeListadoVO, InformeForm
 			}
 			try {
 				//Copiamos las propiedades simples, excluyendo relaciones
-				TransferObjectFactory.copyProperties(ret, instance, new String[] { "inspeccion", "edificio", "estadoInforme" });
+				TransferObjectFactory.copyProperties(ret, instance, new String[] { "inspeccion", "edificio", "estadoInforme", "renovacio", "subsana", "tipusIee" });
 
 				ret.setEstadoInformeId(instance.getEstadoInforme().getClave());
 				ret.setEstadoInformeLabel(instance.getEstadoInforme().getNombreEs());
@@ -222,6 +222,10 @@ public class InformeBean extends BaseBean<Informe, InformeListadoVO, InformeForm
 					ret.setInspeccionId(instance.getInspeccion().getId());
 					ret.setInspeccionLabel(FormData2Java.toString(instance.getInspeccion().getId()));
 				}
+
+				ret.setRenovacio(instance.isRenovacio());
+				ret.setSubsana(instance.isSubsana());
+				ret.setTipusIee(instance.getTipusIee());
 
 				return ret;
 			} catch (TransferObjectCreateException e) {

@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
+import es.caib.avaedi.logic.bo.TipusIee;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -284,18 +285,31 @@ public class InformeService extends BaseService<InformeBO, InformeListadoVO, Inf
 		// Informe de 30/50 anys
 //		metaData.addRecordField(new GridRecordFieldMetaData("tipusIeeId", GridRecordFieldMetaData.INT_TYPE));
 //		metaData.addRecordField(new GridRecordFieldMetaData("tipusIeeLabel", GridRecordFieldMetaData.STRING_TYPE));
-		metaData.addRecordField(new GridRecordFieldMetaData("tipusIee", this.getMessage("forms.informe.columns.tipusIee.header", locale), GridRecordFieldMetaData.STRING_TYPE));
+		metaData.addRecordField(new GridRecordFieldMetaData("tipusIeeCodi", this.getMessage("forms.informe.columns.tipusIee.header", locale), GridRecordFieldMetaData.STRING_TYPE));
+		metaData.addRecordField(new GridRecordFieldMetaData("tipusIeeLabel", this.getMessage("forms.informe.columns.tipusIee.header", locale), GridRecordFieldMetaData.STRING_TYPE));
 
 		/** Creamos la columna */
-		metaData.addColumn(new GridColumnMetaData("tipusIee", this.getMessage("forms.informe.columns.tipusIee.header", locale)));
-		metaData.getColumn("tipusIee").setTooltip(this.getMessage("forms.informe.columns.tipusIee.description", locale));
-		metaData.getColumn("tipusIee").setGroupable(true);
-		metaData.getColumn("tipusIee").setSortable(true);
-		metaData.getColumn("tipusIee").setSofaFilter(GridColumnFilter.TYPE_MULTICOMBO);
-		metaData.getColumn("tipusIee").setEditable(usuari.isInAnyRole(Constants.ADMIN, Constants.OPERADOR));
+		metaData.addColumn(new GridColumnMetaData("tipusIeeLabel", this.getMessage("forms.informe.columns.tipusIee.header", locale)));
+		metaData.getColumn("tipusIeeLabel").setTooltip(this.getMessage("forms.informe.columns.tipusIee.description", locale));
+		metaData.getColumn("tipusIeeLabel").setGroupable(false);
+		metaData.getColumn("tipusIeeLabel").setSortable(false);
+		metaData.getColumn("tipusIeeLabel").setSofaFilter(GridColumnFilter.TYPE_MULTICOMBO);
+		metaData.getColumn("tipusIeeLabel").setEditable(usuari.isInAnyRole(Constants.ADMIN, Constants.OPERADOR));
+		metaData.getColumn("tipusIeeLabel").setWidth(120);
+//		metaData.getColumn("tipusIee").setSofaRenderer("tipusIeeRenderer");
 
 
-		// Informe de renovació
+		// Renovació
+		metaData.addRecordField(new GridRecordFieldMetaData("renovacio", this.getMessage("forms.informe.columns.renovacio.header", locale), GridRecordFieldMetaData.BOOLEAN_TYPE));
+
+		/** Creamos la columna */
+		metaData.addColumn(new GridColumnMetaData("renovacio", this.getMessage("forms.informe.columns.renovacio.header", locale)));
+		metaData.getColumn("renovacio").setTooltip(this.getMessage("forms.informe.columns.renovacio.description", locale));
+		metaData.getColumn("renovacio").setGroupable(false);
+		metaData.getColumn("renovacio").setSortable(false);
+		metaData.getColumn("renovacio").setSofaFilter(GridColumnFilter.TYPE_MULTICOMBO);
+		metaData.getColumn("renovacio").setEditable(usuari.isInAnyRole(Constants.ADMIN, Constants.OPERADOR));
+		metaData.getColumn("renovacio").setSofaRenderer(GridColumnMetaData.RENDERER_BOOLEAN);
 
 		return metaData;
 	}
@@ -321,6 +335,7 @@ public class InformeService extends BaseService<InformeBO, InformeListadoVO, Inf
 		datosExportacion.add("fechaInforme", this.getMessage("forms.informe.columns.fechaInforme.header", locale), TipoCampoExportacion.DATE);
 		datosExportacion.add("fechaAlta", this.getMessage("forms.informe.columns.fechaAlta.header", locale), TipoCampoExportacion.DATE);
 		datosExportacion.add("tipusIee", this.getMessage("forms.informe.columns.tipusIee.header", locale), TipoCampoExportacion.STRING);
+		datosExportacion.add("renovacio", this.getMessage("forms.informe.columns.renovacio.header", locale), TipoCampoExportacion.STRING);
 
 		datosExportacion.add("dateCreation", this.getMessage("forms.general.columns.dateCreation.header", locale), TipoCampoExportacion.DATE);
 		datosExportacion.add("lastModified", this.getMessage("forms.general.columns.lastModified.header", locale), TipoCampoExportacion.DATE);
@@ -347,6 +362,8 @@ public class InformeService extends BaseService<InformeBO, InformeListadoVO, Inf
 		excelRow.add(FormData2Java.toString(instance.getFechaAlta()));
 		excelRow.add(FormData2Java.toString(instance.getDateCreation()));
 		excelRow.add(FormData2Java.toString(instance.getLastModified()));
+		excelRow.add(instance.getTipusIee().getText());
+		excelRow.add(instance.getRenovacio() != null ? (instance.getRenovacio() ? "SI" : "NO") : "");
 		excelRow.add(instance.getCreatorUser());
 		excelRow.add(instance.getModUser());
 
@@ -391,6 +408,10 @@ public class InformeService extends BaseService<InformeBO, InformeListadoVO, Inf
 //			formDataStr = (String) formData.get("fechaAlta");
 //			record.setFechaAlta(FormData2Java.toDate(formDataStr));
 //		}
+		if (FormData2Java.needsUpdate(formData, "tipusIee")) {
+			formDataStr = (String) formData.get("tipusIee");
+			record.setTipusIee(TipusIee.fromName(formDataStr));
+		}
 	}
 
 	@Override

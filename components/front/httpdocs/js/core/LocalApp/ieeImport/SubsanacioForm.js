@@ -336,6 +336,23 @@ Ext.define("At4FrameworkIntranet.SubsanacioForm", {
 			allowBlank: false,
 			format: 'd-m-Y'
 		});
+
+		// primerFormFields.tipusIee = Ext.create({
+		// 	xtype: "hidden",
+		// 	name: 'renovacio',
+		// 	value: 'T30'
+		// });
+		primerFormFields.renovacio = Ext.create({
+			xtype: "hidden",
+			name: 'renovacio',
+			value: false
+		});
+		primerFormFields.subsana = Ext.create({
+			xtype: "hidden",
+			name: 'subsana',
+			value: false
+		});
+
 		primerFormFields.numeroCatastro = new Ext.form.TextField({
 			name: 'numeroCatastro',
 			fieldLabel: "Numero catastro",
@@ -423,7 +440,8 @@ Ext.define("At4FrameworkIntranet.SubsanacioForm", {
 							width: 500,
 							//height: 120,
 							html: "<span class='regimg'></span>"
-						}]
+						}],
+						[primerFormFields.renovacio, primerFormFields.subsana]
 						//[primerFormFields.submit]
 						//,
 						//At4FrameworkIntranet.FormDefaults.resumenAuditoria()

@@ -833,6 +833,21 @@ Ext.define('At4FrameworkIntranet.AbstractGrid', {
 
 			case 'checkbox':
 				break;
+
+			case 'tipusIeeRenderer':
+				column.renderer = function (
+					value, metaData, record, rowIndex, colIndex, store) {
+					debugger
+					if (value === null) {
+						return '';
+					}
+					if (value === 'T30') return 'IIE 30';
+					if (value === 'T40') return 'Renov. IEE 30';
+					if (value === 'T50') return 'IEE 50';
+					if (value === 'T50R') return 'Renov. IEE 50';
+					return '';
+				}.bind(this);
+				break;
 			}
 		}
 

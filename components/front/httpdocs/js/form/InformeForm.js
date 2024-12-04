@@ -108,6 +108,42 @@ Ext.define("At4FrameworkIntranet.InformeForm", {
 			format: 'd-m-Y'
 		})
 
+		fields.ieeArxiu = new Ext.form.NumberField({
+			name: 'ieeArxiu',
+			visibility: false
+		})
+		fields.subsana = new Ext.form.TextField({
+			name: 'subsana',
+			visibility: false
+		})
+
+		var tipus = Ext.create('Ext.data.Store', {
+			fields: ['abbr', 'name'],
+			data : [
+				{"abbr":"T30", "name":"IEE 30"},
+				{"abbr":"T40", "name":"Renov. IEE 30"},
+				{"abbr":"T50", "name":"IEE 50"},
+				{"abbr":"T50R", "name":"Renov. IEE 50"}
+			]
+		});
+		fields.tipusIee = new Ext.form.ComboBox({
+			allowBlank: false,
+			xtype: "combobox",
+			store: tipus,
+			queryMode: 'local',
+			displayField: 'name',
+			valueField: 'abbr',
+			autoSelect: true,
+			disableUpdates: fechaInformeDisbled,
+			disabled: fechaInformeDisbled,
+			// editable: false,
+			forceSelection: true,
+			allowBlank: false,
+			name: "tipusIee",
+			fieldLabel: "Tipo IEE (30 o 50 años)",
+			width: At4FrameworkIntranet.FormDefaults.size(3, 1, 6),
+		})
+
 		this.ieeArxiuPanel = new At4FrameworkIntranet.FilePanel(this, {
 			titleTxt: this.ieeArxiuHeaderLabel,
 			fieldName: 'ieeArxiu',
@@ -131,7 +167,6 @@ Ext.define("At4FrameworkIntranet.InformeForm", {
 			disableDelete: true,
 			disableUpload: true,
 			disableConstrains: true,
-			//disabled: true
 		})
 
 		this.fields = fields;
@@ -140,7 +175,7 @@ Ext.define("At4FrameworkIntranet.InformeForm", {
 				items: [
 					At4FrameworkIntranet.FormDefaults.rows([
 						[fields.clave, fields.estadoInforme, fields.edificio, fields.municipio, fields.inspeccionId],
-						[fields.fechaInforme, fields.fechaAlta]
+						[fields.fechaInforme, fields.fechaAlta, fields.tipusIee, fields.arxiuIee]
 					]),
 					At4FrameworkIntranet.FormDefaults.rows([
 						[this.ieeArxiuPanel, this.pdfArxiuPanel]
@@ -154,8 +189,30 @@ Ext.define("At4FrameworkIntranet.InformeForm", {
 			}
 		];
 
-
-
+		this.listeners = {
+			afterload: {
+				fn: function (clave, record) {
+					// console.log(arguments);
+					var data = record.data;
+					if (data.clave) {
+						var ieeArxiu = data.ieeArxiu;
+						var subsana = data.subsana;
+						if (!ieeArxiu) {
+							this.ieeArxiuPanel.hide();
+							if (subsana === true) {
+								this.pdfArxiuPanel.setTitle(this.pdfArxiuSubsanaLabel);
+							} else {
+								this.pdfArxiuPanel.setTitle(this.pdfArxiuIteLabel);
+							}
+						}
+						debugger
+						fields.tipusIee.setValue(data.tipusIeeCodi);
+						console.log(fields.tipusIee.getValue());
+					}
+				},
+				scope: this
+			}
+		}
 		this.maxTabIndex = tabHelper.getNext();
 		this.callParent([application, formName, gridMetaData, items, config]);
 	}

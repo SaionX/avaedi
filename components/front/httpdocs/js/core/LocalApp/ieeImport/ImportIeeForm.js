@@ -345,10 +345,10 @@ Ext.define("At4FrameworkIntranet.ImportIeeForm", {
 		var tipus = Ext.create('Ext.data.Store', {
 			fields: ['abbr', 'name'],
 			data : [
-				{"abbr":"T30", "name":"30"},
-				{"abbr":"T40", "name":"Renov. 30"},
-				{"abbr":"T50", "name":"50"},
-				{"abbr":"T50R", "name":"Renov. 50"}
+				{"abbr":"T30", "name":"IEE 30"},
+				{"abbr":"T40", "name":"Renov. IEE 30"},
+				{"abbr":"T50", "name":"IEE 50"},
+				{"abbr":"T50R", "name":"Renov. IEE 50"}
 			]
 		});
 		primerFormFields.tipusIee = Ext.create({
@@ -366,6 +366,21 @@ Ext.define("At4FrameworkIntranet.ImportIeeForm", {
 			allowBlank: false,
 			name: "tipusIee",
 			fieldLabel: "Tipo IEE (30 o 50 años)",
+			listeners: {
+				change: {
+					fn: function (el, newValue, oldValue, eOpts) {
+						// console.log(arguments);
+						// debugger
+						if (newValue === 'T40' || newValue === 'T50R') {
+							this.primerFormFields.renovacio.setValue(true);
+						} else {
+							this.primerFormFields.renovacio.setValue(false);
+						}
+
+					},
+					scope: this
+				}
+			}
 		});
 		primerFormFields.renovacio = Ext.create({
 			margin: "0 30px",
@@ -374,6 +389,31 @@ Ext.define("At4FrameworkIntranet.ImportIeeForm", {
 			name: 'renovacio',
 			boxLable: 'renovación',
 			fieldLabel: "Es renovación IEE?",
+			listeners: {
+				change: {
+					fn: function (el, newValue, oldValue, eOpts) {
+						// console.log(arguments);
+						// debugger
+						if (newValue) {
+							if (this.primerFormFields.tipusIee.getValue() === 'T30') {
+								this.primerFormFields.tipusIee.setValue('T40');
+							}
+							if (this.primerFormFields.tipusIee.getValue() === 'T50') {
+								this.primerFormFields.tipusIee.setValue('T50R');
+							}
+						} else {
+							if (this.primerFormFields.tipusIee.getValue() === 'T40') {
+								this.primerFormFields.tipusIee.setValue('T30');
+							}
+							if (this.primerFormFields.tipusIee.getValue() === 'T50R') {
+								this.primerFormFields.tipusIee.setValue('T50');
+							}
+						}
+
+					},
+					scope: this
+				}
+			}
 		});
 		primerFormFields.subsana = Ext.create({
 			margin: "0px",

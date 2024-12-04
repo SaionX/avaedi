@@ -163,6 +163,8 @@ public class Informe extends BaseModel implements java.io.Serializable {
 		this.ieeArxiuMime = ieeArxiuMime;
 	}
 
+	// Tipus Mime
+	@Transient
 	public String getIeeArxiuMimeType() {
 		if (ieeArxiuMime != null) {
 			String[] parts = ieeArxiuMime.split(SCAPED_DELIMITER);
@@ -179,7 +181,7 @@ public class Informe extends BaseModel implements java.io.Serializable {
 			String[] parts = this.ieeArxiuMime.split(SCAPED_DELIMITER);
 			sb.append(ieeArxiuMime != null ? ieeArxiuMime : ""); // Timus mime
 			sb.append(DELIMITER);
-			sb.append(parts.length > 2 ? parts[2] : ""); // Tipus IEE
+			sb.append(parts.length > 2 ? parts[1] : ""); // Tipus IEE
 			sb.append(DELIMITER);
 			sb.append(parts.length > 2 ? parts[2] : B_FALSE); // Renovacio
 			sb.append(DELIMITER);
@@ -197,7 +199,7 @@ public class Informe extends BaseModel implements java.io.Serializable {
 			String[] parts = ieeArxiuMime.split(SCAPED_DELIMITER);
 			if (parts.length > 1) {
 				try {
-					return TipusIee.fromString(parts[1]);
+					return TipusIee.fromName(parts[1]);
 				} catch (NumberFormatException e) {
 					// Tractar l'error en convertir a enter
 					e.printStackTrace();
