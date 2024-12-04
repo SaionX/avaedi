@@ -205,9 +205,8 @@ Ext.define("At4FrameworkIntranet.InformeForm", {
 								this.pdfArxiuPanel.setTitle(this.pdfArxiuIteLabel);
 							}
 						}
-						debugger
 						fields.tipusIee.setValue(data.tipusIeeCodi);
-						console.log(fields.tipusIee.getValue());
+						// console.log(fields.tipusIee.getValue());
 					}
 				},
 				scope: this

@@ -523,7 +523,7 @@ Ext.define("At4FrameworkIntranet.SubsanacioForm", {
 			height: "auto",
 			hidden: true,
 			width: At4FrameworkIntranet.FormDefaults.size(7, 0, 12),
-			html: '<div class="edificio-existente"><span class="glyphicons glyphicons-warning-sign"></span>El edificio ya existia</span></div>'
+			html: '<div class="edificio-existente"><span class="glyphicons glyphicons-warning-sign"></span> <span style="font-weight: bold;">El edificio ya existia</span><p style="line-height: normal;margin: 0;font-size: smaller;">Rellenar el campo "Numero extra" y seleccionar la opción [Crear un nuevo registro] solamente en el caso de estar importando un informe de un nuevo edificio que tiene la misma referéncia catastral que otro edificio ya existente en el sistema (Caso de múltiples edificios con la misma referencia catastral). En caso contrario seleccionar el edificio existente al que se realiza el informe.</p></div>'
 		});
 
 		segundoFormItems.nuevoEdificioAction = Ext.create("Ext.form.field.ComboBox", {
