@@ -395,7 +395,8 @@ Ext.define('At4FrameworkIntranet.FormDefaults', {
 	debugButton: function(scope) {
 		return {
 			text: "debug",
-			hidden: !window.At4Framework_modoDesarrollo,
+			// hidden: !window.At4Framework_modoDesarrollo,
+			hidden: true,
 			scope: scope,
 			handler: function() {
 				var values = scope.getForm().getValues();
