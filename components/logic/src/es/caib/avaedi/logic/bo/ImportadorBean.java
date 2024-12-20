@@ -537,7 +537,8 @@ public class ImportadorBean implements ImportadorBO {
 		informeraw.setEdificioId(edifici.getClave());
 
 		Date now = new Date();
-		int estado = Constants.ESTADO_INFORME_EN_CURSO;
+//		int estado = Constants.ESTADO_INFORME_EN_CURSO;
+		int estado = Constants.ESTADO_INFORME_FAVORABLE;
 
 		informeraw.setEstadoInformeId(estado);
 		informeraw.setFechaAlta(now);
@@ -563,6 +564,7 @@ public class ImportadorBean implements ImportadorBO {
 
 		// Nous camps
 		informe.setTipusIee(tipusIee);
+		informe.setRenovacio(TipusIee.T40.equals(tipusIee) || TipusIee.T50R.equals(tipusIee));
 		informe.setSubsana(true);
 
 //		this.generarInformeSubsanacio(ultimInforme, informe.getClave());
@@ -675,6 +677,7 @@ public class ImportadorBean implements ImportadorBO {
 
 		BigInteger codigoCatastroMunicipio = null;
 		String codigoVia = null;
+		String numeroVia = null;
 
 		if (consulta.getBico() != null && consulta.getBico().getBi() != null && consulta.getBico().getBi().getDt() != null) {
 			Dtdnp dt = consulta.getBico().getBi().getDt();
@@ -699,8 +702,10 @@ public class ImportadorBean implements ImportadorBO {
 				Locs localizacion = dt.getLocs();
 				if (localizacion.getLous() != null) {
 					codigoVia = localizacion.getLous().getLourb().getDir().getCv();
+					numeroVia = localizacion.getLous().getLourb().getDir().getPnp();
 				} else if (localizacion.getLors() != null) {
 					codigoVia = localizacion.getLors().getLourb().getDir().getCv();
+					numeroVia = localizacion.getLous().getLourb().getDir().getPnp();
 				} else {
 					throw new GenericBusinessException("Impossible recuperar datos de localizacion del edificio");
 				}
@@ -757,12 +762,16 @@ public class ImportadorBean implements ImportadorBO {
 			//no hay edificio, creamos uno nuevo
 			existia = false;
 			EdificioFormVO edificioRaw = this.generateEdificio(edificioSoap, user, via.getClave());
-			if (inspeccionImportada != null && inspeccionImportada.getInspeccionIdentificacionedificioDirecciones() != null && inspeccionImportada.getInspeccionIdentificacionedificioDirecciones().getDireccion() != null) {
-				edificioRaw.setNumeroCatastro(String.valueOf(inspeccionImportada.getInspeccionIdentificacionedificioDirecciones().getDireccion().getNumero()));
+			if (inspeccionImportada != null) {
+				if (inspeccionImportada.getInspeccionIdentificacionedificioDirecciones() != null && inspeccionImportada.getInspeccionIdentificacionedificioDirecciones().getDireccion() != null) {
+					edificioRaw.setNumeroCatastro(String.valueOf(inspeccionImportada.getInspeccionIdentificacionedificioDirecciones().getDireccion().getNumero()));
+				} else {
+					String error = "Error al recuperar el numero (del catastro) del edificio";
+					log.error(error);
+					throw new GenericBusinessException(error);
+				}
 			} else {
-				String error = "Error al recuperar el numero (del catastro) del edificio";
-				log.error(error);
-				throw new GenericBusinessException(error);
+				edificioRaw.setNumeroCatastro(numeroVia);
 			}
 
 			EdificioFormVO edificioBD = edificioBO.add(edificioRaw);

@@ -168,7 +168,7 @@ Ext.define("At4FrameworkIntranet.ImportIteForm", {
 			this.changeButtons(1);
 			this.activeItem = 0;
 			layout.setActiveItem(0);
-			this.primerFormFields.documentoIee.reset();
+			// this.primerFormFields.documentoIee.reset();
 			this.primerFormFields.documentoPdf.reset();
 		},
 		cerrarVentana: function () {
@@ -269,16 +269,6 @@ Ext.define("At4FrameworkIntranet.ImportIteForm", {
 			data: estadosData
 		});
 
-		// for (var key in estadosData) {
-		// 	if (estadosData.hasOwnProperty(key)) {
-		// 		var estado = estadosData[key];
-		// 		if (estado.clave != 3) {
-		// 			estadoSelected = estado.clave;
-		// 		}
-		// 	}
-		// }
-
-
 		var edificiosData = data.edificiosDisponibles;
 		var data1 = data.edificiosDisponibles[0];
 		edificiosData.unshift({
@@ -304,7 +294,7 @@ Ext.define("At4FrameworkIntranet.ImportIteForm", {
 
 		this.segundoFormItems.nuevoEdificioAction.setHidden(!data.edificioExistia);
 
-		this.segundoFormItems.nuevoEdificioAction.setValue(-1);
+		this.segundoFormItems.nuevoEdificioAction.setValue(data.edificioExistia ? -1 : data1.clave);
 
 		this.segundoFormItems.numeroExtra.setHidden(!data.edificioExistia);
 

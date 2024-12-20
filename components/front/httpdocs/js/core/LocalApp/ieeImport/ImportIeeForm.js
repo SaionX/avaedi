@@ -256,6 +256,7 @@ Ext.define("At4FrameworkIntranet.ImportIeeForm", {
 			viaLabel: data.viaLabel
 		})*/
 
+		debugger;
 		var estadoSelected = 3;
 		var estadosData = data.estadoInformeDisponibles;
 		var estadosInformeStore = Ext.create('Ext.data.Store', {
@@ -298,7 +299,7 @@ Ext.define("At4FrameworkIntranet.ImportIeeForm", {
 
 		this.segundoFormItems.nuevoEdificioAction.setHidden(!data.edificioExistia);
 
-		this.segundoFormItems.nuevoEdificioAction.setValue(-1);
+		this.segundoFormItems.nuevoEdificioAction.setValue(data.edificioExistia ? -1 : data1.clave);
 
 		this.segundoFormItems.numeroExtra.setHidden(!data.edificioExistia);
 

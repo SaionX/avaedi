@@ -3,7 +3,7 @@ Ext.define("At4FrameworkIntranet.SubsanacioWindow", {
 	title: "Anexo que subsana una IEE desfavorable",
 	closable: false,
 	closeAction: "destroy",
-	height: 400,
+	height: 440,
 	width: 600,
 	resizable: false,
 	modal: true,
@@ -167,7 +167,7 @@ Ext.define("At4FrameworkIntranet.SubsanacioForm", {
 			this.changeButtons(1);
 			this.activeItem = 0;
 			layout.setActiveItem(0);
-			this.primerFormFields.documentoIee.reset();
+			// this.primerFormFields.documentoIee.reset();
 			this.primerFormFields.documentoPdf.reset();
 		},
 		cerrarVentana: function () {
@@ -241,16 +241,6 @@ Ext.define("At4FrameworkIntranet.SubsanacioForm", {
 	loadIee: function (data) {
 		//console.log(data);
 		this.claveInforme = data.primaryKey;
-		/*this.segundoFormItems.estadoInforme.setComboValue("estadoInformeId", {
-			estadoInformeId: data.estadoInformeId,
-			estadoInformeLabel: data.estadoInformeLabel
-		})*/
-
-		/*this.segundoFormItems.via.setComboValue("viaId", {
-			viaId: data.viaId,
-			viaLabel: data.viaLabel
-		})*/
-
 		var estadoSelected = 3;
 		var estadosData = data.estadoInformeDisponibles;
 		var estadosInformeStore = Ext.create('Ext.data.Store', {
@@ -258,14 +248,21 @@ Ext.define("At4FrameworkIntranet.SubsanacioForm", {
 			data: estadosData
 		});
 
-		for (var key in estadosData) {
-			if (estadosData.hasOwnProperty(key)) {
-				var estado = estadosData[key];
-				if (estado.clave != 3) {
-					estadoSelected = estado.clave;
-				}
-			}
+		// Si l'estat no és un dels disponibles, inicialitzam el combo a favorable
+		var isEstadoDisponible = estadosData.some(function(estado) {
+			return estado.clave === estadoSelected;
+		});
+		if (!isEstadoDisponible) {
+			estadoSelected = 1;
 		}
+		// for (var key in estadosData) {
+		// 	if (estadosData.hasOwnProperty(key)) {
+		// 		var estado = estadosData[key];
+		// 		if (estado.clave != 3) {
+		// 			estadoSelected = estado.clave;
+		// 		}
+		// 	}
+		// }
 
 
 		var edificiosData = data.edificiosDisponibles;
@@ -293,7 +290,7 @@ Ext.define("At4FrameworkIntranet.SubsanacioForm", {
 
 		this.segundoFormItems.nuevoEdificioAction.setHidden(!data.edificioExistia);
 
-		this.segundoFormItems.nuevoEdificioAction.setValue(-1);
+		this.segundoFormItems.nuevoEdificioAction.setValue(data.edificioExistia ? -1 : data1.clave);
 
 		this.segundoFormItems.numeroExtra.setHidden(!data.edificioExistia);
 

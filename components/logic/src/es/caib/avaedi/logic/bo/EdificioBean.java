@@ -2,9 +2,12 @@ package es.caib.avaedi.logic.bo;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.LinkedHashSet;
 import java.util.Map;
+import java.util.Set;
 
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.collections4.FunctorException;
@@ -195,7 +198,23 @@ public class EdificioBean extends BaseBean<Edificio, EdificioListadoVO, Edificio
 			EdificioFormVO ret = new EdificioFormVO();
 			listadoTransformer().transform(instance, ret);
 
-			ret.setInformes(new LinkedHashSet<InformeListadoVO>(CollectionUtils.collect(instance.getInformes(), new InformeBean().listadoTransformer())));
+			// Java 7 compatible Comparator to order informes by fechaInforme and id
+			Set<InformeListadoVO> informes = new LinkedHashSet<InformeListadoVO>(
+				CollectionUtils.collect(instance.getInformes(), new InformeBean().listadoTransformer())
+			);
+			ArrayList<InformeListadoVO> sortedInformes = new ArrayList<InformeListadoVO>(informes);
+			Collections.sort(sortedInformes, new Comparator<InformeListadoVO>() {
+				@Override
+				public int compare(InformeListadoVO o1, InformeListadoVO o2) {
+					int dateCompare = o2.getFechaInforme().compareTo(o1.getFechaInforme());
+					if (dateCompare != 0) {
+						return dateCompare;
+					}
+					return o2.getClave() - o1.getClave();
+				}
+			});
+			
+			ret.setInformes(new LinkedHashSet<InformeListadoVO>(sortedInformes));
 
 			return ret;
 		}
