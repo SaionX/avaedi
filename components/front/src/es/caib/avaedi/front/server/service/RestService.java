@@ -424,7 +424,7 @@ public class RestService extends BaseRestService {
 				plazoIte = antiguedad + PLAZO_IEE_TOTAL;
 			}
 		} else { // (anyoActual > anyIeeTotal) {
-			if (anyUltimInformeFavorable < anyIeeTotal) {
+			if (anyUltimInformeFavorable == null || anyUltimInformeFavorable < anyIeeTotal) {
 				plazoIte = anyIeeTotal;
 			} else {
 				plazoIte = antiguedad + ((anyUltimInformeFavorable - antiguedad + PLAZO_IEE_SIG) / PLAZO_IEE_SIG) * PLAZO_IEE_SIG;
