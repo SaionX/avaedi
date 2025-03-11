@@ -705,7 +705,7 @@ public class ImportadorBean implements ImportadorBO {
 					numeroVia = localizacion.getLous().getLourb().getDir().getPnp();
 				} else if (localizacion.getLors() != null) {
 					codigoVia = localizacion.getLors().getLourb().getDir().getCv();
-					numeroVia = localizacion.getLous().getLourb().getDir().getPnp();
+					numeroVia = localizacion.getLors().getLourb().getDir().getPnp();
 				} else {
 					throw new GenericBusinessException("Impossible recuperar datos de localizacion del edificio");
 				}
