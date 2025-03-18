@@ -1409,6 +1409,10 @@ public class ImportadorBean implements ImportadorBO {
 		if (ret.getMediosInspeccion() != null && ret.getMediosInspeccion().length() > 254) {
 			ret.setMediosInspeccion(ret.getMediosInspeccion().substring(0, 254));
 		}
+		//TODO: Maxlength muy bajo
+		if (ret.getImpedimentosVisita() != null && ret.getImpedimentosVisita().length() > 254) {
+			ret.setImpedimentosVisita(ret.getImpedimentosVisita().substring(0, 254));
+		}
 
 		return ret;
 	}
@@ -1936,7 +1940,7 @@ public class ImportadorBean implements ImportadorBO {
 			}
 		}
 		InstalacionesComunicacionesictsType comunicacionesIcts = source.getInstalacionesComunicacionesicts();
-		if (calefaccionCentrales != null) {
+		if (comunicacionesIcts != null) {
 			for (Integer id : comunicacionesIcts.getId()) {
 				ValorFormVO valor = this.valorBO.findByCarId("instalaciones_comunicacionesicts", id);
 				valores.add(valor);
